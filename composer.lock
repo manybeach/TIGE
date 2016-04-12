@@ -4,9 +4,51 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7873a6c36ac0b2ffcf6c0f34527a89e5",
-    "content-hash": "2a32d961187db7ddb47686839f36247c",
+    "hash": "c46efaaa3ca223adbbfd9c9f3a95ea52",
+    "content-hash": "8d15e67bdedc3e206d18cc5d51a8f929",
     "packages": [
+        {
+            "name": "components/jquery",
+            "version": "2.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/components/jquery.git",
+                "reference": "7894addbce3c4de6f82449610e6f8e168b49e9b0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/components/jquery/zipball/7894addbce3c4de6f82449610e6f8e168b49e9b0",
+                "reference": "7894addbce3c4de6f82449610e6f8e168b49e9b0",
+                "shasum": ""
+            },
+            "type": "component",
+            "extra": {
+                "component": {
+                    "scripts": [
+                        "jquery.js"
+                    ],
+                    "files": [
+                        "jquery.min.js",
+                        "jquery.min.map",
+                        "jquery-migrate.js",
+                        "jquery-migrate.min.js"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "John Resig",
+                    "email": "jeresig@gmail.com"
+                }
+            ],
+            "description": "jQuery JavaScript Library",
+            "homepage": "http://jquery.com",
+            "time": "2016-02-24 08:16:25"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.2.7",
