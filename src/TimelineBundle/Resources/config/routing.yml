@@ -1,0 +1,3 @@
+timeline_homepage:
+    path:     /
+    defaults: { _controller: TimelineBundle:Default:index }
