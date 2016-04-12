@@ -1,3 +1,7 @@
 timeline_homepage:
     path:     /
     defaults: { _controller: TimelineBundle:Default:index }
+
+timeline_data:
+    path:  /timeline/
+    defaults: { _controller: TimelineBundle:Default:getDataFromLol }

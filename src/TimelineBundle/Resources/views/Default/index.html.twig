@@ -1,1 +1,43 @@
-Hello World!
+{% extends "TwigBundle::layout.html.twig" %}
+
+{% block head %}
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
+    <script src="{{ asset('js/bootstrap.js') }}"></script>
+{% endblock %}
+
+{% block title 'Timeline' %}
+
+{% block body %}
+
+    {% block content_header %}
+
+    {% endblock %}
+
+    <div class="block">
+        {% block content %}
+            {% for players in AllData %}
+                {% for player,matchs in players %}
+                    {% for data in matchs %}
+                        <table border="1">
+                            <tr>
+                                <td colspan=3>Nom du jeu en question : League Of Legend</td>
+                            </tr>
+                            <tr>
+                                <td rowspan=2>Id de la photo{{ data.profileIconId }}</td>
+                                <td>Nom du joueur : {{ player }}</td>
+                                <td></td>
+                            <tr>
+                                <td>Level du joueur : {{ data.summonerLevel }}</td>
+                                <td>{{ data.createDate }}</td>
+                            </tr>
+                            </tr>
+                        </table>
+                        </br>
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+        {% endblock %}
+    </div>
+
+{% endblock %}
