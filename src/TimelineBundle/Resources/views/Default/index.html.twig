@@ -2,6 +2,9 @@
 
 {% block head %}
     <!-- Bootstrap -->
+    <form class="fos_user_registration_register" action="{{ path('fos_user_registration_register') }}" method="POST">
+        <div><input type="submit" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}" /></div>
+    </form>
     <head>
         {% stylesheets '@bootstrap_css' %}
             <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
@@ -12,11 +15,12 @@
 {% block title 'Timeline' %}
 
 {% block body %}
+
     {% javascripts '@jquery' '@bootstrap_js' %}
          <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
     {% block content_header %}
-        <button type="button" class="btn btn-warning">Warning</button>
+        <button type="button" class="btn btn-warning">Actualiser</button>
     {% endblock %}
 
     <div class="block">
@@ -44,5 +48,4 @@
             {% endfor %}
         {% endblock %}
     </div>
-
 {% endblock %}

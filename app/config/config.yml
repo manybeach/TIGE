@@ -72,6 +72,12 @@ assetic:
             inputs:
                 - %kernel.root_dir%/../vendor/components/jquery/jquery.js
 
+# Fos Configuration
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: AppBundle\Entity\User
+
 # Twig Configuration
 twig:
     debug:            "%kernel.debug%"
