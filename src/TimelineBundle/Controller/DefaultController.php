@@ -10,14 +10,15 @@ class DefaultController extends Controller
     {
         return $this->render('TimelineBundle:Default:index.html.twig');
     }
+
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getDataFromLolAction()
     {
-        $arrayAllStats      = array();
+        $arrayAllStats = array();
 
-        $server             = 'euw';
+        $server = 'euw';
 
         // $this->addGamers();
         $gamers = $this->getDoctrine()
@@ -25,7 +26,7 @@ class DefaultController extends Controller
             ->findAll();
 
         $arrayAllPlayers = array();
-        foreach($gamers as $gamer) {
+        foreach ($gamers as $gamer) {
             $summonerName = strtolower($gamer->getName());
             $resultSummonerInfo = $this->getInfoSummoner($summonerName, $server);
             $summonerId = $resultSummonerInfo[$summonerName]['id'];
@@ -37,25 +38,37 @@ class DefaultController extends Controller
             $arrayAllStats = array($summonerName => array());
 
             foreach ($resultListMatch["games"] as $arrayGame) {
+
+                $photo = $this->getPhotoByIdLol($profileIconId);
+                $arrayGame = $this->controleArrayLol($arrayGame);
                 $arrayDataBySum = array(
                     'summonerId' => $summonerId,
                     'profileIconId' => $profileIconId,
                     'summonerLevel' => $summonerLevel,
+                    'photo' => $photo,
                     'win' => $arrayGame["stats"]["win"],
-                    'createDate' => $arrayGame["createDate"],
+                    'createDate' => date('d/m/Y H:i:s', $arrayGame["createDate"] / 1000),
                     'championId' => $arrayGame["championId"],
                     'goldEarned' => $arrayGame["stats"]["goldEarned"],
                     'numDeaths' => $arrayGame["stats"]["numDeaths"],
                     'championsKilled' => $arrayGame["stats"]["championsKilled"],
                     'minionsKilled' => $arrayGame["stats"]["minionsKilled"],
                     'assists' => $arrayGame["stats"]["assists"],
-                    'timePlayed' => $arrayGame["stats"]["timePlayed"]
+                    'timePlayed' => date('i:s', $arrayGame["stats"]["timePlayed"]),
+                    'kda' => ($arrayGame["stats"]["championsKilled"] + $arrayGame["stats"]["assists"]) / $arrayGame["stats"]["numDeaths"]
                 );
                 array_push($arrayAllStats[$summonerName], $arrayDataBySum);
             }
+
             array_push($arrayAllPlayers, $arrayAllStats);
         }
         return $this->render('TimelineBundle:Default:index.html.twig', array('AllData' => $arrayAllPlayers));
+    }
+
+    private function getPhotoByIdLol($idPhoto)
+    {
+        $url = "http://ddragon.leagueoflegends.com/cdn/6.7.1/img/profileicon/$idPhoto.png";
+        return $url;
     }
 
     /**
@@ -75,13 +88,14 @@ class DefaultController extends Controller
     {
         $url = 'https://' . $server . '.api.pvp.net/api/lol/' . $server . '/v1.3/game/by-summoner/' . $summonerId . '/recent?api_key=0610f47d-dba7-46ff-84c7-fc9eeee8b788';
         $resultJson = file_get_contents($url);
-        if($resultJson != false)
-        {
-            $result = json_decode($resultJson, true);
-        }
+        $result = json_decode($resultJson, true);
+
         return $result;
     }
 
+    /**
+     * Add gamers
+     */
     private function addGamers()
     {
         $user = new Users();
@@ -94,5 +108,18 @@ class DefaultController extends Controller
 
         // actually executes the queries (i.e. the INSERT query)
         $em->flush();
+    }
+
+    private function controleArrayLol($arrayGame)
+    {
+        if(empty($arrayGame["stats"]["win"])) $arrayGame["stats"]["win"] = 0;
+        if(empty($arrayGame["stats"]["goldEarned"]))$arrayGame["stats"]["goldEarned"] = 0;
+        if(empty($arrayGame["stats"]["numDeaths"])) $arrayGame["stats"]["numDeaths"]=0;
+        if(empty($arrayGame["stats"]["championsKilled"]))$arrayGame["stats"]["championsKilled"] =0;
+        if(empty($arrayGame["stats"]["minionsKilled"]))$arrayGame["stats"]["minionsKilled"] =0;
+        if(empty($arrayGame["stats"]["assists"]))$arrayGame["stats"]["assists"]=0;
+        if(empty($arrayGame["stats"]["timePlayed"]))$arrayGame["stats"]["timePlayed"]=0;
+
+        return $arrayGame;
     }
 }

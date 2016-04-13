@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% stylesheets '@bootstrap_css' %}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+    {% javascripts '@jquery' '@bootstrap_js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <meta charset="{{ _charset }}"/>
+    <meta name="robots" content="noindex,nofollow"/>
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{{ absolute_url(asset('bundles/framework/css/structure.css')) }}" rel="stylesheet"/>
+    <link href="{{ absolute_url(asset('bundles/framework/css/body.css')) }}" rel="stylesheet"/>
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+<div id="content">
+    <div class="header clear-fix">
+        <div class="header-logo">
+            <img src={{ absolute_url(asset('bundles/framework/images/tige.png')) }} alt="Tige"/>
+        </div>
+
+        <div class="search">
+            <div class="form-row">
+                <form class="fos_user_registration_register"
+                      action="{{ path('fos_user_registration_register') }} "
+                      method="POST">
+                    <button class="sf-button" type="submit">
+                        <span class="border-l">
+                            <span class="border-r">
+                                <span class="btn-bg">S'enregistrer</span>
+                            </span>
+                        </span>
+                    </button>
+                </form>
+            </div>
+           </br>
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                <div class="form-row">
+                    <form class="fos_user_registration_register"
+                          action="{{ path('fos_user_security_logout') }} "
+                          method="POST">
+                        <button class="sf-button" type="submit">
+                            <span class="border-l">
+                                <span class="border-r">
+                                    <span class="btn-bg">Déconnexion</span>
+                                </span>
+                            </span>
+                        </button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="form-row">
+                    <form class="fos_user_registration_register"
+                          action="{{ path('fos_user_security_login') }} "
+                          method="POST">
+                        <button class="sf-button" type="submit">
+                            <span class="border-l">
+                                <span class="border-r">
+                                    <span class="btn-bg">Connexion</span>
+                                </span>
+                            </span>
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+    <div>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{{ path('timeline_data')}} ">Timeline</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#">Evénements</a></li>
+                        <li><a href="#">Statistique</a></li>
+                        <li><a href="#">Mon compte</a></li>
+                    </ul>
+                    <form class="navbar-form navbar-left" role="search">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Rechercher">
+                        </div>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+
+    </div>
+    <div class="sf-reset">
+        {% block body %}
+        {% endblock %}
+    </div>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

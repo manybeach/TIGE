@@ -1,25 +1,10 @@
-{% extends "TwigBundle::layout.html.twig" %}
+{% extends "TimelineBundle::layout.html.twig" %}
 
-{% block head %}
-    <!-- Bootstrap -->
-    <head>
-        {% stylesheets '@bootstrap_css' %}
-            <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
-        {% endstylesheets %}
-    </head>
-{% endblock %}
-
-{% block title 'Timeline' %}
 
 {% block body %}
 
-    {% javascripts '@jquery' '@bootstrap_js' %}
-         <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
     {% block content_header %}
-        <form class="fos_user_registration_register" action="{{ path('fos_user_registration_register') }} "method="POST">
-            <div><input type="submit" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}" /></div>
-        </form>
+
     {% endblock %}
 
     <div class="block">
@@ -27,17 +12,28 @@
             {% for players in AllData %}
                 {% for player,matchs in players %}
                     {% for data in matchs %}
-                        <table border="1">
+                        <table class="table table-bordered table-striped">
+                            <tr class="blog-title">
+                                <th colspan=3>League Of Legend</th>
                             <tr>
-                                <td colspan=3>Nom du jeu en question : League Of Legend</td>
-                            </tr>
-                            <tr>
-                                <td rowspan=2>Id de la photo{{ data.profileIconId }}</td>
-                                <td>Nom du joueur : {{ player }}</td>
-                                <td></td>
+                                <td rowspan=2><img src="{{ data.photo }}"</td>
+                                <td align ="center">
+                                   <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/champion.png"/>  {{ player }}
+                                </td>
+
+                                <td><img src={{ absolute_url(asset('bundles/framework/images/calendar.png')) }} /> {{ data.createDate }}</td>
                             <tr>
                                 <td>Level du joueur : {{ data.summonerLevel }}</td>
-                                <td>{{ data.createDate }}</td>
+                                <td>Durée du match : {{ data.timePlayed }}</td>
+                            </tr>
+                            </tr>
+                            <tr>
+                                <td rowspan=2>Champion ID{{ data.championId }}</td>
+                                <td> <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/score.png"/>  {{ data.championsKilled }}/{{ data.numDeaths }}/{{ data.assists }}</td>
+                                <td><img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/gold.png"/>  {{ data.goldEarned }}</td>
+                            <tr>
+                                <td>KDA  : {{ data.kda}}</td>
+                                <td><img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/minion.png"/> {{ data.minionsKilled }}</td>
                             </tr>
                             </tr>
                         </table>
