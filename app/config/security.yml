@@ -4,12 +4,15 @@ security:
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory:
-            memory: ~
+         in_memory:
+             memory:
+                 users:
+                     user1:
+                         password: user1
+                         roles: 'ROLE_USERS'
     encoders:
-        Symfony\Component\Security\Core\User\User:
-             algorithm: bcrypt
-             cost: 12
+        Symfony\Component\Security\Core\User\: plaintext
+
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
