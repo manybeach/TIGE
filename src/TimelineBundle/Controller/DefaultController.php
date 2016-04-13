@@ -29,10 +29,10 @@ class DefaultController extends Controller
 
         $arrayAllPlayers = array();
         foreach ($gamers as $gamer) {
-            $summonerName = strtolower($gamer->getName());
-            $resultSummonerInfo = $this->getInfoSummoner($summonerName, $server);
-            $summonerId = $resultSummonerInfo[$summonerName]['id'];
-            $resultListMatch = $this->getMatchList($summonerId, $server);
+            $summonerName           = strtolower($gamer->getName());
+            $resultSummonerInfo     = $this->getInfoSummoner($summonerName, $server);
+            $summonerId             = $resultSummonerInfo[$summonerName]['id'];
+            $resultListMatch        = $this->getMatchList($summonerId, $server);
 
             $profileIconId = $resultSummonerInfo[$summonerName]["profileIconId"];
             $summonerLevel = $resultSummonerInfo[$summonerName]["summonerLevel"];
@@ -42,12 +42,16 @@ class DefaultController extends Controller
             foreach ($resultListMatch["games"] as $arrayGame) {
 
                 $photo = $this->getPhotoByIdLol($profileIconId);
+                $photoChamp = $this->getNameByIdChampionLol($arrayGame["championId"]);
                 $arrayGame = $this->controleArrayLol($arrayGame);
+
                 $arrayDataBySum = array(
+                    'player' => $summonerName,
                     'summonerId' => $summonerId,
                     'profileIconId' => $profileIconId,
                     'summonerLevel' => $summonerLevel,
                     'photo' => $photo,
+                    'photoChamp' => $photoChamp,
                     'win' => $arrayGame["stats"]["win"],
                     'createDate' => date('d/m/Y H:i:s', $arrayGame["createDate"] / 1000),
                     'championId' => $arrayGame["championId"],
@@ -64,8 +68,49 @@ class DefaultController extends Controller
 
             array_push($arrayAllPlayers, $arrayAllStats);
         }
-        return $this->render('TimelineBundle:Default:index.html.twig', array('AllData' => $arrayAllPlayers));
+        $games = $this->sortGames($arrayAllPlayers);
+        return $this->render('TimelineBundle:Default:index.html.twig', array('AllData' => $games));
     }
+
+
+    /**
+     * @param $arrayGames
+     * @return array
+     */
+    private function sortGames($arrayGames)
+    {
+        $temp = array();
+        foreach($arrayGames as $player)
+        {
+            foreach($player as $games)
+            {
+                foreach($games as $game)
+                {
+                    array_push($temp,$game);
+                }
+            }
+        }
+        $tmp = Array();
+        foreach($temp as &$ma)
+            $tmp[] = &$ma["createDate"];
+        array_multisort($tmp,SORT_DESC, $temp);
+
+        return $temp;
+    }
+
+    private function getNameByIdChampionLol($idChampion)
+    {
+        $url = "https://global.api.pvp.net/api/lol/static-data/euw/v1.2/champion/$idChampion?api_key=0610f47d-dba7-46ff-84c7-fc9eeee8b788";
+        $champDetail = file_get_contents($url);
+        $arrayChamDetail = json_decode($champDetail,true);
+        $champName = $arrayChamDetail['name'];
+        $champNameW = str_replace(" ","",$champName);
+        $champNameF = str_replace("'","",$champNameW);
+        $photoChamp = "http://ddragon.leagueoflegends.com/cdn/6.7.1/img/champion/$champNameF.png";
+        return $photoChamp;
+
+    }
+
 
     private function getPhotoByIdLol($idPhoto)
     {
@@ -112,6 +157,10 @@ class DefaultController extends Controller
         $em->flush();
     }
 
+    /**
+     * @param $arrayGame
+     * @return array
+     */
     private function controleArrayLol($arrayGame)
     {
         if(empty($arrayGame["stats"]["win"])) $arrayGame["stats"]["win"] = 0;
@@ -124,4 +173,32 @@ class DefaultController extends Controller
 
         return $arrayGame;
     }
+
+    /**
+     * @return array
+     */
+    function array_msort($array, $cols)
+    {
+        $colarr = array();
+        foreach ($cols as $col => $order) {
+            $colarr[$col] = array();
+            foreach ($array as $k => $row) { $colarr[$col]['_'.$k] = strtolower($row[$col]); }
+        }
+        $eval = 'array_multisort(';
+        foreach ($cols as $col => $order) {
+            $eval .= '$colarr[\''.$col.'\'],'.$order.',';
+        }
+        $eval = substr($eval,0,-1).');';
+        eval($eval);
+        $ret = array();
+        foreach ($colarr as $col => $arr) {
+            foreach ($arr as $k => $v) {
+                $k = substr($k,1);
+                if (!isset($ret[$k])) $ret[$k] = $array[$k];
+                $ret[$k][$col] = $array[$k][$col];
+            }
+        }
+        return $ret;
+    }
+
 }
