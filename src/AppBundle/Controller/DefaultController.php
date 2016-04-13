@@ -21,11 +21,10 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/admin", name="homepage")
+     * @Route("/admin")
      */
-    public function adminAction(Request $request)
+    public function adminAction()
     {
-        // replace this example code with whatever you need
-        return new Response("Hello Mathieu !!");
+        return new Response('<html><body>Admin page!</body></html>');
     }
 }
