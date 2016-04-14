@@ -21,27 +21,13 @@
         <div class="header-logo">
             <img src={{ absolute_url(asset('bundles/framework/images/tige.png')) }} alt="Tige"/>
         </div>
-
         <div class="search">
-            <div class="form-row">
-                <form class="fos_user_registration_register"
-                      action="{{ path('fos_user_registration_register') }} "
-                      method="POST">
-                    <button class="sf-button" type="submit">
-                        <span class="border-l">
-                            <span class="border-r">
-                                <span class="btn-bg">S'enregistrer</span>
-                            </span>
-                        </span>
-                    </button>
-                </form>
-            </div>
            </br>
             {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
                 <div class="form-row">
                     <form class="fos_user_registration_register"
                           action="{{ path('fos_user_security_logout') }} "
-                          method="POST">
+                          method="GET">
                         <button class="sf-button" type="submit">
                             <span class="border-l">
                                 <span class="border-r">
@@ -52,6 +38,19 @@
                     </form>
                 </div>
             {% else %}
+                <div class="form-row">
+                    <form class="fos_user_registration_register"
+                          action="{{ path('fos_user_registration_register') }} "
+                          method="POST">
+                        <button class="sf-button" type="submit">
+                        <span class="border-l">
+                            <span class="border-r">
+                                <span class="btn-bg">S'enregistrer</span>
+                            </span>
+                        </span>
+                        </button>
+                    </form>
+                </div></br>
                 <div class="form-row">
                     <form class="fos_user_registration_register"
                           action="{{ path('fos_user_security_login') }} "
@@ -70,6 +69,7 @@
         </div>
     </div>
     <div>
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
@@ -87,8 +87,8 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <li><a href="#">Evénements</a></li>
-                        <li><a href="#">Statistique</a></li>
-                        <li><a href="#">Mon compte</a></li>
+                        <li><a href="#">Statistiques</a></li>
+                        <li><a href="{{ path('my_account') }}">Mon compte</a></li>
                     </ul>
                     <form class="navbar-form navbar-left" role="search">
                         <div class="form-group">
@@ -99,7 +99,7 @@
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>
-
+ {% endif %}
     </div>
     <div class="sf-reset">
         {% block body %}

@@ -1,3 +1,7 @@
+myaccount:
+    resource: "@MyaccountBundle/Resources/config/routing.yml"
+    prefix:   /
+
 timeline:
     resource: "@TimelineBundle/Resources/config/routing.yml"
     prefix:   /
