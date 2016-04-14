@@ -10,13 +10,17 @@
         {% block content %}
             {% if AllData is not empty %}
                 {% for data in AllData %}
-                    <table class="table table-bordered table-striped">
+                    <table class="table table-hover table-condensed">
                         <tr class="blog-title">
-                            <th colspan=3>League Of Legend</th>
+                            {% if data.win %}
+                                <th class="success" colspan=3>League Of Legend</th>
+                            {% else %}
+                                <th class="danger" colspan=3>League Of Legend</th>
+                            {% endif %}
                         <tr>
                             <td rowspan=2><img src="{{ data.photo }}"/></td>
                             <td align="center">
-                                <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/champion.png"/> {{ data.player }}
+                                <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/champion.png" class="img-thumbnail"/> {{ data.player }}
                             </td>
 
                             <td>
@@ -30,7 +34,7 @@
                         <tr>
                             <td rowspan=2><img src="{{ data.photoChamp }}"/></td>
                             <td>
-                                <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/score.png"/> {{ data.championsKilled }}/{{ data.numDeaths }}/{{ data.assists }}</td>
+                                <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/score.png" class="img-thumbnail"/> {{ data.championsKilled }}/{{ data.numDeaths }}/{{ data.assists }}</td>
                             <td>
                                 <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/gold.png"/> {{ data.goldEarned }}
                             </td>

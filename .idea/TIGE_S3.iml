@@ -18,5 +18,6 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="library" name="highcharts-DefinitelyTyped" level="application" />
   </component>
 </module>

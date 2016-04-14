@@ -1,3 +1,7 @@
+stats:
+    resource: "@StatsBundle/Resources/config/routing.yml"
+    prefix:   /
+
 myaccount:
     resource: "@MyaccountBundle/Resources/config/routing.yml"
     prefix:   /

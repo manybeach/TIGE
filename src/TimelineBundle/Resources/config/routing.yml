@@ -5,3 +5,7 @@ timeline_data:
 my_account:
     path:  /account
     defaults: { _controller: MyaccountBundle:Default:index }
+
+stats_homepage:
+    path:  /statistiques
+    defaults: { _controller: StatsBundle:Default:index }

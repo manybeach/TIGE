@@ -119,7 +119,10 @@ class DefaultController extends Controller
 
     }
 
-
+    /**
+     * @param $idPhoto
+     * @return string (url)
+     */
     private function getPhotoByIdLol($idPhoto)
     {
         $url = "http://ddragon.leagueoflegends.com/cdn/6.7.1/img/profileicon/$idPhoto.png";
@@ -127,9 +130,10 @@ class DefaultController extends Controller
     }
 
     /**
-     * @param $summonerId
+     * @param $summonerName
      * @param $server
      * @return arrayOfSummonnersInfo
+     * @internal param $summonerId
      */
     private function getInfoSummoner($summonerName, $server)
     {
