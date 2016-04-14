@@ -18,58 +18,66 @@ class DefaultController extends Controller
      */
     public function getDataFromLolAction()
     {
-        $arrayAllStats = array();
+        $securityContext = $this->container->get('security.authorization_checker');
+        if ($securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED'))
+        {
+            $arrayAllStats = array();
 
-        $server = 'euw';
+            $server = 'euw';
 
-        // $this->addGamers();
-        $gamers = $this->getDoctrine()
-            ->getRepository('TimelineBundle\Entity\Users')
-            ->findAll();
+            // $this->addGamers();
+            $gamers = $this->getDoctrine()
+                ->getRepository('TimelineBundle\Entity\Users')
+                ->findAll();
 
-        $arrayAllPlayers = array();
-        foreach ($gamers as $gamer) {
-            $summonerName           = strtolower($gamer->getName());
-            $resultSummonerInfo     = $this->getInfoSummoner($summonerName, $server);
-            $summonerId             = $resultSummonerInfo[$summonerName]['id'];
-            $resultListMatch        = $this->getMatchList($summonerId, $server);
+            $arrayAllPlayers = array();
+            foreach ($gamers as $gamer) {
+                $summonerName = strtolower($gamer->getName());
+                $resultSummonerInfo = $this->getInfoSummoner($summonerName, $server);
+                $summonerId = $resultSummonerInfo[$summonerName]['id'];
+                $resultListMatch = $this->getMatchList($summonerId, $server);
 
-            $profileIconId = $resultSummonerInfo[$summonerName]["profileIconId"];
-            $summonerLevel = $resultSummonerInfo[$summonerName]["summonerLevel"];
+                $profileIconId = $resultSummonerInfo[$summonerName]["profileIconId"];
+                $summonerLevel = $resultSummonerInfo[$summonerName]["summonerLevel"];
 
-            $arrayAllStats = array($summonerName => array());
+                $arrayAllStats = array($summonerName => array());
 
-            foreach ($resultListMatch["games"] as $arrayGame) {
+                foreach ($resultListMatch["games"] as $arrayGame) {
 
-                $photo = $this->getPhotoByIdLol($profileIconId);
-                $photoChamp = $this->getNameByIdChampionLol($arrayGame["championId"]);
-                $arrayGame = $this->controleArrayLol($arrayGame);
-
-                $arrayDataBySum = array(
-                    'player' => $summonerName,
-                    'summonerId' => $summonerId,
-                    'profileIconId' => $profileIconId,
-                    'summonerLevel' => $summonerLevel,
-                    'photo' => $photo,
-                    'photoChamp' => $photoChamp,
-                    'win' => $arrayGame["stats"]["win"],
-                    'createDate' => date('d/m/Y H:i:s', $arrayGame["createDate"] / 1000),
-                    'championId' => $arrayGame["championId"],
-                    'goldEarned' => $arrayGame["stats"]["goldEarned"],
-                    'numDeaths' => $arrayGame["stats"]["numDeaths"],
-                    'championsKilled' => $arrayGame["stats"]["championsKilled"],
-                    'minionsKilled' => $arrayGame["stats"]["minionsKilled"],
-                    'assists' => $arrayGame["stats"]["assists"],
-                    'timePlayed' => date('i:s', $arrayGame["stats"]["timePlayed"]),
-                    'kda' => ($arrayGame["stats"]["championsKilled"] + $arrayGame["stats"]["assists"]) / $arrayGame["stats"]["numDeaths"]
-                );
-                array_push($arrayAllStats[$summonerName], $arrayDataBySum);
+                    $photo = $this->getPhotoByIdLol($profileIconId);
+                   // $photoChamp = $this->getNameByIdChampionLol($arrayGame["championId"]);
+                    $arrayGame = $this->controleArrayLol($arrayGame);
+                    $photoChamp = '';
+                    $arrayDataBySum = array(
+                        'player' => $summonerName,
+                        'summonerId' => $summonerId,
+                        'profileIconId' => $profileIconId,
+                        'summonerLevel' => $summonerLevel,
+                        'photo' => $photo,
+                        'photoChamp' => $photoChamp,
+                        'win' => $arrayGame["stats"]["win"],
+                        'createDate' => date('d/m/Y H:i:s', $arrayGame["createDate"] / 1000),
+                        'championId' => $arrayGame["championId"],
+                        'goldEarned' => $arrayGame["stats"]["goldEarned"],
+                        'numDeaths' => $arrayGame["stats"]["numDeaths"],
+                        'championsKilled' => $arrayGame["stats"]["championsKilled"],
+                        'minionsKilled' => $arrayGame["stats"]["minionsKilled"],
+                        'assists' => $arrayGame["stats"]["assists"],
+                        'timePlayed' => date('i:s', $arrayGame["stats"]["timePlayed"]),
+                        'kda' => ($arrayGame["stats"]["championsKilled"] + $arrayGame["stats"]["assists"]) / $arrayGame["stats"]["numDeaths"]
+                    );
+                    array_push($arrayAllStats[$summonerName], $arrayDataBySum);
+                }
+                array_push($arrayAllPlayers, $arrayAllStats);
             }
-
-            array_push($arrayAllPlayers, $arrayAllStats);
+            $games = $this->sortGames($arrayAllPlayers);
+            return $this->render('TimelineBundle:Default:index.html.twig', array('AllData' => $games));
         }
-        $games = $this->sortGames($arrayAllPlayers);
-        return $this->render('TimelineBundle:Default:index.html.twig', array('AllData' => $games));
+        else
+        {
+            return $this->render('TimelineBundle:Default:index.html.twig', array('AllData'=>''));
+        }
+
     }
 
 
