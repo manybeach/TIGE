@@ -44,16 +44,15 @@ class DefaultController extends Controller
                 foreach ($resultListMatch["games"] as $arrayGame) {
 
                     $photo = $this->getPhotoByIdLol($profileIconId);
-                   // $photoChamp = $this->getNameByIdChampionLol($arrayGame["championId"]);
                     $arrayGame = $this->controleArrayLol($arrayGame);
-                    $photoChamp = '';
+                    if($arrayGame["stats"]["numDeaths"] == 0) $arrayGame["stats"]["numDeaths"] =1;
                     $arrayDataBySum = array(
                         'player' => $summonerName,
                         'summonerId' => $summonerId,
                         'profileIconId' => $profileIconId,
                         'summonerLevel' => $summonerLevel,
                         'photo' => $photo,
-                        'photoChamp' => $photoChamp,
+                        'photoChamp' => $arrayGame["championId"],
                         'win' => $arrayGame["stats"]["win"],
                         'createDate' => date('d/m/Y H:i:s', $arrayGame["createDate"] / 1000),
                         'championId' => $arrayGame["championId"],
@@ -63,7 +62,7 @@ class DefaultController extends Controller
                         'minionsKilled' => $arrayGame["stats"]["minionsKilled"],
                         'assists' => $arrayGame["stats"]["assists"],
                         'timePlayed' => date('i:s', $arrayGame["stats"]["timePlayed"]),
-                        'kda' => ($arrayGame["stats"]["championsKilled"] + $arrayGame["stats"]["assists"]) / $arrayGame["stats"]["numDeaths"]
+                        'kda'=> round(($arrayGame["stats"]["championsKilled"] + $arrayGame["stats"]["assists"]) / $arrayGame["stats"]["numDeaths"],2)
                     );
                     array_push($arrayAllStats[$summonerName], $arrayDataBySum);
                 }
@@ -107,13 +106,7 @@ class DefaultController extends Controller
 
     private function getNameByIdChampionLol($idChampion)
     {
-        $url = "https://global.api.pvp.net/api/lol/static-data/euw/v1.2/champion/$idChampion?api_key=0610f47d-dba7-46ff-84c7-fc9eeee8b788";
-        $champDetail = file_get_contents($url);
-        $arrayChamDetail = json_decode($champDetail,true);
-        $champName = $arrayChamDetail['name'];
-        $champNameW = str_replace(" ","",$champName);
-        $champNameF = str_replace("'","",$champNameW);
-        $photoChamp = "http://ddragon.leagueoflegends.com/cdn/6.7.1/img/champion/$champNameF.png";
+        $photoChamp = 'bundles/framework/images/LoL/1.png';
         return $photoChamp;
 
     }
