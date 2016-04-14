@@ -1,32 +1,27 @@
 <?php
 
-namespace TimelineBundle\Entity;
-
-use Doctrine\ORM\Mapping as ORM;
+namespace AppBundle\Entity;
 
 /**
-* @ORM\Entity
-* @ORM\Table(name="users")
-*/
-class Users
+ * Games
+ */
+class Games
 {
-/**
-* @ORM\Column(type="integer")
-* @ORM\Id
-* @ORM\GeneratedValue(strategy="AUTO")
-*/
-private $id;
+    /**
+     * @var int
+     */
+    private $id;
 
-/**
-* @ORM\Column(type="string", length=50)
-*/
-private $name;
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $name;
 
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -37,19 +32,20 @@ private $name;
      * Set name
      *
      * @param string $name
-     * @return Users
+     *
+     * @return Games
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {

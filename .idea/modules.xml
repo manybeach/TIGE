@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/TIGE.iml" filepath="$PROJECT_DIR$/.idea/TIGE.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/tige_symfony.iml" filepath="$PROJECT_DIR$/.idea/tige_symfony.iml" />
     </modules>
   </component>
