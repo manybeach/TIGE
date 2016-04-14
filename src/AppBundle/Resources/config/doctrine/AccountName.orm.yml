@@ -1,0 +1,30 @@
+AppBundle\Entity\AccountName:
+    type: entity
+    table: null
+    repositoryClass: AppBundle\Repository\AccountNameRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 100
+    manyToOne:
+        user_id:
+            targetEntity: User
+            inversedBy: accountname
+            joinColumn:
+                name: user_id
+                referencedColumnName: id
+        game_id:
+            targetEntity: Games
+            inversedBy: games
+            joinColumn:
+                name: game_id
+                referencedColumnName: id
+    manyToOne:
+
+lifecycleCallbacks: {  }

@@ -25,9 +25,8 @@ class DefaultController extends Controller
 
             $server = 'euw';
 
-            // $this->addGamers();
             $gamers = $this->getDoctrine()
-                ->getRepository('TimelineBundle\Entity\Users')
+                ->getRepository('AppBundle\Entity\Games')
                 ->findAll();
 
             $arrayAllPlayers = array();
