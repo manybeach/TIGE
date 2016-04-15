@@ -12,38 +12,62 @@ class DefaultController extends Controller
     }
 
 
-    public function getStatsData()
+    public function getStatsDataAction()
     {
-        $arrayAllStats = array();
-
+        $arrayStatsSummary = array();
+        $arrayStatsRanked =array();
         $server = 'euw';
-
-
         $summonerName = strtolower('BabyKywa');
-        $resultSummonerInfo = $this->getInfoSummoner($summonerName, $server);
-        $summonerId = $resultSummonerInfo[$summonerName]['id'];
-        $resultStatsGamer = $this->getStatsGamer($summonerId, $server);
 
-        $arrayAllStats = array($summonerName => array());
+        // on recupere le summonerID à partir du summonerName
+        $summonerId = $this->getSummonerId($summonerName,$server);
 
-        foreach ($resultStatsGamer["playerStatSummaries"] as $arrayStats) {
+        // on recupere le résumé des stats du joueur à partir de son ID
+        $resultStatsSummary = $this->getStatsSummary($summonerId, $server);
 
-            if (empty($arrayGame["stats"]["win"])) {
-                $arrayGame["stats"]["win"] = 0;
+
+        foreach ($resultStatsSummary["playerStatSummaries"] as $arrayStats) {
+
+            if (empty($arrayStats["wins"])) {
+                $arrayStats["wins"] = 0;
+            }
+            if (empty($arrayStats["losses"])) {
+                $arrayStats["losses"] = 0;
             }
             $arrayDataBySum = array(
                 'wins' => $arrayStats["wins"],
                 'losses' => $arrayStats["losses"],
+                'playerStatSummaryType' => $arrayStats["playerStatSummaryType"]
             );
-            array_push($arrayAllStats[$summonerName], $arrayDataBySum);
+            array_push($arrayStatsSummary, $arrayDataBySum);
         }
-        array_push($arrayAllPlayers, $arrayAllStats);
 
-        $games = $this->sortGames($arrayAllPlayers);
 
-        return $this->render('TimelineBundle:Default:index.html.twig', array('AllData' => $games));
+        // on recupere les stats ranked du joueur à partir de son ID
+        $resultStatsRanked= $this->getStatsRanked($summonerId, $server);
+        foreach ($resultStatsRanked["champions"] as $arrayStats) {
 
+            if (empty($arrayStats["wins"])) {
+                $arrayStats["wins"] = 0;
+            }
+            if (empty($arrayStats["losses"])) {
+                $arrayStats["losses"] = 0;
+            }
+            $arrayDataBySum = array(
+                'id' => $arrayStats["id"],
+                'totalSessionsPlayed' => $arrayStats["stats"]["totalSessionsPlayed"],
+                'totalSessionsLost' => $arrayStats["stats"]["totalSessionsLost"],
+                'totalSessionsWon' => $arrayStats["stats"]["totalSessionsWon"],
+            );
+            array_push($arrayStatsRanked, $arrayDataBySum);
+        }
+
+    var_dump($arrayStatsRanked);
+        return true;
     }
+
+
+
 
     /**
      * @param $summonerName
@@ -51,19 +75,33 @@ class DefaultController extends Controller
      * @return arrayOfSummonnersInfo
      * @internal param $summonerId
      */
-    private function getInfoSummoner($summonerName, $server)
-    {
+    private
+    function getSummonerId(
+        $summonerName,
+        $server
+    ) {
         $url = 'https://'.$server.'.api.pvp.net/api/lol/'.$server.'/v1.4/summoner/by-name/'.$summonerName.'?api_key=0610f47d-dba7-46ff-84c7-fc9eeee8b788';
+        $resultJson = file_get_contents($url);
+        $result = json_decode($resultJson, true);
+        $summonerId = $result[$summonerName]['id'];
+        return $summonerId;
+    }
+
+
+    private
+    function getStatsSummary(
+        $summonerId,
+        $server
+    ) {
+        $url = 'https://'.$server.'.api.pvp.net/api/lol/'.$server.'/v1.3/stats/by-summoner/'.$summonerId.'/summary?api_key=0610f47d-dba7-46ff-84c7-fc9eeee8b788';
         $resultJson = file_get_contents($url);
         $result = json_decode($resultJson, true);
 
         return $result;
     }
 
-
-    private function getStatsGamer($summonerId, $server)
-    {
-        $url = 'https://'.$server.'.api.pvp.net/api/lol/'.$server.'/v1.3/stats/by-summoner/'.$summonerId.'?api_key=0610f47d-dba7-46ff-84c7-fc9eeee8b788';
+    private function getStatsRanked($summonerId, $server){
+        $url = 'https://'.$server.'.api.pvp.net/api/lol/'.$server.'/v1.3/stats/by-summoner/'.$summonerId.'/ranked?api_key=0610f47d-dba7-46ff-84c7-fc9eeee8b788';
         $resultJson = file_get_contents($url);
         $result = json_decode($resultJson, true);
 

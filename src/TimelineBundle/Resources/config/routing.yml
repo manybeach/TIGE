@@ -8,4 +8,4 @@ my_account:
 
 stats_homepage:
     path:  /statistiques
-    defaults: { _controller: StatsBundle:Default:index }
+    defaults: { _controller: StatsBundle:Default:getStatsData }
