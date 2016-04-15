@@ -13,9 +13,9 @@
                     <table class="table table-bordered table-striped">
                         <tr class="blog-title">
                             {% if data.win %}
-                                <th class="success" colspan=3>League Of Legend</th>
+                                <th class="success" colspan=3> <img src={{ absolute_url(asset('bundles/framework/images/coupe.png')) }}  /> League Of Legend</th>
                             {% else %}
-                                <th class="danger" colspan=3>League Of Legend</th>
+                                <th class="danger" colspan=3><img src={{ absolute_url(asset('bundles/framework/images/tete.png')) }}  /> League Of Legend</th>
                             {% endif %}
                         <tr>
                             <td rowspan=2><img src="{{ data.photo }}"/></td>

@@ -5,7 +5,7 @@
     <div class="block">
         <table class="table table-bordered table-striped">
             <tr class="blog-title">
-                <th colspan=2>Mes informations</th>
+                <th colspan=2> <img src={{ absolute_url(asset('bundles/framework/images/stylo.png')) }} />  Mes informations</th>
             </tr>
             <tr>
                 <td>id utilisateur :</td>
@@ -24,7 +24,7 @@
 
         <table class="table table-bordered table-striped">
             <tr class="blog-title">
-                <th colspan=2>Mes jeux</th>
+                <th colspan=2>  <img src={{ absolute_url(asset('bundles/framework/images/manette.png')) }} /> Mes jeux</th>
             </tr>
             {% for id,name in games %}
                 <tr>
@@ -32,7 +32,7 @@
                     <td>
                         {% if accountName[id] is empty %}
                             <form action="{{ path('myaccount_add') }}" class="navbar-form navbar-left" role="search"
-                                  method="" POST">
+                                  method="POST">
                             <input type="hidden" name="id_game" value={{ id }}>
                             <input type="text" name="pseudo" class="form-control" placeholder="Mon pseudo">
                             <button type="submit" class="btn btn-default">Valider</button>
