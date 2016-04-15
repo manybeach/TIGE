@@ -32,7 +32,7 @@
                         </tr>
                         </tr>
                         <tr>
-                            <td rowspan=2><img src="{{ data.photoChamp }}"/></td>
+                            <td rowspan=2><img src= {{ absolute_url(asset('bundles/framework/images/LoL/'~data.photoChamp~'.png')) }} /> </td>
                             <td>
                                 <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/score.png" class="img-thumbnail"/> {{ data.championsKilled }}/{{ data.numDeaths }}/{{ data.assists }}</td>
                             <td>

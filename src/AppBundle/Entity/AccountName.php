@@ -19,14 +19,16 @@ class AccountName
 
 
     /**
- * @ORM\ManyToOne(targetEntity="User", inversedBy="accountname")
- * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
- */
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="accountname", cascade={"persist"})
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\Column(nullable=false)
+     */
     private $user_id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Games", inversedBy="games")
+     * @ORM\ManyToOne(targetEntity="Games", inversedBy="games", cascade={"persist"})
      * @ORM\JoinColumn(name="game_id", referencedColumnName="id")
+     * @ORM\Column(name="game_id", nullable=false)
      */
     private $game_id;
 
@@ -87,5 +89,29 @@ class AccountName
     public function getUserId()
     {
         return $this->user_id;
+    }
+
+    /**
+     * Set gameId
+     *
+     * @param \AppBundle\Entity\Games $gameId
+     *
+     * @return AccountName
+     */
+    public function setGameId(\AppBundle\Entity\Games $gameId = null)
+    {
+        $this->game_id = $gameId;
+
+        return $this;
+    }
+
+    /**
+     * Get gameId
+     *
+     * @return \AppBundle\Entity\Games
+     */
+    public function getGameId()
+    {
+        return $this->game_id;
     }
 }

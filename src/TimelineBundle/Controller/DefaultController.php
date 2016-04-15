@@ -19,62 +19,67 @@ class DefaultController extends Controller
     public function getDataFromLolAction()
     {
         $securityContext = $this->container->get('security.authorization_checker');
-        if ($securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED'))
-        {
+        if ($securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $arrayAllStats = array();
 
             $server = 'euw';
 
             $gamers = $this->getDoctrine()
-                ->getRepository('AppBundle\Entity\Games')
+                ->getRepository('AppBundle\Entity\AccountName')
                 ->findAll();
 
+
             $arrayAllPlayers = array();
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $currentUser = $user->getId();
             foreach ($gamers as $gamer) {
-                $summonerName = strtolower($gamer->getName());
-                $resultSummonerInfo = $this->getInfoSummoner($summonerName, $server);
-                $summonerId = $resultSummonerInfo[$summonerName]['id'];
-                $resultListMatch = $this->getMatchList($summonerId, $server);
+                $iduser = $gamer->getUserId();
+                $idObjUser = $iduser->getId();
 
-                $profileIconId = $resultSummonerInfo[$summonerName]["profileIconId"];
-                $summonerLevel = $resultSummonerInfo[$summonerName]["summonerLevel"];
+                if ($idObjUser == $currentUser) {
 
-                $arrayAllStats = array($summonerName => array());
+                    $summonerName = strtolower($gamer->getName());
+                    $resultSummonerInfo = $this->getInfoSummoner($summonerName, $server);
+                    $summonerId = $resultSummonerInfo[$summonerName]['id'];
+                    $resultListMatch = $this->getMatchList($summonerId, $server);
 
-                foreach ($resultListMatch["games"] as $arrayGame) {
+                    $profileIconId = $resultSummonerInfo[$summonerName]["profileIconId"];
+                    $summonerLevel = $resultSummonerInfo[$summonerName]["summonerLevel"];
 
-                    $photo = $this->getPhotoByIdLol($profileIconId);
-                   // $photoChamp = $this->getNameByIdChampionLol($arrayGame["championId"]);
-                    $arrayGame = $this->controleArrayLol($arrayGame);
-                    $photoChamp = '';
-                    $arrayDataBySum = array(
-                        'player' => $summonerName,
-                        'summonerId' => $summonerId,
-                        'profileIconId' => $profileIconId,
-                        'summonerLevel' => $summonerLevel,
-                        'photo' => $photo,
-                        'photoChamp' => $photoChamp,
-                        'win' => $arrayGame["stats"]["win"],
-                        'createDate' => date('d/m/Y H:i:s', $arrayGame["createDate"] / 1000),
-                        'championId' => $arrayGame["championId"],
-                        'goldEarned' => $arrayGame["stats"]["goldEarned"],
-                        'numDeaths' => $arrayGame["stats"]["numDeaths"],
-                        'championsKilled' => $arrayGame["stats"]["championsKilled"],
-                        'minionsKilled' => $arrayGame["stats"]["minionsKilled"],
-                        'assists' => $arrayGame["stats"]["assists"],
-                        'timePlayed' => date('i:s', $arrayGame["stats"]["timePlayed"]),
-                        'kda' => ($arrayGame["stats"]["championsKilled"] + $arrayGame["stats"]["assists"]) / $arrayGame["stats"]["numDeaths"]
-                    );
-                    array_push($arrayAllStats[$summonerName], $arrayDataBySum);
+                    $arrayAllStats = array($summonerName => array());
+
+                    foreach ($resultListMatch["games"] as $arrayGame) {
+
+                        $photo = $this->getPhotoByIdLol($profileIconId);
+                        $arrayGame = $this->controleArrayLol($arrayGame);
+                        if ($arrayGame["stats"]["numDeaths"] == 0) $arrayGame["stats"]["numDeaths"] = 1;
+                        $arrayDataBySum = array(
+                            'player' => $summonerName,
+                            'summonerId' => $summonerId,
+                            'profileIconId' => $profileIconId,
+                            'summonerLevel' => $summonerLevel,
+                            'photo' => $photo,
+                            'photoChamp' => $arrayGame["championId"],
+                            'win' => $arrayGame["stats"]["win"],
+                            'createDate' => date('d/m/Y H:i:s', $arrayGame["createDate"] / 1000),
+                            'championId' => $arrayGame["championId"],
+                            'goldEarned' => $arrayGame["stats"]["goldEarned"],
+                            'numDeaths' => $arrayGame["stats"]["numDeaths"],
+                            'championsKilled' => $arrayGame["stats"]["championsKilled"],
+                            'minionsKilled' => $arrayGame["stats"]["minionsKilled"],
+                            'assists' => $arrayGame["stats"]["assists"],
+                            'timePlayed' => date('i:s', $arrayGame["stats"]["timePlayed"]),
+                            'kda' => round(($arrayGame["stats"]["championsKilled"] + $arrayGame["stats"]["assists"]) / $arrayGame["stats"]["numDeaths"], 2)
+                        );
+                        array_push($arrayAllStats[$summonerName], $arrayDataBySum);
+                    }
                 }
                 array_push($arrayAllPlayers, $arrayAllStats);
             }
             $games = $this->sortGames($arrayAllPlayers);
             return $this->render('TimelineBundle:Default:index.html.twig', array('AllData' => $games));
-        }
-        else
-        {
-            return $this->render('TimelineBundle:Default:index.html.twig', array('AllData'=>''));
+        } else {
+            return $this->render('TimelineBundle:Default:index.html.twig', array('AllData' => ''));
         }
 
     }
@@ -87,33 +92,24 @@ class DefaultController extends Controller
     private function sortGames($arrayGames)
     {
         $temp = array();
-        foreach($arrayGames as $player)
-        {
-            foreach($player as $games)
-            {
-                foreach($games as $game)
-                {
-                    array_push($temp,$game);
+        foreach ($arrayGames as $player) {
+            foreach ($player as $games) {
+                foreach ($games as $game) {
+                    array_push($temp, $game);
                 }
             }
         }
         $tmp = Array();
-        foreach($temp as &$ma)
+        foreach ($temp as &$ma)
             $tmp[] = &$ma["createDate"];
-        array_multisort($tmp,SORT_DESC, $temp);
+        array_multisort($tmp, SORT_DESC, $temp);
 
         return $temp;
     }
 
     private function getNameByIdChampionLol($idChampion)
     {
-        $url = "https://global.api.pvp.net/api/lol/static-data/euw/v1.2/champion/$idChampion?api_key=0610f47d-dba7-46ff-84c7-fc9eeee8b788";
-        $champDetail = file_get_contents($url);
-        $arrayChamDetail = json_decode($champDetail,true);
-        $champName = $arrayChamDetail['name'];
-        $champNameW = str_replace(" ","",$champName);
-        $champNameF = str_replace("'","",$champNameW);
-        $photoChamp = "http://ddragon.leagueoflegends.com/cdn/6.7.1/img/champion/$champNameF.png";
+        $photoChamp = 'bundles/framework/images/LoL/1.png';
         return $photoChamp;
 
     }
@@ -174,13 +170,13 @@ class DefaultController extends Controller
      */
     private function controleArrayLol($arrayGame)
     {
-        if(empty($arrayGame["stats"]["win"])) $arrayGame["stats"]["win"] = 0;
-        if(empty($arrayGame["stats"]["goldEarned"]))$arrayGame["stats"]["goldEarned"] = 0;
-        if(empty($arrayGame["stats"]["numDeaths"])) $arrayGame["stats"]["numDeaths"]=0;
-        if(empty($arrayGame["stats"]["championsKilled"]))$arrayGame["stats"]["championsKilled"] =0;
-        if(empty($arrayGame["stats"]["minionsKilled"]))$arrayGame["stats"]["minionsKilled"] =0;
-        if(empty($arrayGame["stats"]["assists"]))$arrayGame["stats"]["assists"]=0;
-        if(empty($arrayGame["stats"]["timePlayed"]))$arrayGame["stats"]["timePlayed"]=0;
+        if (empty($arrayGame["stats"]["win"])) $arrayGame["stats"]["win"] = 0;
+        if (empty($arrayGame["stats"]["goldEarned"])) $arrayGame["stats"]["goldEarned"] = 0;
+        if (empty($arrayGame["stats"]["numDeaths"])) $arrayGame["stats"]["numDeaths"] = 0;
+        if (empty($arrayGame["stats"]["championsKilled"])) $arrayGame["stats"]["championsKilled"] = 0;
+        if (empty($arrayGame["stats"]["minionsKilled"])) $arrayGame["stats"]["minionsKilled"] = 0;
+        if (empty($arrayGame["stats"]["assists"])) $arrayGame["stats"]["assists"] = 0;
+        if (empty($arrayGame["stats"]["timePlayed"])) $arrayGame["stats"]["timePlayed"] = 0;
 
         return $arrayGame;
     }
@@ -193,18 +189,20 @@ class DefaultController extends Controller
         $colarr = array();
         foreach ($cols as $col => $order) {
             $colarr[$col] = array();
-            foreach ($array as $k => $row) { $colarr[$col]['_'.$k] = strtolower($row[$col]); }
+            foreach ($array as $k => $row) {
+                $colarr[$col]['_' . $k] = strtolower($row[$col]);
+            }
         }
         $eval = 'array_multisort(';
         foreach ($cols as $col => $order) {
-            $eval .= '$colarr[\''.$col.'\'],'.$order.',';
+            $eval .= '$colarr[\'' . $col . '\'],' . $order . ',';
         }
-        $eval = substr($eval,0,-1).');';
+        $eval = substr($eval, 0, -1) . ');';
         eval($eval);
         $ret = array();
         foreach ($colarr as $col => $arr) {
             foreach ($arr as $k => $v) {
-                $k = substr($k,1);
+                $k = substr($k, 1);
                 if (!isset($ret[$k])) $ret[$k] = $array[$k];
                 $ret[$k][$col] = $array[$k][$col];
             }
