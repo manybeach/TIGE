@@ -10,4 +10,9 @@ namespace AppBundle\Repository;
  */
 class AccountNameRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function myFindOne($id)
+    {
+
+    }
 }

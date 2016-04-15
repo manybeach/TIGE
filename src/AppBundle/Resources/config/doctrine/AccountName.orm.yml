@@ -19,12 +19,12 @@ AppBundle\Entity\AccountName:
             joinColumn:
                 name: user_id
                 referencedColumnName: id
+                nullable: false
         game_id:
             targetEntity: Games
             inversedBy: games
             joinColumn:
                 name: game_id
                 referencedColumnName: id
-    manyToOne:
-
+                nullable: false
 lifecycleCallbacks: {  }

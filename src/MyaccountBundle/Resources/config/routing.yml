@@ -1,3 +1,9 @@
 myaccount_homepage:
     path:     /account
     defaults: { _controller: MyaccountBundle:Default:index }
+
+myaccount_add:
+    path:    /add
+    defaults: { _controller: MyaccountBundle:Default:addAccount }
+    requirements:
+      _method: POST
