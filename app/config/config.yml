@@ -38,9 +38,8 @@ framework:
 # Assetic Configuration
 assetic:
     debug:          "%kernel.debug%"
-    use_controller: false
-    bundles:        [ 'TimelineBundle' ]
-
+    use_controller: '%kernel.debug%'
+    bundles:        [ 'TimelineBundle', 'StatsBundle' ]
     filters:
         cssrewrite: ~
     assets:
@@ -73,6 +72,7 @@ assetic:
         jquery:
             inputs:
                 - %kernel.root_dir%/../vendor/components/jquery/jquery.js
+
 
 # Fos Configuration
 fos_user:
@@ -118,3 +118,4 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
+# app/config/config.yml
