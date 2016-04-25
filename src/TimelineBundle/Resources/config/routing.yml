@@ -8,4 +8,4 @@ my_account:
 
 stats_homepage:
     path:  /statistiques
-    defaults: { _controller: StatsBundle:Default:victoryChart }
+    defaults: { _controller: StatsBundle:Default:sellsHistory }
