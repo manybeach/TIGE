@@ -2,6 +2,7 @@
 
 namespace StatsBundle\Controller;
 
+use AppBundle;
 use Ob\HighchartsBundle\Highcharts\Highchart;
 use Ob\HighchartsBundle\Highcharts\ChartInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -14,10 +15,19 @@ class DefaultController extends Controller
         return $this->render('StatsBundle:Default:index.html.twig');
     }
 
-    public function sellsHistoryAction()
+    public function displayStatAction($idUser)
     {
+        if($idUser == false)
+        {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $idUser = $user->getId();
+        }
 
-        $arrayStatsChampions = $this->getStatsDataAction();
+
+        $summonerName = $this->getSummonerNameByUserId($idUser);
+
+        $arrayStatsChampions = $this->getStatsDataAction($summonerName);
+
 
         $ob = new Highchart();
         $ob->chart->renderTo('piechart');
@@ -29,11 +39,10 @@ class DefaultController extends Controller
             'showInLegend' => false
         ));
         $data = array();
-        foreach($arrayStatsChampions as $hero)
-        {
+        foreach ($arrayStatsChampions as $hero) {
             $heroName = $this->getNameChampById($hero["id"]);
-            if($heroName != false)
-                array_push($data,array($heroName, $hero["totalSessionsPlayed"]));
+            if ($heroName != false)
+                array_push($data, array($heroName, $hero["totalSessionsPlayed"]));
         }
         $ob->series(array(array('type' => 'pie', 'name' => 'Browser share', 'data' => $data)));
 
@@ -42,38 +51,31 @@ class DefaultController extends Controller
         ));
     }
 
+    public function getSummonerNameByUserId($idUser)
+    {
+        $repository = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('AppBundle:AccountName');
 
-    public function getStatsDataAction()
+        $arrayAccountName = $repository->findBy(array(
+            'user_id' => $idUser,
+            'game_id' => 1
+        ));
+
+        $accountName = $arrayAccountName[0]->getName();
+        return $accountName;
+    }
+
+    public function getStatsDataAction($summonerName)
     {
         $arrayStatsSummary = array();
         $arrayStatsRanked = array();
         $server = 'euw';
-        $summonerName = strtolower('BabyKywa');
 
         // on recupere le summonerID à partir du summonerName
         $summonerId = $this->getSummonerId($summonerName, $server);
 
-        /* // on recupere le résumé des stats du joueur à partir de son ID
-         $resultStatsSummary = $this->getStatsSummary($summonerId, $server);
-
-         foreach ($resultStatsSummary["playerStatSummaries"] as $arrayStats) {
-
-             if (empty($arrayStats["wins"])) {
-                 $arrayStats["wins"] = 0;
-             }
-             if (empty($arrayStats["losses"])) {
-                 $arrayStats["losses"] = 0;
-             }
-             $arrayDataBySum = array(
-                 'wins' => $arrayStats["wins"],
-                 'losses' => $arrayStats["losses"],
-                 'playerStatSummaryType' => $arrayStats["playerStatSummaryType"]
-             );
-             array_push($arrayStatsSummary, $arrayDataBySum);
-         }*/
-
-
-        // on recupere les stats ranked du joueur à partir de son ID
         $resultStatsRanked = $this->getStatsRanked($summonerId, $server);
 
         foreach ($resultStatsRanked["champions"] as $arrayStats) {
@@ -144,8 +146,7 @@ class DefaultController extends Controller
     private function getNameChampById($id)
     {
         $result = false;
-        if(!empty($id))
-        {
+        if (!empty($id)) {
             $url = "https://global.api.pvp.net/api/lol/static-data/euw/v1.2/champion/$id?api_key=0610f47d-dba7-46ff-84c7-fc9eeee8b788";
             $resultJson = file_get_contents($url);
             $result = json_decode($resultJson, true);

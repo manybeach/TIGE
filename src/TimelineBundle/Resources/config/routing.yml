@@ -7,5 +7,5 @@ my_account:
     defaults: { _controller: MyaccountBundle:Default:index }
 
 stats_homepage:
-    path:  /statistiques
-    defaults: { _controller: StatsBundle:Default:sellsHistory }
+    path:  /statistiques/{idUser}
+    defaults: { _controller: StatsBundle:Default:displayStat,idUser: false }

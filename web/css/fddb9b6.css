@@ -2251,6 +2251,7 @@ pre code {
 }
 table {
   background-color: transparent;
+  text-align: center;
 }
 caption {
   padding-top: 8px;
@@ -2294,6 +2295,7 @@ th {
 }
 .table .table {
   background-color: #fff;
+  text-align: center;
 }
 .table-condensed > thead > tr > th,
 .table-condensed > tbody > tr > th,

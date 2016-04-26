@@ -27,4 +27,13 @@ class DefaultController extends Controller
     {
         return new Response('<html><body>Admin page!</body></html>');
     }
+
+    public function getCurrentUserId()
+    {
+        var_dump($this);
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        var_dump($user);
+        $idUser = $user->getId();
+        return $idUser;
+    }
 }
