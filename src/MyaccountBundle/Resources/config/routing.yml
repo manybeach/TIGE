@@ -7,3 +7,11 @@ myaccount_add:
     defaults: { _controller: MyaccountBundle:Default:addAccount }
     requirements:
       _method: POST
+
+myaccount_mod:
+    path:    /mod
+    defaults: { _controller: MyaccountBundle:Default:modAccount }
+    requirements:
+      _method: POST
+
+

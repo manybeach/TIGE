@@ -43,13 +43,11 @@ class DefaultController extends Controller
                     $currentUser = $user->getId();
                     if ($idObjUser == $currentUser) {
                         $accountName[$idGame] = $objectAccN->getName();
-                    }
-                    else{
+                    } else {
                         $accountName[$idGame] = '';
                     }
                 }
-            }
-            else{
+            } else {
                 $accountName[$idGame] = '';
             }
         }
@@ -57,6 +55,11 @@ class DefaultController extends Controller
         return $this->render('MyaccountBundle:Default:index.html.twig', array('user' => $arrayUser, 'games' => $arrayGames, 'accountName' => $accountName));
     }
 
+    public function modAccountAction(Request $request)
+    {
+        return $this->redirect($this->generateUrl('myaccount_homepage', array('user' => '', 'games' => '', 'accountName' => '')));
+
+    }
 
     public function addAccountAction(Request $request)
     {
