@@ -34,7 +34,6 @@ class FavouritesController extends Controller
 
             $favourites = $arrayFavourites[0];
         }
-        if ($favourites->isFavourite($id_favoris)==false) {
             $favourites->setIdFavourites($id_favoris);
 
             $em = $this->getDoctrine()->getManager();
@@ -44,7 +43,7 @@ class FavouritesController extends Controller
 
             // actually executes the queries (i.e. the INSERT query)
             $em->flush();
-    }
+    
         return $this->redirect($this->generateUrl('stats_homepage',array(
             'idUser'=>$id_favoris))
         );
