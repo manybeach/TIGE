@@ -23,6 +23,11 @@ class Favourites
     private $idFavourites;
 
 
+    
+    public function Favourites($bool){
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $this->setIdAccount($user);
+    }
     /**
      * Get id
      *
@@ -43,7 +48,7 @@ class Favourites
     public function setIdAccount($idAccount)
     {
         $this->idAccount = $idAccount;
-
+        
         return $this;
     }
 
@@ -82,6 +87,26 @@ class Favourites
     public function getIdFavourites()
     {
         return $this->idFavourites;
+    }
+
+    public function delFavourite($id_user){
+        $favourites = explode(';',$this->getIdFavourites());
+        $result = false;
+        $i=0;
+        #On recherche l'élément à supprimer
+        foreach ($favourites as $favourite){
+            if($id_user== $favourite){
+                unset($favourites[$i]);
+            }
+            $i++;
+        }
+        #On réassemble le nouveau tableau pour le maj en base
+        foreach ($favourites as $favourite){
+            $this->idFavourites = (string)$favourite.';';
+        }
+        
+        
+        return $result;
     }
 }
 

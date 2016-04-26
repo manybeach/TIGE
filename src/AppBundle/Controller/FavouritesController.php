@@ -14,7 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FavouritesController extends Controller
 {
-    public function addfavouritesAction($id_favoris){
+    public function addfavouritesAction($id_favoris)
+    {
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $id_user = $user->getId();
 
@@ -26,23 +27,28 @@ class FavouritesController extends Controller
         $arrayFavourites = $repository->findBy(array(
             'idAccount' => $id_user));
 
-        if (empty($arrayFavourites[0])){
+        if (empty($arrayFavourites[0])) {
             $favourites = new Favourites();
             $favourites->setIdAccount($user);
-        }
-        else
+        } else {
+
             $favourites = $arrayFavourites[0];
+        }
+        if ($favourites->isFavourite($id_favoris)==false) {
+            $favourites->setIdFavourites($id_favoris);
 
-        $favourites->setIdFavourites($id_favoris);
+            $em = $this->getDoctrine()->getManager();
 
-        $em = $this->getDoctrine()->getManager();
+            // tells Doctrine you want to (eventually) save the Product (no queries yet)
+            $em->persist($favourites);
 
-        // tells Doctrine you want to (eventually) save the Product (no queries yet)
-        $em->persist($favourites);
-
-        // actually executes the queries (i.e. the INSERT query)
-        $em->flush();
-        return new Response();
-}
-
+            // actually executes the queries (i.e. the INSERT query)
+            $em->flush();
+    }
+        return $this->redirect($this->generateUrl('stats_homepage',array(
+            'idUser'=>$id_favoris))
+        );
+    }
+    
+ 
 }

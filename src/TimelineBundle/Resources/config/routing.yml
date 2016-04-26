@@ -15,3 +15,9 @@ ajoutfavoris:
     defaults: {_controller: AppBundle:Favourites:addfavourites}
     requirements:
       id_favourites: \d+
+
+supprfavoris:
+    path: /supprfavoris/{id_favoris}
+    defaults: {_controller: AppBundle:Favourites:delfavourites}
+    requirements:
+      id_favourites: \d+

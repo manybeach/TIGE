@@ -6,6 +6,7 @@ use AppBundle;
 use Ob\HighchartsBundle\Highcharts\Highchart;
 use Ob\HighchartsBundle\Highcharts\ChartInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\Controller\FavouritesController;
 
 
 class DefaultController extends Controller
@@ -17,14 +18,18 @@ class DefaultController extends Controller
 
     public function displayStatAction($idUser)
     {
-        if($idUser == false)
-        {
+        $me=false;
+        if($idUser == false) {
             $user = $this->get('security.token_storage')->getToken()->getUser();
             $idUser = $user->getId();
+            $me = true;
         }
-
-
-        $summonerName = $this->getSummonerNameByUserId($idUser);
+        else
+        {
+            $follow = $this->isFavourite($idUser);
+            $summonerName = $this->getSummonerNameByUserId($idUser);
+            
+        }
 
         $arrayStatsChampions = $this->getStatsDataAction($summonerName);
 
@@ -47,7 +52,12 @@ class DefaultController extends Controller
         $ob->series(array(array('type' => 'pie', 'name' => 'Browser share', 'data' => $data)));
 
         return $this->render('StatsBundle:Default:index.html.twig', array(
-            'piechart' => $ob
+            'piechart' => $ob,
+            'summonerName' => strtoupper($summonerName),
+            'me' => $me,
+            'follow' =>$follow,
+            'idUser' => $idUser
+            
         ));
     }
 
@@ -156,5 +166,29 @@ class DefaultController extends Controller
 
         return $result;
 
+    }
+
+    public function isFavourite($idUser){
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $id_user = $user->getId();
+
+        $repository = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('AppBundle:Favourites');
+
+        $arrayFavourites = $repository->findBy(array(
+            'idAccount' => $id_user));
+        $result = false;
+
+        if (!empty($arrayFavourites) ){
+            $mesfavoris = $arrayFavourites[0]->getIdFavourites();
+            $favourites = explode(';', $mesfavoris);
+            foreach ($favourites as $favourite) {
+                if ($idUser == $favourite)
+                    $result = true;
+            }
+        }
+        return $result;
     }
 }
