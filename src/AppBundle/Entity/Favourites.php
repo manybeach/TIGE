@@ -66,7 +66,10 @@ class Favourites
      */
     public function setIdFavourites($idFavourites)
     {
-        $this->idFavourites = $idFavourites;
+        if(empty($this->getIdFavourites()))
+            $this->idFavourites = (string)$idFavourites.';';
+        else    
+            $this->idFavourites = $this->getIdFavourites().(string)$idFavourites.';';
 
         return $this;
     }

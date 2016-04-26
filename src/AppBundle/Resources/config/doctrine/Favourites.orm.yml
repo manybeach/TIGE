@@ -9,13 +9,17 @@ AppBundle\Entity\Favourites:
             generator:
                 strategy: AUTO
     fields:
-        idAccount:
-            type: integer
-            unique: true
-            column: id_account
         idFavourites:
             type: string
             length: 255
             nullable: true
             column: id_favourites
+    manyToOne:
+            idAccount:
+                targetEntity: User
+                inversedBy: accountname
+                joinColumn:
+                    name: id_account
+                    referencedColumnName: id
+                    nullable: false
     lifecycleCallbacks: {  }

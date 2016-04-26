@@ -9,3 +9,9 @@ my_account:
 stats_homepage:
     path:  /statistiques/{idUser}
     defaults: { _controller: StatsBundle:Default:displayStat,idUser: false }
+
+ajoutfavoris:
+    path: /ajoutfavoris/{id_favoris}
+    defaults: {_controller: AppBundle:Favourites:addfavourites}
+    requirements:
+      id_favourites: \d+

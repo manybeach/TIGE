@@ -53,4 +53,9 @@ class User extends BaseUser
     {
         return $this->address;
     }
+
+    public function getId()
+    {
+        return $this->id;
+    }
 }
