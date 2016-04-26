@@ -66,9 +66,9 @@ class DefaultController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $idUser = $user->getId();
 
-        $result = $this->addAccountGaming($idUser, $idGame, $pseudo);
+        $this->addAccountGaming($idUser, $idGame, $pseudo);
 
-        return new Response("Ajout ok");
+        return $this->redirect($this->generateUrl('myaccount_homepage', array('user' => $idUser, 'games' => $idGame, 'accountName' => $pseudo)));
     }
 
     private function addAccountGaming($idUser, $idGame, $pseudo)
