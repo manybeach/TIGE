@@ -32,7 +32,8 @@ class DefaultController extends Controller
         }
 
         $summonerName = $this->getSummonerNameByUserId($idUser);
-        $arrayStatsChampions = $this->getStatsDataAction($summonerName);
+        $arrayStatsRankChampions = $this->getStatsDataRankAction($summonerName);
+        $arrayStatsSummaryChampions = $this->getStatsDataSummaryAction($summonerName);
 
 
         $ob = new Highchart();
@@ -45,15 +46,45 @@ class DefaultController extends Controller
             'showInLegend' => false
         ));
         $data = array();
-        foreach ($arrayStatsChampions as $hero) {
+        foreach ($arrayStatsRankChampions as $hero) {
             $heroName = $this->getNameChampById($hero["id"]);
             if ($heroName != false)
                 array_push($data, array($heroName, $hero["totalSessionsPlayed"]));
         }
         $ob->series(array(array('type' => 'pie', 'name' => 'Browser share', 'data' => $data)));
 
+
+
+        //Graphique en barre du nombre de parties gagnées par type de partie
+        $arrayWins = array();
+        $arrayPlayerstatSummaryType = array();
+        foreach ($arrayStatsSummaryChampions as $summary) {
+            array_push($arrayWins, $summary['wins']);
+            array_push($arrayPlayerstatSummaryType, $summary['playerStatSummaryType']);
+        }
+
+        $ob2 = new Highchart();
+        $ob2->chart->renderTo('barchart');
+        $ob2->title->text('Nombre de parties gagnées par type de partie');
+        $ob2->chart->type('column');
+
+        $ob2->yAxis->title(array('text' => 'Nombre de parties gagnées'));
+
+        $ob2->xAxis->title(array('text' => 'Type de partie'));
+        $ob2->xAxis->categories($arrayPlayerstatSummaryType);
+
+        $ob2->plotOptions->bar(array(
+            'allowPointSelect' => true,
+            'cursor' => 'pointer',
+            'dataLabels' => array('enabled' => true),
+            'showInLegend' => false
+        ));
+
+        $ob2->series(array(array('type' => 'bar', 'name' => 'Nombre de parties gagnées', 'data' => $arrayWins)));
+
         return $this->render('StatsBundle:Default:index.html.twig', array(
             'piechart' => $ob,
+            'barchart' => $ob2,
             'summonerName' => strtoupper($summonerName),
             'me' => $me,
             'follow' =>$follow,
@@ -78,9 +109,8 @@ class DefaultController extends Controller
         return $accountName;
     }
 
-    public function getStatsDataAction($summonerName)
+    public function getStatsDataRankAction($summonerName)
     {
-        $arrayStatsSummary = array();
         $arrayStatsRanked = array();
         $server = 'euw';
 
@@ -109,6 +139,28 @@ class DefaultController extends Controller
             array_push($arrayStatsRanked, $arrayDataBySum);
         }
         return $arrayStatsRanked;
+    }
+
+    public function getStatsDataSummaryAction($summonerName)
+    {
+        $arrayStatsSummary = array();
+        $server = 'euw';
+
+        // on recupere le summonerID à partir du summonerName
+        $summonerId = $this->getSummonerId($summonerName, $server);
+
+        $resultStatsSummary = $this->getStatsSummary($summonerId, $server);
+
+        foreach ($resultStatsSummary["playerStatSummaries"] as $arrayStats) {
+
+            $arrayDataBySum = array(
+                'wins' => $arrayStats["wins"],
+                'playerStatSummaryType' => $arrayStats["playerStatSummaryType"],
+
+            );
+            array_push($arrayStatsSummary, $arrayDataBySum);
+        }
+        return $arrayStatsSummary;
     }
 
 
