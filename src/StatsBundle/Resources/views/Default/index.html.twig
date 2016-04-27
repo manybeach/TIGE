@@ -32,10 +32,35 @@
         <script src="//code.highcharts.com/4.1.8/modules/exporting.js"></script>
         <script type="text/javascript">
             {{ chart(piechart) }}
+            {{ chart(barchart) }}
         </script>
 
-        <div id="piechart" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#byChampion">Par champion</a></li>
+            <li><a data-toggle="tab" href="#bySummary">Par partie</a></li>
+            <li><a data-toggle="tab" href="#etc">etc</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="byChampion" class="tab-pane fade in active">
+                <h3>Statistiques par champion</h3>
+                <p>
+                <div id="piechart" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+                </p>
+            </div>
+            <div id="bySummary" class="tab-pane fade">
+                <h3>Statistiques par partie</h3>
+                <p>
+                <div id="barchart" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
+                </p>
+            </div>
+            <div id="etc" class="tab-pane fade">
+                <h3>Statistiques etc</h3>
+                <p>Some content in etc.</p>
+            </div>
+        </div>
     </div>
+
 
 {% endblock %}
 
