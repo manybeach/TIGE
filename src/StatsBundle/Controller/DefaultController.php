@@ -28,10 +28,11 @@ class DefaultController extends Controller
         {
             $follow = $this->isFavourite($idUser);
             $summonerName = $this->getSummonerNameByUserId($idUser);
-            
+
         }
 
-        $arrayStatsChampions = $this->getStatsDataAction($summonerName);
+        $arrayStatsChampions = $this->getStatsDataRankedAction($summonerName);
+        $arrayStatsType = $this->getStatsDataSummaryAction($summonerName);
 
 
         $ob = new Highchart();
@@ -51,13 +52,32 @@ class DefaultController extends Controller
         }
         $ob->series(array(array('type' => 'pie', 'name' => 'Browser share', 'data' => $data)));
 
+        $ob2 = new Highchart();
+        // ID de l'élement de DOM que vous utilisez comme conteneur
+        $ob2->chart->renderTo('piechart');
+        $ob2->title->text('Répartition des victoires par type de partie');
+        $ob2->plotOptions->pie(array(
+            'allowPointSelect' => true,
+            'cursor' => 'pointer',
+            'dataLabels' => array('enabled' => true),
+            'showInLegend' => false
+        ));
+        $data2 = array();
+        foreach ($arrayStatsType as $type) {
+            array_push($data, array($type["playerStatSummaryType"], $type["wins"]));
+        }
+        $ob2->series(array(array('type' => 'pie', 'name' => 'Browser share', 'data' => $data2)));
+
+
+
+
         return $this->render('StatsBundle:Default:index.html.twig', array(
             'piechart' => $ob,
             'summonerName' => strtoupper($summonerName),
             'me' => $me,
             'follow' =>$follow,
             'idUser' => $idUser
-            
+
         ));
     }
 
@@ -74,12 +94,12 @@ class DefaultController extends Controller
         ));
 
         $accountName = $arrayAccountName[0]->getName();
-        return $accountName;
+        return strtolower($accountName);
     }
 
-    public function getStatsDataAction($summonerName)
+    public function getStatsDataRankedAction($summonerName)
     {
-        $arrayStatsSummary = array();
+
         $arrayStatsRanked = array();
         $server = 'euw';
 
