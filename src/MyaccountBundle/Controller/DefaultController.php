@@ -8,6 +8,8 @@ use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class DefaultController extends Controller
 {
@@ -104,5 +106,25 @@ class DefaultController extends Controller
         $em->flush();
 
         return true;
+    }
+
+    public function newAction(Request $request)
+    {
+        //Pour l'user_id, voir DefaultController du Bundle stat
+
+        // create a task and give it some dummy data for this example
+        $accountName = new AccountName();
+        //$accountName->setGameId(1);
+        $accountName->setName('Enter your pseudo');
+        //$accountName->setUserId(1);
+
+        $form = $this->createFormBuilder($accountName)
+            //->add('gameId', TextType::class)
+            ->add('name', TextType::class)
+            ->add('save', SubmitType::class, array('label' => 'Enregistrer'))
+            ->getForm();
+        return $this->render('@Myaccount/Default/index.html.twig', array(
+            'form' => $form->createView()
+        ));
     }
 }

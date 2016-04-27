@@ -3,8 +3,8 @@ timeline_data:
     defaults: { _controller: TimelineBundle:Default:getDataFromLol }
 
 my_account:
-    path:  /account
-    defaults: { _controller: MyaccountBundle:Default:index }
+    path:  /accountmathieu
+    defaults: { _controller: MyaccountBundle:Default:new }
 
 stats_homepage:
     path:  /statistiques/{idUser}
