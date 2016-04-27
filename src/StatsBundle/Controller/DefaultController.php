@@ -19,6 +19,7 @@ class DefaultController extends Controller
     public function displayStatAction($idUser)
     {
         $me=false;
+        $follow=false;
         if($idUser == false) {
             $user = $this->get('security.token_storage')->getToken()->getUser();
             $idUser = $user->getId();
@@ -27,10 +28,10 @@ class DefaultController extends Controller
         else
         {
             $follow = $this->isFavourite($idUser);
-            $summonerName = $this->getSummonerNameByUserId($idUser);
             
         }
 
+        $summonerName = $this->getSummonerNameByUserId($idUser);
         $arrayStatsChampions = $this->getStatsDataAction($summonerName);
 
 
