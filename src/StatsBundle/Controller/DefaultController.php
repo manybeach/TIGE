@@ -18,6 +18,12 @@ class DefaultController extends Controller
 
     public function displayStatAction($idUser)
     {
+        $repo = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('AppBundle:champions')
+        ;
+
         $me=false;
         $follow=false;
         if($idUser == false) {
@@ -46,11 +52,15 @@ class DefaultController extends Controller
             'showInLegend' => false
         ));
         $data = array();
+
         foreach ($arrayStatsRankChampions as $hero) {
-            $heroName = $this->getNameChampById($hero["id"]);
-            if ($heroName != false)
-                array_push($data, array($heroName, $hero["totalSessionsPlayed"]));
+            $heroName = $repo->findBy(array("idChampion"=>$hero['id']));
+            //$heroName = $this->getNameChampById($hero["id"]);
+            //if ($heroName != false)
+            if(!empty($heroName))
+                array_push($data, array($heroName[0]->getChampionName(), $hero["totalSessionsPlayed"]));
         }
+
         $ob->series(array(array('type' => 'pie', 'name' => 'Browser share', 'data' => $data)));
 
 
@@ -216,9 +226,7 @@ class DefaultController extends Controller
             $result = $result["name"];
 
         }
-
         return $result;
-
     }
 
     public function isFavourite($idUser){

@@ -4,7 +4,7 @@ timeline_data:
 
 my_account:
     path:  /account
-    defaults: { _controller: MyaccountBundle:Default:index }
+    defaults: { _controller: MyaccountBundle:AccountName:add }
 
 stats_homepage:
     path:  /statistiques/{idUser}
@@ -21,3 +21,5 @@ supprfavoris:
     defaults: {_controller: AppBundle:Favourites:delfavourites}
     requirements:
       id_favourites: \d+
+
+

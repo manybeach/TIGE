@@ -6,9 +6,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Form\UserAccountForm;
 
 class DefaultController extends Controller
 {
+
     /**
      * @Route("/nnn", name="homepage")
      */
@@ -28,6 +30,9 @@ class DefaultController extends Controller
         return new Response('<html><body>Admin page!</body></html>');
     }
 
+    /**
+     * @return User current idUser
+     */
     public function getCurrentUserId()
     {
         var_dump($this);

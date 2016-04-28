@@ -31,24 +31,29 @@
             {% for id,name in games %}
                 <tr>
                     <td>{{ name }}</td>
+
                     {% if accountName[id] is empty %}
                         <form action="{{ path('myaccount_add') }}" class="navbar-form navbar-left" role="search"
-                              method="POST"> <td>
+                              method="POST">
+                            <td>
 
                                 <input type="hidden" name="id_game" value={{ id }}>
                                 <input type="text" name="pseudo" class="form-control" placeholder="Mon pseudo">
-                        </td>
-                        <td>
-                            <button type="submit" class="btn btn-default">Valider</button>
+                            </td>
+                            <td>
+                                <button type="submit" class="btn btn-default">Valider</button>
 
-                        </td>                            </form>
+                            </td>
+                        </form>
 
                     {% else %}
                         <form action="{{ path('myaccount_mod') }}" class="" method="POST">
                             <td>{{ accountName[id] }}</td>
                             <input type="hidden" name="id_game" value={{ id }}></td>
                             <input type="hidden" name="account_name" value= {{ accountName[id] }}>
-                            <td><button type="submit" class="btn btn-default">Modifier</button></td>
+                            <td>
+                                <button type="submit" class="btn btn-default">Modifier</button>
+                            </td>
                         </form>
                     {% endif %}
                 </tr>
