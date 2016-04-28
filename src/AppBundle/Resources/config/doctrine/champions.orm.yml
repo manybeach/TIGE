@@ -1,0 +1,20 @@
+AppBundle\Entity\champions:
+    type: entity
+    table: null
+    repositoryClass: AppBundle\Repository\championsRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        idChampion:
+            type: integer
+            unique: true
+            column: id_champion
+        championName:
+            type: string
+            length: 255
+            column: champion_name
+    lifecycleCallbacks: {  }
