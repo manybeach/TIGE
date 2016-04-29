@@ -3,20 +3,25 @@
 {% block body %}
     <div class="block">
         <table align="center">
-            <tr><td>
+            <tr>
+                <td>
                     <h1 class="display-4">{{ summonerName }}</h1></td>
                 {% if  me==false %}
                     {% if follow==false %}
                         <td>
-                            <a tabindex="0" class="btn btn-lg btn" role="button" data-toggle="popover" data-trigger="focus"
+                            <a tabindex="0" class="btn btn-lg btn" role="button" data-toggle="popover"
+                               data-trigger="focus"
                                href="{{ path('ajoutfavoris',{'id_favoris':idUser}) }}"
-                               title="Suis-moi" data-content="L'ajoutez aux favoris"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a>
+                               title="Suis-moi" data-content="L'ajoutez aux favoris"><span
+                                        class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a>
                         </td>
-                    {%  else %}
+                    {% else %}
                         <td>
-                            <a tabindex="0" class="btn btn-lg btn" role="button" data-toggle="popover" data-trigger="focus"
+                            <a tabindex="0" class="btn btn-lg btn" role="button" data-toggle="popover"
+                               data-trigger="focus"
                                href="{{ path('supprfavoris',{'id_favoris':idUser}) }}"
-                               title="unfollow-me" data-content="Le supprimer des favoris"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span></a>
+                               title="unfollow-me" data-content="Le supprimer des favoris"><span
+                                        class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span></a>
                         </td>
                     {% endif %}
                 {% endif %}
@@ -30,15 +35,17 @@
 
         <script src="//code.highcharts.com/4.1.8/highcharts.js"></script>
         <script src="//code.highcharts.com/4.1.8/modules/exporting.js"></script>
+        <script src="//code.highcharts.com/4.1.8/modules/heatmap.js"></script>
         <script type="text/javascript">
             {{ chart(piechart) }}
             {{ chart(barchart) }}
         </script>
 
-        <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#byChampion">Par champion</a></li>
-            <li><a data-toggle="tab" href="#bySummary">Par partie</a></li>
-            <li><a data-toggle="tab" href="#etc">etc</a></li>
+        <ul class="nav nav-pills">
+            <li class="active"><a data-toggle="tab" href="#byChampion">Répartition champions</a></li>
+            <li><a data-toggle="tab" href="#bySummary">Répartition parties</a></li>
+            <li><a data-toggle="tab" href="#heatmap">Données des champions</a></li>
+            <li><a data-toggle="tab" href="#louane">Louane</a></li>
         </ul>
 
         <div class="tab-content">
@@ -54,9 +61,106 @@
                 <div id="barchart" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
                 </p>
             </div>
-            <div id="etc" class="tab-pane fade">
-                <h3>Statistiques etc</h3>
-                <p>Some content in etc.</p>
+            <div id="heatmap" class="tab-pane fade">
+                <h3>heatmap par champion</h3>
+
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <td> Nom du champion</td>
+                        <td> Ratio de victoires</td>
+                        <td> KDA</td>
+                        <td> Dommages infligés</td>
+                        <td> Dommages reçus</td>
+                        <td> Minions tués</td>
+                        <td> Gold gagné</td>
+                    </tr>
+                    {% if championsData is not empty %}
+                    {% for champion in championsData %}
+                    <tr class="blog-title">
+                        <td> {{ champion.id }}</td>
+                        <td> {{ champion.totalSessionsWon/champion.totalSessionsPlayed }}</td>
+                        <td> {{ (champion.totalChampionKills+champion.totalAssists)/champion.totalDeathsPerSession }}</td>
+                        <td> {{ champion.totalDamageDealt }}</td>
+                        <td> {{ champion.totalDamageTaken }}</td>
+                        <td> {{ champion.totalMinionKills }}</td>
+                        <td> {{ champion.totalGoldEarned }}</td>
+
+                    <tr>
+                        {% endfor %}
+                        {% endif %}
+
+                </table>
+                </br>
+
+
+            </div>
+            <div id="louane" class="tab-pane fade">
+                <h3>Jour 1</h3>
+                <p>Jour 1
+                    Amour numéro 1
+                    C'est l'amour suprême
+                    Dis-moi que tu m'aimes
+                    Je veux un jour numéro deux
+                    Une suite à l'hôtel
+                    Supplément mortel
+                    Je t'ai regardé toute la nuit
+                    Danser sur mon âme n'est plus permis
+                    9 jours la vie c'est du velours
+                    Et l'éternité une nécessité
+                    Jour 10
+                    Variation du délice
+                    Que voudrais-tu faire ?
+                    Une balade en mer
+                    Chaque jour
+                    Dépendance à l'amour
+                    Pas de danse autour
+
+                    C'est le jour 1
+                    Celui qu'on retient
+                    Celui qui s'efface quand tu me remplaces
+                    Quand tu me retiens
+                    C'est celui qui revient
+                    C'est le jour 1
+                    Celui qu'on retient
+                    Celui qui s'efface quand tu me remplaces
+                    Quand tu me retiens
+                    C'est celui qui revient
+
+                    100 jours si c’était un jour sans
+
+
+                    Sans en avoir l'air
+                    De l'orage dans l'air
+                    Jour 1000
+                    T'as touché dans le mille
+
+                    Essence térébenthine
+                    Cachée dans la poitrine
+                    Chaque jour
+                    Dépendance à l'amour
+                    Pas de danse autour
+
+                    C'est le jour 1
+                    Celui qu'on retient
+                    Celui qui s'efface quand tu me remplaces
+                    Quand tu me retiens
+                    C'est celui qui revient
+                    C'est le jour 1
+                    Celui qu'on retient
+                    Celui qui s'efface quand tu me remplaces
+                    Quand tu me retiens
+                    C'est celui qui revient
+                    C'est le jour 1
+                    Celui qu'on retient
+                    Celui qui s'efface quand tu me remplaces
+                    Quand tu me retiens
+                    C'est celui qui revient
+                    C'est le jour 1
+                    Celui qu'on retient
+                    Celui qui s'efface quand tu me remplaces
+                    Quand tu me retiens
+                    C'est celui qui revient
+                </p>
             </div>
         </div>
     </div>
