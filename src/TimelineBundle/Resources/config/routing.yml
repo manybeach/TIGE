@@ -22,4 +22,8 @@ supprfavoris:
     requirements:
       id_favourites: \d+
 
-
+search_player:
+    path: /search
+    defaults: { _controller: SearchBundle:Default:searchPlayer}
+    requirements:
+      _method: POST
