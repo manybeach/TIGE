@@ -89,24 +89,9 @@ class Favourites
         return $this->idFavourites;
     }
 
-    public function delFavourite($id_user){
-        $favourites = explode(';',$this->getIdFavourites());
-        $result = false;
-        $i=0;
-        #On recherche l'élément à supprimer
-        foreach ($favourites as $favourite){
-            if($id_user== $favourite){
-                unset($favourites[$i]);
-            }
-            $i++;
-        }
-        #On réassemble le nouveau tableau pour le maj en base
-        foreach ($favourites as $favourite){
-            $this->idFavourites = (string)$favourite.';';
-        }
-        
-        
-        return $result;
+    public function eraseFavourite(){
+        $this->idFavourites=null;
+        return $this;
     }
 }
 
