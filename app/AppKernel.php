@@ -22,8 +22,7 @@ class AppKernel extends Kernel
             new MyaccountBundle\MyaccountBundle(),
             new StatsBundle\StatsBundle(),
             new Ob\HighchartsBundle\ObHighchartsBundle(),
-            new \SearchBundle\SearchBundle()
-            //new FOS\CommentBundle\FOSCommentBundle(),
+            new FOS\CommentBundle\FOSCommentBundle(),
         );
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
