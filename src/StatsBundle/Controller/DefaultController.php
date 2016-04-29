@@ -55,8 +55,6 @@ class DefaultController extends Controller
 
         foreach ($arrayStatsRankChampions as $hero) {
             $heroName = $repo->findBy(array("idChampion"=>$hero['id']));
-            //$heroName = $this->getNameChampById($hero["id"]);
-            //if ($heroName != false)
             if(!empty($heroName))
                 array_push($data, array($heroName[0]->getChampionName(), $hero["totalSessionsPlayed"]));
         }

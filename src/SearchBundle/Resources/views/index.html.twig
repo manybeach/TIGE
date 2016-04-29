@@ -1,0 +1,21 @@
+{% extends "@Timeline/layout.html.twig" %}
+
+{% block body %}
+    <div class="block">
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th colspan="2">Liste des joueurs</th>
+            </tr>
+            {% for id, name in dataSearch %}
+                <tr>
+                    <td>
+                        {{ id }}
+                    </td>
+                    <td>
+                        <a href="{{ path("stats_homepage",{'idUser':id}) }}">{{ name }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
