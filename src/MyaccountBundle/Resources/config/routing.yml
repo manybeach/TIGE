@@ -14,4 +14,11 @@ myaccount_mod:
     requirements:
       _method: POST
 
+games:
+    path:    /games
+    defaults: { _controller: AppBundle:Games:index }
+    requirements:
+          _method: POST
+
+
 
