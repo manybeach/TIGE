@@ -83,6 +83,17 @@ fos_user:
             form:
                 type: AppBundle\Form\RegistrationType
 
+
+fos_comment:
+    db_driver: orm
+    class:
+        model:
+            comment: CommentBundle\Entity\Comment
+            thread: CommentBundle\Entity\Thread
+
+assetic:
+    bundles: [ "FOSCommentBundle" ]
+
 # Twig Configuration
 twig:
     debug:            "%kernel.debug%"

@@ -17,12 +17,13 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new AppBundle\AppBundle(),
             new TimelineBundle\TimelineBundle(),
-            new FOS\UserBundle\FOSUserBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new MyaccountBundle\MyaccountBundle(),
             new StatsBundle\StatsBundle(),
             new Ob\HighchartsBundle\ObHighchartsBundle(),
             new FOS\CommentBundle\FOSCommentBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
+
         );
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
