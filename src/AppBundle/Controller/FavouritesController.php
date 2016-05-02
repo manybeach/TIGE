@@ -34,18 +34,18 @@ class FavouritesController extends Controller
 
             $favourites = $arrayFavourites[0];
         }
-            $favourites->setIdFavourites($id_favoris);
+        $favourites->setIdFavourites($id_favoris);
 
-            $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
 
-            // tells Doctrine you want to (eventually) save the Product (no queries yet)
-            $em->persist($favourites);
+        // tells Doctrine you want to (eventually) save the Product (no queries yet)
+        $em->persist($favourites);
 
-            // actually executes the queries (i.e. the INSERT query)
-            $em->flush();
-    
-        return $this->redirect($this->generateUrl('stats_homepage',array(
-            'idUser'=>$id_favoris))
+        // actually executes the queries (i.e. the INSERT query)
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('stats_homepage', array(
+            'idUser' => $id_favoris))
         );
     }
 
@@ -58,12 +58,12 @@ class FavouritesController extends Controller
             ->getDoctrine()
             ->getManager()
             ->getRepository('AppBundle:Favourites');
-        
+
         $arrayFavourites = $repository->findBy(array(
             'idAccount' => $id_user));
         $result = false;
 
-        if (!empty($arrayFavourites) ) {
+        if (!empty($arrayFavourites)) {
             $mesfavoris = $arrayFavourites[0]->getIdFavourites();
             $favourites = explode(';', $mesfavoris);
             $arrayFavourites[0]->eraseFavourite();
@@ -73,7 +73,7 @@ class FavouritesController extends Controller
                 }
             }
         }
-            
+
         $em = $this->getDoctrine()->getManager();
 
         // tells Doctrine you want to (eventually) save the Product (no queries yet)
@@ -82,10 +82,11 @@ class FavouritesController extends Controller
         // actually executes the queries (i.e. the INSERT query)
         $em->flush();
 
-        return $this->redirect($this->generateUrl('stats_homepage',array(
-            'idUser'=>$id_favoris))
+        return $this->redirect($this->generateUrl('stats_homepage', array(
+            'idUser' => $id_favoris))
         );
     }
+}
 
 
 
