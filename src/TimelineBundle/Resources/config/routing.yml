@@ -27,3 +27,4 @@ search_player:
     defaults: { _controller: SearchBundle:Default:searchPlayer}
     requirements:
       _method: POST
+

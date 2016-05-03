@@ -20,8 +20,11 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new MyaccountBundle\MyaccountBundle(),
+            new \SearchBundle\SearchBundle(),
             new StatsBundle\StatsBundle(),
             new Ob\HighchartsBundle\ObHighchartsBundle(),
+            new FOS\RestBundle\FOSRestBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle(),
             new FOS\CommentBundle\FOSCommentBundle(),
         );
 

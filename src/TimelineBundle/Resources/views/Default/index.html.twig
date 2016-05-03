@@ -1,54 +1,78 @@
 {% extends "TimelineBundle::layout.html.twig" %}
 
-
 {% block body %}
 
     {% block content_header %}
     {% endblock %}
-
     <div class="block">
         {% block content %}
+            <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"
+                    type="text/javascript"></script>
+
             {% if AllData is not empty %}
-                {% for data in AllData %}
-                    <table class="table table-bordered table-striped">
-                        <tr class="blog-title">
-                            {% if data.win %}
-                                <th class="success"  colspan=3> <img src={{ absolute_url(asset('bundles/framework/images/coupe.png')) }}  /> League Of Legend</th>
-                            {% else %}
-                                <th class="danger" colspan=3><img src={{ absolute_url(asset('bundles/framework/images/tete.png')) }}  /> League Of Legend</th>
-                            {% endif %}
-                        <tr>
-                            <td rowspan=2><img src="{{ data.photo }}"/></td>
-                            <td align="center">
-                                <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/champion.png" class="img-thumbnail"/> {{ data.player }}
-                            </td>
+            {% for data in AllData %}
+            <table class="table table-bordered table-striped">
+                <tr class="blog-title">
+                    {% if data.win %}
+                        <th class="success" align="center" colspan=3><img
+                                    src={{ absolute_url(asset('bundles/framework/images/coupe.png')) }} /> League Of
+                            Legend
+                        </th>
+                    {% else %}
+                        <th class="danger" colspan=3><img
+                                    src={{ absolute_url(asset('bundles/framework/images/tete.png')) }} /> League Of
+                            Legend
+                        </th>
+                    {% endif %}
+                <tr>
+                    <td rowspan=2 align="center"><img src="{{ data.photo }}" /></td>
+                    <td align="center">
+                        <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/champion.png "
+                             class="img-thumbnail" /> {{ data.player }}
+                    </td>
 
-                            <td>
-                                <img src={{ absolute_url(asset('bundles/framework/images/calendar.png')) }} /> {{ data.createDate }}
-                            </td>
-                        <tr>
-                            <td>Level du joueur : {{ data.summonerLevel }}</td>
-                            <td>Durée du match : {{ data.timePlayed }}</td>
-                        </tr>
-                        </tr>
-                        <tr>
-                            <td rowspan=2><img src= {{ absolute_url(asset('bundles/framework/images/LoL/'~data.photoChamp~'.png')) }} /> </td>
-                            <td>
-                                <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/score.png" class="img-thumbnail"/> {{ data.championsKilled }}/{{ data.numDeaths }}/{{ data.assists }}</td>
-                            <td>
-                                <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/gold.png"/> {{ data.goldEarned }}
-                            </td>
-                        <tr>
-                            <td>KDA : {{ data.kda }}</td>
-                            <td>
-                                <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/minion.png"/> {{ data.minionsKilled }}
-                            </td>
-                        </tr>
-                        </tr>
-                    </table>
-                    </br>
+                    <td align="center">
+                        <img src={{ absolute_url(asset('bundles/framework/images/calendar.png')) }} /> {{ data.createDate }}
+                    </td>
+                <tr>
+                    <td align="center">Level du joueur : {{ data.summonerLevel }}</td>
+                    <td align="center">Durée du match : {{ data.timePlayed }}</td>
+                </tr>
+                </tr>
+                <tr>
+                    <td rowspan=2 align="center"><img
+                                src= {{ absolute_url(asset('bundles/framework/images/LoL/'~data.photoChamp~'.png')) }} />
+                    </td>
+                    <td align="center">
+                        <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/score.png"
+                             class="img-thumbnail" /> {{ data.championsKilled }}/{{ data.numDeaths }}
+                        /{{ data.assists }}
+                    </td>
+                    <td align="center">
+                        <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/gold.png" /> {{ data.goldEarned }}
+                    </td>
+                <tr>
+                    <td align="center">KDA : {{ data.kda }}</td>
+                    <td align="center">
+                        <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/minion.png" /> {{ data.minionsKilled }}
+                    </td>
+                </tr>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <div id="fos_comment_thread" data-thread="{{ thread[loop.index0] }}">
+                            {% include 'FOSCommentBundle:Thread:comments.html.twig' with {
+                            'comments': comments[loop.index0],
+                            'thread': thread[loop.index0]
+                            } %}
+                        </div>
+                    </td>
+                </tr>
+            </table>
 
-                {% endfor %}
+            </br>
+
+            {% endfor %}
             {% endif %}
         {% endblock %}
     </div>

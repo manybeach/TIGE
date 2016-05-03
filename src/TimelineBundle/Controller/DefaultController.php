@@ -4,6 +4,7 @@ namespace TimelineBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
@@ -16,8 +17,11 @@ class DefaultController extends Controller
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getDataFromLolAction()
+    public function getDataFromLolAction(Request $request)
     {
+        $arrayCommentsThreads = array();
+        $comments = array();
+        $threads = array();
         $securityContext = $this->container->get('security.authorization_checker');
         if ($securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $arrayAllStats = array();
@@ -49,6 +53,9 @@ class DefaultController extends Controller
                     $arrayAllStats = array($summonerName => array());
 
                     foreach ($resultListMatch["games"] as $arrayGame) {
+                        $arrayCommentAndThread = $this->somethingAction($request,$arrayGame["createDate"]);
+                        array_push($comments,$arrayCommentAndThread['comments']);
+                        array_push($threads,$arrayCommentAndThread['threads']);
 
                         $photo = $this->getPhotoByIdLol($profileIconId);
                         $arrayGame = $this->controleArrayLol($arrayGame);
@@ -62,6 +69,7 @@ class DefaultController extends Controller
                             'photoChamp' => $arrayGame["championId"],
                             'win' => $arrayGame["stats"]["win"],
                             'createDate' => date('d/m/Y H:i:s', $arrayGame["createDate"] / 1000),
+                            'idComm'=>$arrayGame["createDate"],
                             'championId' => $arrayGame["championId"],
                             'goldEarned' => $arrayGame["stats"]["goldEarned"],
                             'numDeaths' => $arrayGame["stats"]["numDeaths"],
@@ -77,7 +85,7 @@ class DefaultController extends Controller
                 array_push($arrayAllPlayers, $arrayAllStats);
             }
             $games = $this->sortGames($arrayAllPlayers);
-            return $this->render('TimelineBundle:Default:index.html.twig', array('AllData' => $games));
+            return $this->render('TimelineBundle:Default:index.html.twig', array('AllData' => $games,'comments'=>$comments,'thread'=>$threads));
         } else {
             return $this->render('TimelineBundle:Default:index.html.twig', array('AllData' => ''));
         }
@@ -208,6 +216,27 @@ class DefaultController extends Controller
             }
         }
         return $ret;
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function somethingAction(Request $request,$id)
+    {
+        $thread = $this->container->get('fos_comment.manager.thread')->findThreadById($id);
+        if (null === $thread) {
+            $thread = $this->container->get('fos_comment.manager.thread')->createThread();
+            $thread->setId($id);
+            $thread->setPermalink($request->getUri());
+
+            // Add the thread
+            $this->container->get('fos_comment.manager.thread')->saveThread($thread);
+        }
+
+        $comments = $this->container->get('fos_comment.manager.comment')->findCommentTreeByThread($thread);
+
+        return array('comments'=> $comments, 'threads'=> $thread);
     }
 
 }
