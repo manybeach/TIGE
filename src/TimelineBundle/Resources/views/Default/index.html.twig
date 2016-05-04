@@ -11,14 +11,16 @@
 
             {% if AllData is not empty %}
             {% for data in AllData %}
-            <table class="table table-bordered table-striped">
-                <tr class="blog-title">
                     {% if data.win %}
+                    <table class="table table-bordered alert alert-success" role="alert">
+                        <tr class="blog-title">
                         <th class="success" align="center" colspan=3><img
                                     src={{ absolute_url(asset('bundles/framework/images/coupe.png')) }} /> League Of
                             Legend
                         </th>
                     {% else %}
+                            <table class="table table-bordered alert alert-danger" role="alert">
+                                <tr class="blog-title">
                         <th class="danger" colspan=3><img
                                     src={{ absolute_url(asset('bundles/framework/images/tete.png')) }} /> League Of
                             Legend

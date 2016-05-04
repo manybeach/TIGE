@@ -5,12 +5,12 @@
     {% block content_header %}
     {% endblock %}
 
-<div class="block">
+    <div class="block">
 
         {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'form-horizontal'}}) }}
         {{ form_widget(form) }}
         </br>
         <button type="submit" class="btn btn-primary">Envoyer</button>
 
-</div>
+    </div>
 {% endblock %}

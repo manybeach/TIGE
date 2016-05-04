@@ -18,11 +18,11 @@
 <body>
 <div id="content">
     <div class="header clear-fix">
-        <div class="header-logo">
+        {#<div class="header-logo">
             <img class="img-thumbnail"
                  alt="Tige"
-                 src={{ absolute_url(asset('bundles/framework/images/tige.png')) }} />
-        </div>
+                 src="{{ absolute_url(asset('bundles/framework/images/tige.png')) }}"/>
+        </div>#}
         <div class="search">
             </br>
             {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
@@ -72,7 +72,7 @@
     </div>
     <div>
         {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-            <nav class="navbar navbar-default">
+            <nav class="navbar navbar-inverse navbar-fixed-top">
                 <div class="container-fluid">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
@@ -87,7 +87,7 @@
                     </div>
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
-                    <div class="collapse navbar-collapse vcenter" id="bs-example-navbar-collapse-1 ">
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1 ">
                         <ul class="nav navbar-nav">
                             <li><a href="#">Evénements</a></li>
                             <li><a href="{{ path('stats_homepage') }}">Statistiques</a></li>
@@ -98,10 +98,10 @@
                               method="POST">
                             <div class="form-group">
                                 <input name="searchData" type="text" class="form-control" placeholder="Rechercher">
-                                <button type="submit" class="btn btn-default">Submit</button>
+                                <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
                         </form>
-                        <form class="fos_user_registration_register navbar-form"
+                        <form class="fos_user_registration_register navbar-form navbar-right"
                               action="{{ path('fos_user_security_logout') }} "
                               method="GET">
                             <div class="form-group">
@@ -114,10 +114,11 @@
         {% endif %}
     </div>
     <div class="sf-reset">
-        {% block body %}
+            {% block body %}
 
 
-        {% endblock %}
+            {% endblock %}
+
     </div>
 </div>
 </body>
