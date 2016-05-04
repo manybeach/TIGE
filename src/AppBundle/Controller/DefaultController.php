@@ -11,6 +11,9 @@ use AppBundle\Form\UserAccountForm;
 class DefaultController extends Controller
 {
 
+    public function homeAction(){
+        return $this->render('AppBundle::accueil.html.twig');
+    }
     /**
      * @Route("/nnn", name="homepage")
      */

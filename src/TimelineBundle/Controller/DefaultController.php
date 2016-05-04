@@ -10,7 +10,7 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
-        #return $this->render('TimelineBundle:Default:index.html.twig');
+        #return $this->render('TimelineBundle:Default:accueil.html.twig');
         return new Response("OK");
     }
 

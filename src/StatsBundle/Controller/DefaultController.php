@@ -52,7 +52,7 @@ class DefaultController extends Controller
 
         $ob = new Highchart();
         $ob->chart->renderTo('piechart');
-        $ob->title->text('Nombre de parties jouées par champion');
+        $ob->title->text('Nombre de parties jouées par champion en parties classées');
         $ob->plotOptions->pie(array(
             'allowPointSelect' => true,
             'cursor' => 'pointer',

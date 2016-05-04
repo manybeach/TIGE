@@ -1,5 +1,9 @@
-timeline_data:
+home:
     path:  /
+    defaults: { _controller: AppBundle:Default:home }
+
+timeline_data:
+    path:  /timeline
     defaults: { _controller: TimelineBundle:Default:getDataFromLol }
 
 my_account:

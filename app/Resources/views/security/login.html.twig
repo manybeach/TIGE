@@ -5,34 +5,39 @@
     {% block content_header %}
     {% endblock %}
 
-<div class="block">
-    {% block content %}
-        {% if error %}
-            <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
-
-        <form action="{{ path('login') }}" method="post" class="form-horizontal">
-            <div class="form-group">
-                <div class="col-md-8"><label for="username">Username:</label>
-                <input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}" />
-                </div>
-            </div>
-            <div class="form-group">
-                    <div class="col-md-8">
-                        <label for="password">Password:</label>
-                        <input type="password" class="form-control" id="password" name="_password" />
+    <div class="block">
+        {# {% block content %}
+             {% if error %}
+                 <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+             {% endif %}#}
+        <div class="container-fluid">
+            <form action="{{ path('login') }}" method="post" class="form-horizontal">
+                <div class="form-group">
+                    <label for="username" class="col-sm-2 control-label">Username</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="username" name="_username"
+                               value="{{ last_username }}" placeholder="Username"/>
                     </div>
-            </div>
-            {#
-                If you want to control the URL the user
-                is redirected to on success (more details below)
-                <input type="hidden" name="_target_path" value="/account" />
-            #}
-            </br>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary btn-lg">login</button>
-            </div>
-        </form>
-     {% endblock %}
-</div>
+                </div>
+                </br>
+                <div class="form-group">
+                    <label for="password" class="col-sm-2 control-label">Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="password" name="_password"
+                               placeholder="Password"/>
+                    </div>
+                </div>
+                {#
+     If you want to control the URL the user
+     is redirected to on success (more details below)
+     <input type="hidden" name="_target_path" value="/account" />
+    #}
+                </br>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-lg">login</button>
+                </div>
+            </form>
+        </div>
+        {# {% endblock %}#}
+    </div>
 {% endblock %}

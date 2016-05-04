@@ -3,7 +3,6 @@
     "license": "MIT",
     "type": "project",
     "description": "The \"Symfony Standard Edition\" distribution",
-    "minimum-stability": "dev",
     "autoload": {
         "psr-4": { "": "src/" },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
@@ -30,7 +29,7 @@
         "friendsofsymfony/rest-bundle": "^1.7",
         "jms/serializer-bundle": "^1.1",
         "symfony/validator": "^3.0",
-        "friendsofsymfony/comment-bundle": "^2.0"
+        "symfony/asset": "^3.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
@@ -56,7 +55,7 @@
     },
     "config": {
         "platform": {
-            "php": "5.5.9"
+            "php": "5.6.15"
         }
     },
     "extra": {
