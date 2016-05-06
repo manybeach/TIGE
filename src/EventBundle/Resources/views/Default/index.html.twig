@@ -1,0 +1,29 @@
+{% extends "@Timeline/layout.html.twig" %}
+
+{% block body %}
+    <div class="block">
+        <ul class="nav nav-pills">
+            <li class="active"><a data-toggle="tab" href="#upcommingEvents">Evénements à venir</a></li>
+            <li><a data-toggle="tab" href="#participateEvents">Evenements auquels je participe</a></li>
+            <li><a data-toggle="tab" href="#myEvents">Mes évenements</a></li>
+            <li><a data-toggle="tab" href="#addEvents">Créer un évenement</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="upcommingEvents" class="tab-pane fade in active">
+                <p>En cours de développement.</p>
+            </div>
+            <div id="participateEvents" class="tab-pane fade">
+                <p>En cours de développement.</p>
+            </div>
+            <div id="myEvents" class="tab-pane fade">
+                <p>En cours de développement.</p>
+            </div>
+            <div id="addEvents" class="tab-pane fade">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
