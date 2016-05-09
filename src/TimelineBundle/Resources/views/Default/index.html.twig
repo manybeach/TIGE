@@ -15,17 +15,21 @@
                     <table class="table table-bordered" role="alert">
                         <tr class="blog-title">
                         <th class="success" align="center" colspan=3>
-                            <h3 align="center"> <img src={{ absolute_url(asset('bundles/framework/images/coupe.png')) }} /> League Of
-                            Legend</h3>
+                            <h3 align="center"><img
+                                    src={{ absolute_url(asset('bundles/framework/images/win.png')) }} />
+                            </h3>
                         </th>
+                            <tr><td colspan ="3"> <h3 align="center">League Of Legend</h3></td></tr>
                         </tr>
                     {% else %}
                             <table class="table table-bordered" role="alert">
                                 <tr class="blog-title">
-                        <th class="danger" colspan=3> <h3 align="center"><img
-                                    src={{ absolute_url(asset('bundles/framework/images/tete.png')) }} /> League Of
-                            Legend</h3>
-                        </th>
+                                    <th class="danger" colspan=3> <h3 align="center"><img
+                                    src={{ absolute_url(asset('bundles/framework/images/loose.png')) }} /> </h3>
+                                    </th>
+                                <tr><td colspan ="3"> <h3 align="center">League Of Legend</h3></td></tr>
+                                </tr>
+
                     {% endif %}
                 <tr>
                     <td rowspan=2 align="center"><img src="{{ data.photo }}" /></td>
