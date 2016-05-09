@@ -67,12 +67,13 @@
                 </tr>
                 <tr>
                     <td colspan="3">
-                        <div id="fos_comment_thread" data-thread="{{ thread[loop.index0] }}">
+                   {#    <div id="fos_comment_thread" data-thread="{{ thread[loop.index0] }}">
                             {% include 'FOSCommentBundle:Thread:comments.html.twig' with {
                             'comments': comments[loop.index0],
                             'thread': thread[loop.index0]
                             } %}
                         </div>
+                        #}
                     </td>
                 </tr>
             </table>

@@ -69,7 +69,7 @@ class FavouritesController extends Controller
             $arrayFavourites[0]->eraseFavourite();
             foreach ($favourites as $favourite) {
                 if ($id_favoris != $favourite) {
-                    $arrayFavourites[0]->setFavourite($favourite);
+                    $arrayFavourites[0]->setIdFavourites($favourite);
                 }
             }
         }
@@ -86,6 +86,7 @@ class FavouritesController extends Controller
             'idUser' => $id_favoris))
         );
     }
+    
 }
 
 

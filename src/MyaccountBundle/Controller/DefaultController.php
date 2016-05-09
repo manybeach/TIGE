@@ -8,6 +8,7 @@ use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Controller\FavouritesController;
 
 class DefaultController extends Controller
 {
@@ -52,7 +53,19 @@ class DefaultController extends Controller
             }
         }
 
-        return $this->render('MyaccountBundle:Default:index.html.twig', array('user' => $arrayUser, 'games' => $arrayGames, 'accountName' => $accountName));
+
+        /* MANY - ajout de la liste des favoris sur l'onglet mon compte */
+        $maListe = array();
+        $mesFavoris = $this->listFavoris();
+        foreach($mesFavoris as $favoris) {
+            $maSousListe = array();
+            $maSousListe['id'] = $favoris->getId();
+            $maSousListe['name'] = $favoris->getName();
+            $maListe[] = $maSousListe;
+            
+        }
+        return $this->render('MyaccountBundle:Default:index.html.twig', array('user' => $arrayUser,
+            'games' => $arrayGames, 'accountName' => $accountName, 'mesFavoris'=> $maListe));
     }
 
     public function modAccountAction(Request $request)
@@ -104,5 +117,37 @@ class DefaultController extends Controller
         $em->flush();
 
         return true;
+    }
+
+    public function listFavoris()
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $id_user = $user->getId();
+
+        $repository = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('AppBundle:Favourites');
+
+        $arrayFavourites = $repository->findBy(array(
+            'idAccount' => $id_user));
+
+        $result = array();
+
+        if (!empty($arrayFavourites)) {
+            $mesfavoris = $arrayFavourites[0]->getIdFavourites();
+            $favourites = explode(';', $mesfavoris);
+            foreach ($favourites as $favourite) {
+                if (!empty($favourite))
+                    $result[]=$favourite;
+            }
+        }
+        $repository = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('AppBundle:AccountName');
+        $arrayFavourites = $repository->findBy(array('id'=>$result));
+        return $arrayFavourites;
+
     }
 }
