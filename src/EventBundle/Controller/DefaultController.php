@@ -11,6 +11,10 @@ class DefaultController extends Controller
 {
     public function indexAction(Request $request)
     {
+        //Récupération des évenements dans un tableau
+        $arrayEvents = $this->getDoctrine()->getManager()->getRepository('AppBundle:Event')->findAll();
+
+        //Gestion du formulaire d'ajout d'évenement
         $event = new Event();
 
         $form = $this->createForm(EventType::class, $event);
@@ -36,6 +40,7 @@ class DefaultController extends Controller
 
         return $this->render('@Event/Default/index.html.twig', array(
             'form' => $form->createView(),
+            'arrayEvents' => $arrayEvents,
         ));
     }
 }

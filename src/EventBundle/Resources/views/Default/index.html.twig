@@ -11,7 +11,34 @@
 
         <div class="tab-content">
             <div id="upcommingEvents" class="tab-pane fade in active">
-                <p>En cours de développement.</p>
+                {% if arrayEvents is empty %}
+                <p>Aucun évenement n'est programmé pour le moment ! Allez dans "Créer un événement" pour en ajouter
+                    ;)</p>
+                {% else %}
+                {% for event in arrayEvents %}
+                <table class="table table-bordered">
+                    <tr class="blog-title">
+                        <th align="center" colspan=2>
+                            <h3 align="center">
+                                {{ event.eventName }}
+                            </h3>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td colspan=2>
+                            <b>Description : </b>{{ event.eventDescription }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Date : </b>{{ event.eventDate.format("d/M/y") }}</td>
+                        <td><b>Lieu : </b>{{ event.eventPlace }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan=2><b>Participants : </b>{{ event.eventMembers }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                </table>
             </div>
             <div id="participateEvents" class="tab-pane fade">
                 <p>En cours de développement.</p>
