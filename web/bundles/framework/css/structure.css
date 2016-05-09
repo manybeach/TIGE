@@ -4,6 +4,7 @@ html {
 body {
     font: 11px Verdana, Arial, sans-serif;
     color: #333;
+    background-image:url(../images/font.jpg);
 }
 .sf-reset, .sf-reset .block, .sf-reset #message {
     margin: auto;

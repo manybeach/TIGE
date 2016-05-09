@@ -12,18 +12,20 @@
             {% if AllData is not empty %}
             {% for data in AllData %}
                     {% if data.win %}
-                    <table class="table table-bordered alert alert-success" role="alert">
+                    <table class="table table-bordered" role="alert">
                         <tr class="blog-title">
-                        <th class="success" align="center" colspan=3><img
+                        <th class="success" align="center" colspan=3>
+                            <h3 align="center"><img
                                     src={{ absolute_url(asset('bundles/framework/images/coupe.png')) }} /> League Of
-                            Legend
+                            Legend</h3>
                         </th>
+                        </tr>
                     {% else %}
-                            <table class="table table-bordered alert alert-danger" role="alert">
+                            <table class="table table-bordered" role="alert">
                                 <tr class="blog-title">
-                        <th class="danger" colspan=3><img
+                        <th class="danger" colspan=3> <h3 align="center"><img
                                     src={{ absolute_url(asset('bundles/framework/images/tete.png')) }} /> League Of
-                            Legend
+                            Legend</h3>
                         </th>
                     {% endif %}
                 <tr>
@@ -62,12 +64,12 @@
                 </tr>
                 <tr>
                     <td colspan="3">
-                        <div id="fos_comment_thread" data-thread="{{ thread[loop.index0] }}">
+                {#        <div id="fos_comment_thread" data-thread="{{ thread[loop.index0] }}">
                             {% include 'FOSCommentBundle:Thread:comments.html.twig' with {
                             'comments': comments[loop.index0],
                             'thread': thread[loop.index0]
                             } %}
-                        </div>
+                        </div> #}
                     </td>
                 </tr>
             </table>
@@ -77,5 +79,5 @@
             {% endfor %}
             {% endif %}
         {% endblock %}
-    </div>
+    </table></div>
 {% endblock %}
