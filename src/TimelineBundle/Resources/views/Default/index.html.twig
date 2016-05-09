@@ -15,8 +15,7 @@
                     <table class="table table-bordered" role="alert">
                         <tr class="blog-title">
                         <th class="success" align="center" colspan=3>
-                            <h3 align="center"><img
-                                    src={{ absolute_url(asset('bundles/framework/images/coupe.png')) }} /> League Of
+                            <h3 align="center"> <img src={{ absolute_url(asset('bundles/framework/images/coupe.png')) }} /> League Of
                             Legend</h3>
                         </th>
                         </tr>
@@ -64,12 +63,12 @@
                 </tr>
                 <tr>
                     <td colspan="3">
-                {#        <div id="fos_comment_thread" data-thread="{{ thread[loop.index0] }}">
+                        <div id="fos_comment_thread" data-thread="{{ thread[loop.index0] }}">
                             {% include 'FOSCommentBundle:Thread:comments.html.twig' with {
                             'comments': comments[loop.index0],
                             'thread': thread[loop.index0]
                             } %}
-                        </div> #}
+                        </div>
                     </td>
                 </tr>
             </table>

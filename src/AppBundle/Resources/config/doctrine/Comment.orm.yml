@@ -10,5 +10,7 @@ AppBundle\Entity\Comment:
     manyToOne:
         thread:
             targetEntity: AppBundle\Entity\Thread
+        author:
+            targetEntity: AppBundle\Entity\User
 
     lifecycleCallbacks: {  }

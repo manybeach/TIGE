@@ -81,4 +81,3 @@ class champions
         return $this->championName;
     }
 }
-
