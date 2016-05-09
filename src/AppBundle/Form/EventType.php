@@ -3,6 +3,7 @@
 namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -23,6 +24,7 @@ class EventType extends AbstractType
             ->add('eventDescription', TextType::class, array('label' => 'Description'))
             ->add('eventPlace', TextType::class, array('label' => 'Lieu'))
             ->add('eventDate', DateType::class, array('label' => 'Date'))
+            ->add('eventMaxParticipant', IntegerType::class, array('label' => 'Nombre Participants Max'))
             ->add('eventMembers', TextType::class, array('label' => 'Membres'))
             ->add('save', SubmitType::class, array('label' => "Enregistrer l'événement"))
         ;

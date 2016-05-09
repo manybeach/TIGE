@@ -15,11 +15,16 @@ AppBundle\Entity\Event:
         eventDescription:
             type: string
             length: 255
+        eventDate:
+            type: date
         eventPlace:
             type: string
             length: 255
-        eventDate:
-            type: date
+        eventOwner:
+            type: string
+            length: 255
+        eventMaxParticipant:
+            type: integer
         eventMembers:
             type: string
             length: 255
