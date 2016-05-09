@@ -36,3 +36,4 @@ event_homepage:
     path:     /event
     defaults: { _controller: EventBundle:Default:index }
 
+
