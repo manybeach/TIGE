@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     {% stylesheets '@bootstrap_css' %}
     <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
@@ -40,33 +40,30 @@
                      </form>
                  </div>#}
             {% else %}
-                <div class="form-row">
-                    <form class="fos_user_registration_register"
-                          action="{{ path('app_registration_register') }} "
-                          method="POST">
-                        <button class="sf-button" type="submit">
-                        <span class="border-l">
-                            <span class="border-r">
-                                <span class="btn-bg">S'enregistrer</span>
-                            </span>
-                        </span>
-                        </button>
-                    </form>
-                </div></br>
-                <div class="form-row">
-                    <form class="fos_user_registration_register"
-                          action="{{ path('fos_user_security_login') }} "
-                          method="POST">
-                        <button class="sf-button" type="submit">
-                            <span class="border-l">
-                                <span class="border-r">
-                                    <span class="btn-bg">Connexion</span>
-                                </span>
-                            </span>
-                        </button>
-                    </form>
-                </div>
+                <nav class="navbar navbar-inverse navbar-fixed-top">
+                    <div class="container-fluid">
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            <div class="nav navbar-left"><h2 class="text-primary">TIGE, THE TIGE</h2></div>
 
+                            <form class="navbar-form navbar-right fos_user_registration_register"
+                                  action="{{ path('app_registration_register') }} "
+                                  method="POST">
+                                <div class="form-group">
+                                    <button class="btn btn-success navbar-btn" type="submit">S'enregistrer</button>
+                                </div>
+                            </form>
+
+                            <form class="navbar-form navbar-right fos_user_registration_register"
+                                  action="{{ path('fos_user_security_login') }} "
+                                  method="POST">
+
+                                <div class="form-group">
+                                    <button class="btn btn-primary navbar-btn" type="submit">Connexion</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </nav>
             {% endif %}
         </div>
     </div>
@@ -114,10 +111,10 @@
         {% endif %}
     </div>
     <div class="sf-reset">
-            {% block body %}
+        {% block body %}
 
 
-            {% endblock %}
+        {% endblock %}
 
     </div>
 </div>
