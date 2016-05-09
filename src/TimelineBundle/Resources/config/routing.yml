@@ -32,3 +32,7 @@ search_player:
     requirements:
       _method: POST
 
+event_homepage:
+    path:     /event
+    defaults: { _controller: EventBundle:Default:index }
+

@@ -195,7 +195,6 @@
         <li class="active"><a data-toggle="tab" href="#byChampion">Champions</a></li>
         <li><a data-toggle="tab" href="#bySummary">Parties</a></li>
         <li><a data-toggle="tab" href="#perf">Performances</a></li>
-        <li><a data-toggle="tab" href="#louane">Louane</a></li>
     </ul>
 
     <div class="tab-content">
@@ -207,49 +206,42 @@
         </div>
         <div id="perf" class="tab-pane fade">
             <table class="table table-bordered table-striped">
-                <tr>
-                    <td> Nom du champion</td>
-                    <td> Ratio de victoires</td>
-                    <td> KDA</td>
-                    <td> Dommages infligés</td>
-                    <td> Dommages reçus</td>
-                    <td> Minions tués</td>
-                    <td> Gold gagné</td>
-                    <td> Graph de performance</td>
+                <tr class="active text-center">
+                    <td><b>Nom du champion</b></td>
+                    <td><b>Ratio de victoires</b></td>
+                    <td><b>KDA</b></td>
+                    <td><b>Dommages infligés</b></td>
+                    <td><b>Dommages reçus</b></td>
+                    <td><b>Minions tués</b></td>
+                    <td><b>Gold gagné</b></td>
                 </tr>
                 {% if championsData is not empty %}
                 {% for champion in championsData %}
-                {% set kda = (champion.totalChampionKills+champion.totalAssists)/champion.totalDeathsPerSession %}
-                {% if kda < 1 %}
-                <tr class="danger">
-
-                    {% elseif kda > 3 %}
-                <tr class="success">
-
+                {% set ratio = (champion.totalSessionsWon/champion.totalSessionsPlayed) %}
+                {% if ratio < 0.25 %}
+                <tr class="danger text-center">
+                    {% elseif ratio >= 0.25 and ratio <0.5 %}
+                <tr class="warning text-center">
+                    {% elseif ratio >= 0.5 and ratio < 0.75 %}
+                <tr class="info text-center">
                     {% else %}
-                <tr class="blog-title ">
+                <tr class="success text-center ">
                     {% endif %}
 
 
-                    <td> {{ champion.id }}</td>
-                    <td> {{ champion.totalSessionsWon/champion.totalSessionsPlayed }}</td>
-                    <td> {{ (champion.totalChampionKills+champion.totalAssists)/champion.totalDeathsPerSession }}</td>
+                    <td><b>{{ champion.id }}</b></td>
+                    <td> {{ (champion.totalSessionsWon/champion.totalSessionsPlayed)|number_format(2, '.', ',') }}</td>
+                    <td> {{ ((champion.totalChampionKills+champion.totalAssists)/champion.totalDeathsPerSession)|number_format(2, '.', ',') }}</td>
                     <td> {{ champion.totalDamageDealt }}</td>
                     <td> {{ champion.totalDamageTaken }}</td>
                     <td> {{ champion.totalMinionKills }}</td>
                     <td> {{ champion.totalGoldEarned }}</td>
-                    <td>
-                        jj
-                    </td>
+
                 <tr>
                     {% endfor %}
                     {% endif %}
 
             </table>
-        </div>
-        <div id="louane" class="tab-pane fade">
-            <div id="container" style="width: 400px; height: 400px; margin: 0 auto">
-            </div>
         </div>
     </div>
 
