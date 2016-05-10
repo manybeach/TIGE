@@ -53,7 +53,6 @@ class DefaultController extends Controller
 
         foreach ($arrayStatsRankChampions as $hero) {
             $heroName = $repo->findBy(array("idChampion" => $hero['id']));
-
             (empty($hero["id"])) ? $champName = 'Inconnu': $champName = $this->getChampionName($hero["id"]);
             $arrayStatsRankChampions[$i]['champName']=$champName;
 
