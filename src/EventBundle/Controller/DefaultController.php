@@ -22,6 +22,17 @@ class DefaultController extends Controller
         //Récupération des évenements créés par le joueur connecté
         $arrayEventsUser = $this->getDoctrine()->getManager()->getRepository('AppBundle:Event')->findBy(array('eventOwner' => $userId));
 
+        //Récupération des évenements auxquels le joueur connecté participe
+        $arrayEventUserParticipation = array();
+        foreach ($arrayEvents as $event){
+            $arrayMembers = explode(";", $event->getEventMembers());
+            foreach ($arrayMembers as $member){
+                if ($member == $userId){
+                    $arrayEventUserParticipation[] = $event;
+                }
+            }
+        }
+
         //Gestion du formulaire d'ajout d'évenement
         $event = new Event();
 
@@ -32,6 +43,7 @@ class DefaultController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
 
             $event->setEventOwner($userId);
+            $event->setEventNbParticipants(1);
 
             $em = $this->getDoctrine()->getManager();
 
@@ -48,6 +60,7 @@ class DefaultController extends Controller
             'form' => $form->createView(),
             'arrayEvents' => $arrayEvents,
             'arrayEventsUser' => $arrayEventsUser,
+            'arrayEventUserParticipation' => $arrayEventUserParticipation,
             'idUser' => $userId,
         ));
     }

@@ -20,13 +20,23 @@ class EventType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('eventName', TextType::class, array('label' => 'Nom'))
-            ->add('eventDescription', TextType::class, array('label' => 'Description'))
-            ->add('eventPlace', TextType::class, array('label' => 'Lieu'))
-            ->add('eventDate', DateType::class, array('label' => 'Date'))
-            ->add('eventMaxParticipant', IntegerType::class, array('label' => 'Nombre Participants Max'))
-            ->add('eventMembers', TextType::class, array('label' => 'Membres'))
-            ->add('save', SubmitType::class, array('label' => "Enregistrer l'événement"))
+            ->add('eventName', TextType::class, array('label' => 'Nom',
+                'attr' => array(
+                    'class' => 'form-control input-md')))
+            ->add('eventDescription', TextType::class, array('label' => 'Description',
+                'attr' => array(
+                    'class' => 'form-control input-md')))
+            ->add('eventPlace', TextType::class, array('label' => 'Lieu', 'attr' => array(
+                'class' => 'form-control input-md')))
+            ->add('eventDate', DateType::class, array('label' => 'Date',
+                'attr' => array(
+                    'class' => 'form-control input-md')))
+            ->add('eventMaxParticipant', IntegerType::class, array('label' => 'Nombre Participants Max',
+                'attr' => array(
+                    'class' => 'form-control input-md')))
+            ->add('save', SubmitType::class, array('label' => "Enregistrer l'événement",
+                'attr' => array(
+                    'class' => 'btn btn-primary')))
         ;
     }
 

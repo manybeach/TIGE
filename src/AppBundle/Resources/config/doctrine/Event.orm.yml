@@ -21,11 +21,13 @@ AppBundle\Entity\Event:
             type: string
             length: 255
         eventOwner:
-            type: string
-            length: 255
+            type: integer
+        eventNbParticipants:
+            type: integer
         eventMaxParticipant:
             type: integer
         eventMembers:
             type: string
             length: 255
+            nullable: true
     lifecycleCallbacks: {  }

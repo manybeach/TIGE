@@ -33,9 +33,14 @@ class Event
     private $eventPlace;
 
     /**
-     * @var string
+     * @var int
      */
     private $eventOwner;
+
+    /**
+     * @var int
+     */
+    private $eventNbParticipants;
 
     /**
      * @var int
@@ -157,7 +162,7 @@ class Event
     /**
      * Set eventOwner
      *
-     * @param string $eventOwner
+     * @param int $eventOwner
      *
      * @return Event
      */
@@ -171,11 +176,35 @@ class Event
     /**
      * Get eventOwner
      *
-     * @return string
+     * @return int
      */
     public function getEventOwner()
     {
         return $this->eventOwner;
+    }
+
+    /**
+     * Set eventNbParticipants
+     *
+     * @param int $eventNbParticipants
+     *
+     * @return Event
+     */
+    public function setEventNbParticipants($eventNbParticipants)
+    {
+        $this->eventNbParticipants = $eventNbParticipants;
+
+        return $this;
+    }
+
+    /**
+     * Get eventNbParticipants
+     *
+     * @return int
+     */
+    public function getEventNbParticipants()
+    {
+        return $this->eventNbParticipants;
     }
 
     /**
@@ -233,7 +262,7 @@ class Event
         else {
             $this->setEventMembers($UserId);
         }
-
+        $this->setEventNbParticipants($this->getEventNbParticipants() + 1);
     }
 }
 
