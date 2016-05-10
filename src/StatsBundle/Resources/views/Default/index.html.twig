@@ -43,153 +43,6 @@
         {{ chart(barchart) }}
     </script>
 
-    <script type="text/javascript">
-        $(function () {
-            var chart;
-            new Highcharts.Chart('container', {
-
-                        chart: {
-                            type: 'solidgauge',
-                            marginTop: 50
-                        },
-
-                        title: {
-                            text: 'Activity',
-                            style: {
-                                fontSize: '24px'
-                            }
-                        },
-
-                        tooltip: {
-                            borderWidth: 0,
-                            backgroundColor: 'none',
-                            shadow: false,
-                            style: {
-                                fontSize: '16px'
-                            },
-                            pointFormat: '{series.name}<br><span style="font-size:2em; color: {point.color}; font-weight: bold">{point.y}%</span>',
-                            positioner: function (labelWidth, labelHeight) {
-                                return {
-                                    x: 200 - labelWidth / 2,
-                                    y: 180
-                                };
-                            }
-                        },
-
-                        pane: {
-                            startAngle: 0,
-                            endAngle: 360,
-                            background: [{ // Track for Move
-                                outerRadius: '112%',
-                                innerRadius: '88%',
-                                backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0.3).get(),
-                                borderWidth: 0
-                            }, { // Track for Exercise
-                                outerRadius: '87%',
-                                innerRadius: '63%',
-                                backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[1]).setOpacity(0.3).get(),
-                                borderWidth: 0
-                            }, { // Track for Stand
-                                outerRadius: '62%',
-                                innerRadius: '38%',
-                                backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[2]).setOpacity(0.3).get(),
-                                borderWidth: 0
-                            }]
-                        },
-
-                        yAxis: {
-                            min: 0,
-                            max: 100,
-                            lineWidth: 0,
-                            tickPositions: []
-                        },
-
-                        plotOptions: {
-                            solidgauge: {
-                                borderWidth: '34px',
-                                dataLabels: {
-                                    enabled: false
-                                },
-                                linecap: 'round',
-                                stickyTracking: false
-                            }
-                        },
-
-                        series: [{
-                            name: 'Move',
-                            borderColor: Highcharts.getOptions().colors[0],
-                            data: [{
-                                color: Highcharts.getOptions().colors[0],
-                                radius: '100%',
-                                innerRadius: '100%',
-                                y: 80
-                            }]
-                        }, {
-                            name: 'Exercise',
-                            borderColor: Highcharts.getOptions().colors[1],
-                            data: [{
-                                color: Highcharts.getOptions().colors[1],
-                                radius: '75%',
-                                innerRadius: '75%',
-                                y: 65
-                            }]
-                        }, {
-                            name: 'Stand',
-                            borderColor: Highcharts.getOptions().colors[2],
-                            data: [{
-                                color: Highcharts.getOptions().colors[2],
-                                radius: '50%',
-                                innerRadius: '50%',
-                                y: 50
-                            }]
-                        }]
-                    },
-
-                    /**
-                     * In the chart load callback, add icons on top of the circular shapes
-                     */
-                    function callback() {
-
-                        // Move icon
-                        this.renderer.path(['M', -8, 0, 'L', 8, 0, 'M', 0, -8, 'L', 8, 0, 0, 8])
-                                .attr({
-                                    'stroke': '#303030',
-                                    'stroke-linecap': 'round',
-                                    'stroke-linejoin': 'round',
-                                    'stroke-width': 2,
-                                    'zIndex': 10
-                                })
-                                .translate(190, 26)
-                                .add(this.series[2].group);
-
-                        // Exercise icon
-                        this.renderer.path(['M', -8, 0, 'L', 8, 0, 'M', 0, -8, 'L', 8, 0, 0, 8, 'M', 8, -8, 'L', 16, 0, 8, 8])
-                                .attr({
-                                    'stroke': '#303030',
-                                    'stroke-linecap': 'round',
-                                    'stroke-linejoin': 'round',
-                                    'stroke-width': 2,
-                                    'zIndex': 10
-                                })
-                                .translate(190, 61)
-                                .add(this.series[2].group);
-
-                        // Stand icon
-                        /** @namespace this.series */
-                        this.renderer.path(['M', 0, 8, 'L', 0, -8, 'M', -8, 0, 'L', 0, -8, 8, 0])
-                                .attr({
-                                    'stroke': '#303030',
-                                    'stroke-linecap': 'round',
-                                    'stroke-linejoin': 'round',
-                                    'stroke-width': 2,
-                                    'zIndex': 10
-                                })
-                                .translate(190, 96)
-                                .add(this.series[2].group);
-                    });
-        });
-
-    </script>
 
     <ul class="nav nav-pills">
         <li class="active"><a data-toggle="tab" href="#byChampion">Champions</a></li>
@@ -205,16 +58,19 @@
             <div id="barchart" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
         </div>
         <div id="perf" class="tab-pane fade">
-            <table class="table table-bordered table-striped">
-                <tr class="active text-center">
-                    <td><b>Nom du champion</b></td>
-                    <td><b>Ratio de victoires</b></td>
-                    <td><b>KDA</b></td>
-                    <td><b>Dommages infligés</b></td>
-                    <td><b>Dommages reçus</b></td>
-                    <td><b>Minions tués</b></td>
-                    <td><b>Gold gagné</b></td>
+            <table class="avectri table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th data-tri="1" class="selection">Nom du champion</th>
+                    <th data-tri="2" class="selection" data-type="num" >Ratio de victoires</th>
+                    <th data-tri="3" class="selection" data-type="num" >KDA</th>
+                    <th data-tri="4" class="selection" data-type="num" >Dommages infligés</th>
+                    <th data-tri="5" class="selection" data-type="num" >Dommages reçus</th>
+                    <th data-tri="6" class="selection" data-type="num" >Minions tués</th>
+                    <th data-tri="7" class="selection" data-type="num" >Gold gagné</th>
                 </tr>
+                </thead>
+                <tbody>
                 {% if championsData is not empty %}
                 {% for champion in championsData %}
                 {% set ratio = (champion.totalSessionsWon/champion.totalSessionsPlayed) %}
@@ -228,22 +84,111 @@
                 <tr class="success text-center ">
                     {% endif %}
 
-
-                    <td><b>{{ champion.id }}</b></td>
+                    <td> {{  champion.champName }}</td>
                     <td> {{ (champion.totalSessionsWon/champion.totalSessionsPlayed)|number_format(2, '.', ',') }}</td>
                     <td> {{ ((champion.totalChampionKills+champion.totalAssists)/champion.totalDeathsPerSession)|number_format(2, '.', ',') }}</td>
                     <td> {{ champion.totalDamageDealt }}</td>
                     <td> {{ champion.totalDamageTaken }}</td>
                     <td> {{ champion.totalMinionKills }}</td>
                     <td> {{ champion.totalGoldEarned }}</td>
-
-                <tr>
+                    </tr>
                     {% endfor %}
                     {% endif %}
-
+                </tbody>
             </table>
         </div>
     </div>
 
+        <script>
+            // Tri dynamique de tableau HTML
+            // Auteur : Copyright © 2015 - Django Blais
+            // Source : http://trucsweb.com/tutoriels/Javascript/tableau-tri/
+            // Sous licence du MIT.
+            function twInitTableau() {
+                // Initialise chaque tableau de classe « avectri »
+                [].forEach.call( document.getElementsByClassName("avectri"), function(oTableau) {
+                    var oEntete = oTableau.getElementsByTagName("tr")[0];
+                    var nI = 1;
+                    // Ajoute à chaque entête (th) la capture du clic
+                    // Un picto flèche, et deux variable data-*
+                    // - Le sens du tri (0 ou 1)
+                    // - Le numéro de la colonne
+                    [].forEach.call( oEntete.querySelectorAll("th"), function(oTh) {
+                        oTh.addEventListener("click", twTriTableau, false);
+                        oTh.setAttribute("data-pos", nI);
+                        if(oTh.getAttribute("data-tri")=="1") {
+                            oTh.innerHTML += "<span class=\"flecheDesc\"></span>";
+                        } else {
+                            oTh.setAttribute("data-tri", "0");
+                            oTh.innerHTML += "<span class=\"flecheAsc\"></span>";
+                        }
+                        // Tri par défaut
+                        if (oTh.className=="selection") {
+                            oTh.click();
+                        }
+                        nI++;
+                    });
+                });
+            }
 
+            function twInit() {
+                twInitTableau();
+            }
+            function twPret(maFonction) {
+                if (document.readyState != "loading"){
+                    maFonction();
+                } else {
+                    document.addEventListener("DOMContentLoaded", maFonction);
+                }
+            }
+            twPret(twInit);
+
+            function twTriTableau() {
+                // Ajuste le tri
+                var nBoolDir = this.getAttribute("data-tri");
+                this.setAttribute("data-tri", (nBoolDir=="0") ? "1" : "0");
+                // Supprime la classe « selection » de chaque colonne.
+                [].forEach.call( this.parentNode.querySelectorAll("th"), function(oTh) {oTh.classList.remove("selection");});
+                // Ajoute la classe « selection » à la colonne cliquée.
+                this.className = "selection";
+                // Ajuste la flèche
+                this.querySelector("span").className = (nBoolDir=="0") ? "flecheAsc" : "flecheDesc";
+
+                // Construit la matrice
+                // Récupère le tableau (tbody)
+                var oTbody = this.parentNode.parentNode.parentNode.getElementsByTagName("tbody")[0];
+                var oLigne = oTbody.rows;
+                var nNbrLigne = oLigne.length;
+                var aColonne = new Array(), i, j, oCel;
+                for(i = 0; i < nNbrLigne; i++) {
+                    oCel = oLigne[i].cells;
+                    aColonne[i] = new Array();
+                    for(j = 0; j < oCel.length; j++){
+                        aColonne[i][j] = oCel[j].innerHTML;
+                    }
+                }
+
+                // Trier la matrice (array)
+                // Récupère le numéro de la colonne
+                var nIndex = this.getAttribute("data-pos");
+                // Récupère le type de tri (numérique ou par défaut « local »)
+                var sFonctionTri = (this.getAttribute("data-type")=="num") ? "compareNombres" : "compareLocale";
+                // Tri
+                aColonne.sort(eval(sFonctionTri));
+                // Tri numérique
+                function compareNombres(a, b) {return a[nIndex-1] - b[nIndex-1];}
+                // Tri local (pour support utf-8)
+                function compareLocale(a, b) {return a[nIndex-1].localeCompare(b[nIndex-1]);}
+                // Renverse la matrice dans le cas d’un tri descendant
+                if (nBoolDir==0) aColonne.reverse();
+
+                // Construit les colonne du nouveau tableau
+                for(i = 0; i < nNbrLigne; i++){
+                    aColonne[i] = "<td>"+aColonne[i].join("</td><td>")+"</td>";
+                }
+
+                // assigne les lignes au tableau
+                oTbody.innerHTML = "<tr>"+aColonne.join("</tr><tr>")+"</tr>";
+            }
+        </script>
 {% endblock %}

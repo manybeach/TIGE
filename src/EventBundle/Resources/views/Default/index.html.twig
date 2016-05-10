@@ -11,13 +11,83 @@
 
         <div class="tab-content">
             <div id="upcommingEvents" class="tab-pane fade in active">
-                <p>En cours de développement.</p>
+                {% if arrayEvents is empty %}
+                    <p>Aucun évenement n'est programmé pour le moment ! Allez dans "Créer un événement" pour en ajouter
+                        ;)</p>
+                {% else %}
+                    {% for event in arrayEvents %}
+                        <table class="table table-bordered">
+                            <tr class="blog-title">
+                                <th align="center" colspan=2>
+                                    <h3 align="center">
+                                        {{ event.eventName }}
+                                    </h3>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td colspan=2>
+                                    <b>Description : </b>{{ event.eventDescription }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Date : </b>{{ event.eventDate.format("d/M/y") }}</td>
+                                <td><b>Lieu : </b>{{ event.eventPlace }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan=2><b>Participants : </b>{{ event.eventMembers }}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>Nombre de participants : </b> 0/{{ event.eventMaxParticipant }}
+                                    <br> L'évenement est ouvert !
+                                </td>
+                                <td>
+                                    <a class="btn btn-primary" role="button"
+                                       style="color: white"
+                                       href="{{ path('event_participate',{'idEvent': event.id}) }}"
+                                       title="participate">Je participe</a>
+                                </td>
+                            </tr>
+                        </table>
+                    {% endfor %}
+                {% endif %}
             </div>
+
+
             <div id="participateEvents" class="tab-pane fade">
                 <p>En cours de développement.</p>
             </div>
+
+
             <div id="myEvents" class="tab-pane fade">
-                <p>En cours de développement.</p>
+                {% if arrayEventsUser is empty %}
+                    <p>Vous n'avez programmé aucun évenement à ce jour. Rendez-vous sur "Créer un évenement" pour y
+                        remédier ;)</p>
+                {% else %}
+                    {% for event in arrayEventsUser %}
+                        <table class="table table-bordered">
+                            <tr class="blog-title">
+                                <th align="center" colspan=2>
+                                    <h3 align="center">
+                                        {{ event.eventName }}
+                                    </h3>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td colspan=2>
+                                    <b>Description : </b>{{ event.eventDescription }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Date : </b>{{ event.eventDate.format("d/M/y") }}</td>
+                                <td><b>Lieu : </b>{{ event.eventPlace }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan=2><b>Participants : </b>{{ event.eventMembers }}</td>
+                            </tr>
+                        </table>
+                    {% endfor %}
+                {% endif %}
             </div>
             <div id="addEvents" class="tab-pane fade">
                 {{ form_start(form) }}

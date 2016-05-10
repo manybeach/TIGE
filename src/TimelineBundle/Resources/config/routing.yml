@@ -36,3 +36,9 @@ event_homepage:
     path:     /event
     defaults: { _controller: EventBundle:Default:index }
 
+event_participate:
+    path:     /event/{idEvent}
+    defaults: { _controller: EventBundle:Default:addParticipant }
+    requirements:
+          idUser: \d+
+

@@ -26,23 +26,17 @@ class DefaultController extends Controller
      */
     public function displayStatAction($idUser)
     {
-        $repo = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('AppBundle:champions')
-        ;
+        $repo = $this->getDoctrine()->getManager()->getRepository('AppBundle:champions');
 
-        $me=false;
-        $follow=false;
-        if($idUser == false) {
+        $me = false;
+        $follow = false;
+        if ($idUser == false) {
             $user = $this->get('security.token_storage')->getToken()->getUser();
             $idUser = $user->getId();
             $me = true;
-        }
-        else
-        {
+        } else {
             $follow = $this->isFavourite($idUser);
-            
+
         }
 
         $summonerName = $this->getSummonerNameByUserId($idUser);
@@ -53,17 +47,20 @@ class DefaultController extends Controller
         $ob = new Highchart();
         $ob->chart->renderTo('piechart');
         $ob->title->text('Nombre de parties jouées par champion en parties classées');
-        $ob->plotOptions->pie(array(
-            'allowPointSelect' => true,
-            'cursor' => 'pointer',
-            'dataLabels' => array('enabled' => true),
-            'showInLegend' => false
-        ));
+        $ob->plotOptions->pie(array('allowPointSelect' => true, 'cursor' => 'pointer', 'dataLabels' => array('enabled' => true), 'showInLegend' => false));
         $championsData = array();
+        $i = 0;
+
         foreach ($arrayStatsRankChampions as $hero) {
-            $heroName = $repo->findBy(array("idChampion"=>$hero['id']));
-            if(!empty($heroName))
+            $heroName = $repo->findBy(array("idChampion" => $hero['id']));
+
+            (empty($hero["id"])) ? $champName = 'Inconnu': $champName = $this->getChampionName($hero["id"]);
+            $arrayStatsRankChampions[$i]['champName']=$champName;
+
+            if (!empty($heroName)) {
                 array_push($championsData, array($heroName[0]->getChampionName(), $hero["totalSessionsPlayed"]));
+            }
+            $i++;
         }
         $ob->series(array(array('type' => 'pie', 'name' => 'Nombre de parties jouées', 'data' => $championsData)));
 
@@ -85,100 +82,39 @@ class DefaultController extends Controller
         $ob2->xAxis->title(array('text' => 'Type de partie'));
         $ob2->xAxis->categories($arrayPlayerstatSummaryType);
 
-        $ob2->plotOptions->bar(array(
-            'allowPointSelect' => true,
-            'cursor' => 'pointer',
-            'dataLabels' => array('enabled' => true),
-            'showInLegend' => false
-        ));
+        $ob2->plotOptions->bar(array('allowPointSelect' => true, 'cursor' => 'pointer', 'dataLabels' => array('enabled' => true), 'showInLegend' => false));
 
         $ob2->series(array(array('type' => 'bar', 'name' => 'Nombre de parties gagnées', 'data' => $arrayWins)));
 
         $ob3 = new Highchart();
-        $ob3->chart(array(
-            'type' => 'heatmap',
-            'marginTop' => 40,
-            'marginBottom' => 40,
-        ));
+        $ob3->chart(array('type' => 'heatmap', 'marginTop' => 40, 'marginBottom' => 40,));
         $ob3->title->text('Données par Champions en RNKD');
         $ob3->xAxis->categories($arrayStatsRankChampions);
 
-        $donneesob3 = array(
-            'totalSessionsPlayed',
-            'totalSessionsLost',
-            'totalSessionsWon',
-            'totalChampionKills',
-            'totalMinionKills',
-            'totalGoldEarned',
-            'totalDeathsPerSession',
-            'totalDamageDealt',
-            'totalDamageTaken',
-        );
+        $donneesob3 = array('totalSessionsPlayed', 'totalSessionsLost', 'totalSessionsWon', 'totalChampionKills', 'totalMinionKills', 'totalGoldEarned', 'totalDeathsPerSession', 'totalDamageDealt', 'totalDamageTaken',);
         $ob3->yAxis->categories($donneesob3);
         $ob3->yAxis->title(array('text' => 'Données'));
         $ob3->xAxis->title(array('text' => 'Champions'));
-        $colorAxis = array(
-            'min' => 0,
-            'minColor' => '#FFFFFF',
-            'maxColor' => 'Highcharts.getOptions().colors[0]',
-        );
-        $ob3->colorAxis(array(
-            'min' => 0,
-            'minColor' => '#FFFFFF',
-            'maxColor' => 'Highcharts.getOptions().colors[0]',
-        ));
-        $legend = array(
-            'align' => 'right',
-            'layout' => 'vertical',
-            'margin' => 0,
-            'verticalAlign' => 'top',
-            'y' => 25,
-            'symbolHeight' => 320,
-        );
-        $ob3->legend(array(
-            'align' => 'right',
-            'layout' => 'vertical',
-            'margin' => 0,
-            'verticalAlign' => 'top',
-            'y' => 25,
-            'symbolHeight' => 320,
-        ));
-        $ob3->tooltip->formatter(
-            'function () {
+        $colorAxis = array('min' => 0, 'minColor' => '#FFFFFF', 'maxColor' => 'Highcharts.getOptions().colors[0]',);
+        $ob3->colorAxis(array('min' => 0, 'minColor' => '#FFFFFF', 'maxColor' => 'Highcharts.getOptions().colors[0]',));
+        $legend = array('align' => 'right', 'layout' => 'vertical', 'margin' => 0, 'verticalAlign' => 'top', 'y' => 25, 'symbolHeight' => 320,);
+        $ob3->legend(array('align' => 'right', 'layout' => 'vertical', 'margin' => 0, 'verticalAlign' => 'top', 'y' => 25, 'symbolHeight' => 320,));
+        $ob3->tooltip->formatter('function () {
                 return \'<b>\' + this.series.xAxis.categories[this.point.x] + \'</b> sold <br><b>\' +
                     this.point.value + \'</b> items on <br><b>\' + this.series.yAxis.categories[this.point.y] + \'</b>\';
-            }'
-        );
+            }');
 
         $ob3->series(array(array('name' => 'Nombre de parties gagnées', 'data' => $championsData)));
-        return $this->render(
-            'StatsBundle:Default:index.html.twig',
-            array(
-                'piechart' => $ob,
-                'barchart' => $ob2,
-                'championsData' => $arrayStatsRankChampions,
-                'summonerName' => strtoupper($summonerName),
-                'me' => $me,
-                'follow' => $follow,
-                'idUser' => $idUser,
+        return $this->render('StatsBundle:Default:index.html.twig', array('piechart' => $ob, 'barchart' => $ob2, 'championsData' => $arrayStatsRankChampions, 'summonerName' => strtoupper($summonerName), 'me' => $me, 'follow' => $follow, 'idUser' => $idUser,
 
-            )
-        );
+            ));
     }
 
     public function getSummonerNameByUserId($idUser)
     {
-        $repository = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('AppBundle:AccountName');
+        $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:AccountName');
 
-        $arrayAccountName = $repository->findBy(
-            array(
-                'user_id' => $idUser,
-                'game_id' => 1,
-            )
-        );
+        $arrayAccountName = $repository->findBy(array('user_id' => $idUser, 'game_id' => 1,));
 
         $accountName = $arrayAccountName[0]->getName();
         return $accountName;
@@ -196,20 +132,7 @@ class DefaultController extends Controller
 
         foreach ($resultStatsRanked["champions"] as $arrayStats) {
 
-            $arrayDataBySum = array(
-                'id' => $arrayStats["id"],
-                'totalSessionsPlayed' => $arrayStats["stats"]["totalSessionsPlayed"],
-                'totalSessionsLost' => $arrayStats["stats"]["totalSessionsLost"],
-                'totalSessionsWon' => $arrayStats["stats"]["totalSessionsWon"],
-                'totalChampionKills' => $arrayStats["stats"]["totalChampionKills"],
-                'totalMinionKills' => $arrayStats["stats"]["totalMinionKills"],
-                'totalGoldEarned' => $arrayStats["stats"]["totalGoldEarned"],
-                'totalAssists' => $arrayStats["stats"]["totalAssists"],
-                'totalDeathsPerSession' => $arrayStats["stats"]["totalDeathsPerSession"],
-                'totalDamageDealt' => $arrayStats["stats"]["totalDamageDealt"],
-                'totalDamageTaken' => $arrayStats["stats"]["totalDamageTaken"],
-                'championName' => "coco",
-
+            $arrayDataBySum = array('id' => $arrayStats["id"], 'totalSessionsPlayed' => $arrayStats["stats"]["totalSessionsPlayed"], 'totalSessionsLost' => $arrayStats["stats"]["totalSessionsLost"], 'totalSessionsWon' => $arrayStats["stats"]["totalSessionsWon"], 'totalChampionKills' => $arrayStats["stats"]["totalChampionKills"], 'totalMinionKills' => $arrayStats["stats"]["totalMinionKills"], 'totalGoldEarned' => $arrayStats["stats"]["totalGoldEarned"], 'totalAssists' => $arrayStats["stats"]["totalAssists"], 'totalDeathsPerSession' => $arrayStats["stats"]["totalDeathsPerSession"], 'totalDamageDealt' => $arrayStats["stats"]["totalDamageDealt"], 'totalDamageTaken' => $arrayStats["stats"]["totalDamageTaken"],
 
             );
             array_push($arrayStatsRanked, $arrayDataBySum);
@@ -229,9 +152,7 @@ class DefaultController extends Controller
 
         foreach ($resultStatsSummary["playerStatSummaries"] as $arrayStats) {
 
-            $arrayDataBySum = array(
-                'wins' => $arrayStats["wins"],
-                'playerStatSummaryType' => $arrayStats["playerStatSummaryType"],
+            $arrayDataBySum = array('wins' => $arrayStats["wins"], 'playerStatSummaryType' => $arrayStats["playerStatSummaryType"],
 
             );
             array_push($arrayStatsSummary, $arrayDataBySum);
@@ -246,11 +167,7 @@ class DefaultController extends Controller
      * @return arrayOfSummonnersInfo
      * @internal param $summonerId
      */
-    private
-    function getSummonerId(
-        $summonerName,
-        $server
-    )
+    private function getSummonerId($summonerName, $server)
     {
         $url = 'https://' . $server . '.api.pvp.net/api/lol/' . $server . '/v1.4/summoner/by-name/' . $summonerName . '?api_key=0610f47d-dba7-46ff-84c7-fc9eeee8b788';
         $resultJson = file_get_contents($url);
@@ -260,11 +177,7 @@ class DefaultController extends Controller
     }
 
 
-    private
-    function getStatsSummary(
-        $summonerId,
-        $server
-    )
+    private function getStatsSummary($summonerId, $server)
     {
         $url = 'https://' . $server . '.api.pvp.net/api/lol/' . $server . '/v1.3/stats/by-summoner/' . $summonerId . '/summary?api_key=0610f47d-dba7-46ff-84c7-fc9eeee8b788';
         $resultJson = file_get_contents($url);
@@ -282,27 +195,32 @@ class DefaultController extends Controller
         return $result;
     }
 
-    public function isFavourite($idUser){
+    public function isFavourite($idUser)
+    {
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $id_user = $user->getId();
 
-        $repository = $this
-            ->getDoctrine()
-            ->getManager()
-            ->getRepository('AppBundle:Favourites');
+        $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Favourites');
 
-        $arrayFavourites = $repository->findBy(array(
-            'idAccount' => $id_user));
+        $arrayFavourites = $repository->findBy(array('idAccount' => $id_user));
         $result = false;
 
-        if (!empty($arrayFavourites) ){
+        if (!empty($arrayFavourites)) {
             $mesfavoris = $arrayFavourites[0]->getIdFavourites();
             $favourites = explode(';', $mesfavoris);
             foreach ($favourites as $favourite) {
-                if ($idUser == $favourite)
-                    $result = true;
+                if ($idUser == $favourite) $result = true;
             }
         }
         return $result;
+    }
+
+
+    public function getChampionName($idChamp)
+    {
+        $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:champions');
+        $champ = $repository->findBy(array("idChampion" => $idChamp));
+        $champName = $champ[0]->getChampionName();
+        return $champName;
     }
 }
