@@ -6,7 +6,6 @@ use AppBundle\Entity\Event;
 use AppBundle\Form\EventType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -19,11 +18,14 @@ class DefaultController extends Controller
         //Récupération des évenements dans un tableau
         $arrayEvents = $this->getDoctrine()->getManager()->getRepository('AppBundle:Event')->findAll();
 
+        //Tri des événements par date
+        $sortArrayEvents = $this->sortEventAction($arrayEvents);
+
         //Récupération des évenements créés par le joueur connecté
         $arrayEventsUser = $this->getDoctrine()->getManager()->getRepository('AppBundle:Event')->findBy(array('eventOwner' => $userId));
 
         //Récupération des noms des participants
-        $arrayMembersName = $this->getMembersName();
+        $arrayMembersName = $this->getMembersName($userId);
 
         //Récupération des évenements auxquels le joueur connecté participe
         $arrayEventUserParticipation = array();
@@ -61,7 +63,7 @@ class DefaultController extends Controller
 
         return $this->render('@Event/Default/index.html.twig', array(
             'form' => $form->createView(),
-            'arrayEvents' => $arrayEvents,
+            'arrayEvents' => $sortArrayEvents,
             'arrayEventsUser' => $arrayEventsUser,
             'arrayEventUserParticipation' => $arrayEventUserParticipation,
             'arrayMembersName' => $arrayMembersName,
@@ -69,16 +71,16 @@ class DefaultController extends Controller
         ));
     }
 
-    public function addParticipantAction($idEvent)
+    public function addMemberAction($idEvent)
     {
         //Récupération de l'utilisateur connecté
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $userId = $user->getId();
 
-        //Récupération des évenements créés par le joueur connecté
+        //Récupération de l'événement auquel le joueur souhaite participer
         $event = $this->getDoctrine()->getManager()->getRepository('AppBundle:Event')->findBy(array('id' => $idEvent));
 
-        $event[0]->addMembers($userId);
+        $event[0]->addMember($userId);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($event[0]);
@@ -88,7 +90,26 @@ class DefaultController extends Controller
 
     }
 
-    public function getMembersName()
+    public function supprMemberAction($idEvent)
+    {
+        //Récupération de l'utilisateur connecté
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $userId = $user->getId();
+
+        //Récupération de l'événement auquel le joueur souhaite ne plus participer
+        $event = $this->getDoctrine()->getManager()->getRepository('AppBundle:Event')->findBy(array('id' => $idEvent));
+
+        $event[0]->supprMember($userId);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($event[0]);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('event_homepage'));
+
+    }
+
+    public function getMembersName($userId)
     {
 
         $eventRepository = $this
@@ -114,6 +135,20 @@ class DefaultController extends Controller
             $accountNameOwner = $accountNameRepository->findBy(array('user_id' => $idOwner));
             $arrayMembersName[$idOwner] = $accountNameOwner[0]->getName();
 
+            $participate = false;
+
+            if ($event->getEventMembers() != null) {
+                $arrayMembersId = explode(";", $event->getEventMembers());
+
+                foreach ($arrayMembersId as $idMember) {
+                    if ($idMember == $userId) {
+                        $participate = true;
+                    }
+                }
+            }
+
+            $arrayMembersName[] = $participate;
+
             if ($event->getEventMembers() != null) {
                 $arrayMembersId = explode(";", $event->getEventMembers());
 
@@ -126,5 +161,21 @@ class DefaultController extends Controller
             $result[] = $arrayMembersName;
         }
         return $result;
+    }
+
+    public function sortEventAction($arrayEvents)
+    {
+        $arrayEventDates = array();
+
+        foreach ($arrayEvents as $event) {
+            $idDateEvent = array();
+            $idDateEvent[] = $event->getEventDate()->getTimestamp();
+            $idDateEvent[] = $event->getId();
+            $arrayEventDates[] = $idDateEvent;
+        }
+
+        array_multisort($arrayEventDates, SORT_ASC, $arrayEvents);
+
+        return $arrayEvents;
     }
 }

@@ -255,7 +255,7 @@ class Event
         return $this->eventMembers;
     }
 
-    public function addMembers($UserId){
+    public function addMember($UserId){
         if (!empty($this->getEventMembers())){
             $this->setEventMembers($this->getEventMembers().';'.$UserId);
         }
@@ -263,6 +263,23 @@ class Event
             $this->setEventMembers($UserId);
         }
         $this->setEventNbParticipants($this->getEventNbParticipants() + 1);
+    }
+
+    public function supprMember($UserId){
+        $arrayMembers = explode(";", $this->getEventMembers());
+        $newStringMembers = null;
+        foreach ($arrayMembers as $member){
+            if ($member != $UserId){
+                if (empty($newArrayMembers)){
+                    $newStringMembers[] = $member;
+                } else {
+                    $newStringMembers .= ";".$member;
+                }
+            }
+        }
+        $this->setEventMembers($newStringMembers);
+
+        $this->setEventNbParticipants($this->getEventNbParticipants() - 1);
     }
 }
 

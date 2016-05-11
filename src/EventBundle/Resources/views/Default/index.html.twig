@@ -62,10 +62,26 @@
                                     {% elseif (event.eventNbParticipants == event.eventMaxParticipant) %}
                                         <b>L'évenement est complet !</b>
                                     {% else %}
-                                        <br><a class="btn btn-primary" role="button"
-                                               style="color: white"
-                                               href="{{ path('event_participate',{'idEvent': event.id}) }}"
-                                               title="participate">Je participe</a>
+                                        {% for members in arrayMembersName %}
+                                            {% if (members[0] == event.id) %}
+                                                {% for participate in members %}
+                                                    {% if loop.index0 == 2 %}
+                                                        {% if participate == true %}
+                                                            <br><a class="btn btn-danger" role="button"
+                                                                   style="color: white"
+                                                                   href="{{ path('event_not_participate',{'idEvent': event.id}) }}"
+                                                                   title="notparticipate">Ne plus participer</a>
+                                                        {% elseif participate == false %}
+                                                            <br><a class="btn btn-primary" role="button"
+                                                                   style="color: white"
+                                                                   href="{{ path('event_participate',{'idEvent': event.id}) }}"
+                                                                   title="participate">Je participe</a>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endfor %}
+
 
                                     {% endif %}
                                 </td>
@@ -100,7 +116,21 @@
                                 <td><b>Lieu : </b>{{ event.eventPlace }}</td>
                             </tr>
                             <tr>
-                                <td colspan=2><b>Participants : </b>{{ event.eventMembers }}</td>
+                                <td colspan=2><b>Participants : </b> <br>
+                                    {% for members in arrayMembersName %}
+                                        {% if (members[0] == event.id) %}
+                                            {% for key, member in members %}
+                                                {% if loop.index0 == 1 %}
+                                                    <a href="{{ path("stats_homepage",{'idUser':key}) }}">{{ member }}
+                                                        (créateur)</a><br>
+                                                {% elseif key != 0 %}
+                                                    <a href="{{ path("stats_homepage",{'idUser':key}) }}">{{ member }}</a>
+                                                    <br>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
                             </tr>
                             <tr>
                                 <td>
@@ -146,7 +176,21 @@
                                 <td><b>Lieu : </b>{{ event.eventPlace }}</td>
                             </tr>
                             <tr>
-                                <td colspan=2><b>Participants : </b>{{ event.eventMembers }}</td>
+                                <td colspan=2><b>Participants : </b> <br>
+                                    {% for members in arrayMembersName %}
+                                        {% if (members[0] == event.id) %}
+                                            {% for key, member in members %}
+                                                {% if loop.index0 == 1 %}
+                                                    <a href="{{ path("stats_homepage",{'idUser':key}) }}">{{ member }}
+                                                        (créateur)</a><br>
+                                                {% elseif key != 0 %}
+                                                    <a href="{{ path("stats_homepage",{'idUser':key}) }}">{{ member }}</a>
+                                                    <br>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
                             </tr>
                             <tr>
                                 <td colspan=2>
