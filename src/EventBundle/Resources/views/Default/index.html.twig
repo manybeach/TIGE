@@ -12,8 +12,9 @@
         <div class="tab-content">
             <div id="upcommingEvents" class="tab-pane fade in active">
                 {% if arrayEvents is empty %}
-                    <p><br><b>Aucun évenement n'est programmé pour le moment ! Allez dans "Créer un événement" pour en ajouter
-                        ;)</b></p>
+                    <p><br><b>Aucun évenement n'est programmé pour le moment ! Allez dans "Créer un événement" pour en
+                            ajouter
+                            ;)</b></p>
                 {% else %}
                     {% for event in arrayEvents %}
                         <table class="table table-bordered">
@@ -34,7 +35,21 @@
                                 <td><b>Lieu : </b>{{ event.eventPlace }}</td>
                             </tr>
                             <tr>
-                                <td colspan=2><b>Participants : </b>{{ event.eventMembers }}</td>
+                                <td colspan=2><b>Participants : </b> <br>
+                                    {% for members in arrayMembersName %}
+                                        {% if (members[0] == event.id) %}
+                                            {% for key, member in members %}
+                                                {% if loop.index0 == 1 %}
+                                                    <a href="{{ path("stats_homepage",{'idUser':key}) }}">{{ member }}
+                                                        (créateur)</a><br>
+                                                {% elseif key != 0 %}
+                                                    <a href="{{ path("stats_homepage",{'idUser':key}) }}">{{ member }}</a>
+                                                    <br>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
                             </tr>
                             <tr>
                                 <td>
@@ -44,7 +59,7 @@
                                 <td>
                                     {% if (event.eventOwner == idUser) %}
                                         <br><b>Vous avez créé cet événement.</b>
-                                        {% elseif (event.eventNbParticipants == event.eventMaxParticipant) %}
+                                    {% elseif (event.eventNbParticipants == event.eventMaxParticipant) %}
                                         <b>L'évenement est complet !</b>
                                     {% else %}
                                         <br><a class="btn btn-primary" role="button"
@@ -64,7 +79,7 @@
             <div id="participateEvents" class="tab-pane fade">
                 {% if arrayEventUserParticipation is empty %}
                     <p><br><b>Vous n'êtes incrit à aucun événement actuellement !
-                        ;)</b></p>
+                            ;)</b></p>
                 {% else %}
                     {% for event in arrayEventUserParticipation %}
                         <table class="table table-bordered">
@@ -108,8 +123,9 @@
 
             <div id="myEvents" class="tab-pane fade">
                 {% if arrayEventsUser is empty %}
-                    <p><br><b>Vous n'avez programmé aucun évenement à ce jour. Rendez-vous sur "Créer un évenement" pour y
-                        remédier ;)</b></p>
+                    <p><br><b>Vous n'avez programmé aucun évenement à ce jour. Rendez-vous sur "Créer un évenement" pour
+                            y
+                            remédier ;)</b></p>
                 {% else %}
                     {% for event in arrayEventsUser %}
                         <table class="table table-bordered">

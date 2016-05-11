@@ -4,7 +4,7 @@ home:
 
 timeline_data:
     path:  /timeline
-    defaults: { _controller: TimelineBundle:Default:getDataFromLol }
+    defaults: { _controller: TimelineBundle:Default:index }
 
 my_account:
     path:  /account

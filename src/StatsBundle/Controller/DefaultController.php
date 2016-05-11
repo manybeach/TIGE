@@ -130,8 +130,8 @@ class DefaultController extends Controller
         $resultStatsRanked = $this->getStatsRanked($summonerId, $server);
 
         foreach ($resultStatsRanked["champions"] as $arrayStats) {
-
-            $arrayDataBySum = array('id' => $arrayStats["id"], 'totalSessionsPlayed' => $arrayStats["stats"]["totalSessionsPlayed"], 'totalSessionsLost' => $arrayStats["stats"]["totalSessionsLost"], 'totalSessionsWon' => $arrayStats["stats"]["totalSessionsWon"], 'totalChampionKills' => $arrayStats["stats"]["totalChampionKills"], 'totalMinionKills' => $arrayStats["stats"]["totalMinionKills"], 'totalGoldEarned' => $arrayStats["stats"]["totalGoldEarned"], 'totalAssists' => $arrayStats["stats"]["totalAssists"], 'totalDeathsPerSession' => $arrayStats["stats"]["totalDeathsPerSession"], 'totalDamageDealt' => $arrayStats["stats"]["totalDamageDealt"], 'totalDamageTaken' => $arrayStats["stats"]["totalDamageTaken"],
+            if(!empty($arrayStats['id']))
+                $arrayDataBySum = array('id' => $arrayStats["id"], 'totalSessionsPlayed' => $arrayStats["stats"]["totalSessionsPlayed"], 'totalSessionsLost' => $arrayStats["stats"]["totalSessionsLost"], 'totalSessionsWon' => $arrayStats["stats"]["totalSessionsWon"], 'totalChampionKills' => $arrayStats["stats"]["totalChampionKills"], 'totalMinionKills' => $arrayStats["stats"]["totalMinionKills"], 'totalGoldEarned' => $arrayStats["stats"]["totalGoldEarned"], 'totalAssists' => $arrayStats["stats"]["totalAssists"], 'totalDeathsPerSession' => $arrayStats["stats"]["totalDeathsPerSession"], 'totalDamageDealt' => $arrayStats["stats"]["totalDamageDealt"], 'totalDamageTaken' => $arrayStats["stats"]["totalDamageTaken"],
 
             );
             array_push($arrayStatsRanked, $arrayDataBySum);

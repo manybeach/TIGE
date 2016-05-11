@@ -22,12 +22,15 @@ class DefaultController extends Controller
         //Récupération des évenements créés par le joueur connecté
         $arrayEventsUser = $this->getDoctrine()->getManager()->getRepository('AppBundle:Event')->findBy(array('eventOwner' => $userId));
 
+        //Récupération des noms des participants
+        $arrayMembersName = $this->getMembersName();
+
         //Récupération des évenements auxquels le joueur connecté participe
         $arrayEventUserParticipation = array();
-        foreach ($arrayEvents as $event){
+        foreach ($arrayEvents as $event) {
             $arrayMembers = explode(";", $event->getEventMembers());
-            foreach ($arrayMembers as $member){
-                if ($member == $userId){
+            foreach ($arrayMembers as $member) {
+                if ($member == $userId) {
                     $arrayEventUserParticipation[] = $event;
                 }
             }
@@ -61,11 +64,13 @@ class DefaultController extends Controller
             'arrayEvents' => $arrayEvents,
             'arrayEventsUser' => $arrayEventsUser,
             'arrayEventUserParticipation' => $arrayEventUserParticipation,
+            'arrayMembersName' => $arrayMembersName,
             'idUser' => $userId,
         ));
     }
 
-    public function addParticipantAction($idEvent){
+    public function addParticipantAction($idEvent)
+    {
         //Récupération de l'utilisateur connecté
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $userId = $user->getId();
@@ -79,7 +84,47 @@ class DefaultController extends Controller
         $em->persist($event[0]);
         $em->flush();
 
-        return new Response("Ok bro !");
+        return $this->redirect($this->generateUrl('event_homepage'));
 
+    }
+
+    public function getMembersName()
+    {
+
+        $eventRepository = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('AppBundle:Event');
+
+        $accountNameRepository = $this
+            ->getDoctrine()
+            ->getManager()
+            ->getRepository('AppBundle:AccountName');
+
+        $arrayEvents = $eventRepository->findAll();
+
+        $result = array();
+
+        foreach ($arrayEvents as $event) {
+
+            $arrayMembersName = array();
+            $arrayMembersName[0] = $event->getId();
+
+            $idOwner = $event->getEventOwner();
+            $accountNameOwner = $accountNameRepository->findBy(array('user_id' => $idOwner));
+            $arrayMembersName[$idOwner] = $accountNameOwner[0]->getName();
+
+            if ($event->getEventMembers() != null) {
+                $arrayMembersId = explode(";", $event->getEventMembers());
+
+                foreach ($arrayMembersId as $idMember) {
+                    $accountName = $accountNameRepository->findBy(array(
+                        'user_id' => $idMember));
+                    $arrayMembersName[$idMember] = $accountName[0]->getName();
+                }
+            }
+            $result[] = $arrayMembersName;
+        }
+        return $result;
     }
 }
