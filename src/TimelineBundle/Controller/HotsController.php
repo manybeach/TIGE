@@ -73,7 +73,7 @@ class HotsController extends Controller
             $dateMatch = strtotime($td[1][6]);
             ($varMmr > 0) ? $resultGame = 'WIN' : $resultGame = 'LOOSE';
 
-            $arrayGame = array('id'=>$idHots,'heroName'=>$heroName,'mapName' => $mapName, 'timeGame' => $timeGame, 'levelPlayer' => $levelPlayer, 'currentMmr' => $currentMmr, 'varMmr' => $varMmr, 'createDate' => $dateMatch, 'resultGame' => $resultGame);
+            $arrayGame = array('Game'=>$idHots,'idComm'=>$dateMatch,'heroName'=>$heroName,'mapName' => $mapName, 'timeGame' => $timeGame, 'levelPlayer' => $levelPlayer, 'currentMmr' => $currentMmr, 'varMmr' => $varMmr, 'createDate' => $dateMatch, 'resultGame' => $resultGame);
 
             array_push($arrayAllGame, $arrayGame);
         }
