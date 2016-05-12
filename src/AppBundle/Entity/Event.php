@@ -255,6 +255,7 @@ class Event
         return $this->eventMembers;
     }
 
+    //Ajout d'un membre
     public function addMember($UserId){
         if (!empty($this->getEventMembers())){
             $this->setEventMembers($this->getEventMembers().';'.$UserId);
@@ -265,6 +266,7 @@ class Event
         $this->setEventNbParticipants($this->getEventNbParticipants() + 1);
     }
 
+    //Suppression d'un membre
     public function supprMember($UserId){
         $arrayMembers = explode(";", $this->getEventMembers());
         $newStringMembers = null;
