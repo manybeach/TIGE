@@ -5,6 +5,7 @@ body {
     font: 11px Verdana, Arial, sans-serif;
     color: #333;
     background-image:url(../images/font.png);
+    background-attachment: fixed;
 }
 .sf-reset, .sf-reset .block, .sf-reset #message {
     margin: auto;
