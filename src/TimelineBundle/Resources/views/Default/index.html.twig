@@ -140,13 +140,23 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3" class="active">
-                        <div id="fos_comment_thread" data-thread="{{ thread[loop.index0] }}">
-                            {% include 'FOSCommentBundle:Thread:comments.html.twig' with {
-                            'comments': comments[loop.index0],
-                            'thread': thread[loop.index0]
-                            } %}
+                    <td colspan="3">
+                        {%  if loop.index0< 10 %}
+                        <div id="content">
+                            <div class="tab-content">
+                                <div id="sansCommentaire{{loop.index0}}" class="tab-pane fade in active">
+                                     <a data-toggle="tab" href="#fos_comment_thread{{loop.index0}}">Afficher les commentaires </a>
+                                </div>
+                                <div id="fos_comment_thread{{loop.index0}}" data-thread="{{ thread[loop.index0] }}" class="tab-pane fade">
+                                                {% include 'FOSCommentBundle:Thread:comments.html.twig' with {
+                                                'comments': comments[loop.index0],
+                                                'thread': thread[loop.index0]
+                                                } %}
+                                    <a data-toggle="tab" href="#sansCommentaire{{loop.index0}}">Masquer les commentaires </a>
+                                </div>
+                            </div>
                         </div>
+                        {% endif %}
 
                     </td>
                 </tr>
