@@ -9,65 +9,139 @@
             <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"
                     type="text/javascript"></script>
 
+
+            {#https://upload.wikimedia.org/wikipedia/en/7/77/League_of_Legends_logo.png
+            http://cooldown.fr/wp-content/uploads/2014/03/Heroes-of-the-storm-1.png#}
             {% if AllData is not empty %}
             {% for data in AllData %}
-                    {% if data.Game %}
-                    <table class="table table-bordered" role="alert">
-                        <tr class="blog-title">
-                        <th class="success" align="center" colspan=3>
-                            <h3 align="center"><img
-                                    src={{ absolute_url(asset('bundles/framework/images/win.png')) }} />
-                            </h3>
-                        </th>
-                            <tr><td colspan ="3"> <h3 align="center">League Of Legend</h3></td></tr>
-                        </tr>
-                    {% else %}
-                            <table class="table table-bordered" role="alert">
-                                <tr class="blog-title">
-                                    <th class="danger" colspan=3> <h3 align="center"><img
-                                        src={{ absolute_url(asset('bundles/framework/images/loose.png')) }} /> </h3>
-                                    </th>
-                                <tr><td colspan ="3"> <h3 align="center">League Of Legend</h3></td></tr>
-                                </tr>
 
-                    {% endif %}
+            {% if data.Game == 1 %}
+            <table class="table table-hover" role="alert" style="background-color: #dac6d6">
+                {% if data.win %}
+                    <tr class="alert-success">
+                        <td width="200px">
+                            <a> <img src="https://upload.wikimedia.org/wikipedia/fr/7/77/League_of_Legends_logo.png"
+                                     class="img-responsive img-rounded" alt="League Of Legends">
+                            </a>
+                        </td>
+                        <td align="center" colspan="3" style="vertical-align: middle"><img
+                                    src="{{ absolute_url(asset('bundles/framework/images/win.png')) }}"/>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr class="alert-danger">
+                        <td width="200px">
+                            <a> <img src="https://upload.wikimedia.org/wikipedia/fr/7/77/League_of_Legends_logo.png"
+                                     class="img-responsive img-rounded" alt="League Of Legends">
+                            </a>
+                        </td>
+                        <td align="center" colspan="3" style="vertical-align: middle"><img
+                                    src="{{ absolute_url(asset('bundles/framework/images/loose.png')) }}"/>
+                        </td>
+                    </tr>
+                {% endif %}
                 <tr>
-                    <td rowspan=2 align="center"><img src="{{ data.photo }}" /></td>
-                    <td align="center">
-                        <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/champion.png "
-                             class="img-circle" /> {{ data.player }}
+                    <td align="center" width="200px"><img class="img-responsive img-circle"
+                                                          src="{{ absolute_url(asset('bundles/framework/images/LoL/'~data.photoChamp~'.png')) }}"/>
                     </td>
+                    <td rowspan="2" style="vertical-align: middle" align="right">
+                        <ul class="list-unstyled h4" style="font-weight: bold">
+                            <li>Date du match</li>
+                            <li>Durée du match</li>
+                            <li>Kills/Deaths/Assists</li>
+                            <li>KDA</li>
+                            <li>Or gagné</li>
+                            <li>Serviteurs tués</li>
+                        </ul>
+                    </td>
+                    <td rowspan="2" style="vertical-align: middle">
+                        <ul class="list-unstyled h4 carbonad-text">
+                            <li>{{ data.createDate }}</li>
+                            <li>{{ data.timePlayed }}</li>
+                            <li>{{ data.championsKilled }}/{{ data.numDeaths }}/{{ data.assists }}</li>
+                            <li>{{ data.kda }}</li>
+                            <li>{{ data.goldEarned }}</li>
+                            <li> {{ data.minionsKilled }}</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" class="h3 text-capitalize" style="font-weight: bold">
+                       {{ data.player }}
+                        </br>Niveau {{ data.summonerLevel }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="active">
+                        <div id="fos_comment_thread" data-thread="{{ thread[loop.index0] }}">
+                            {% include 'FOSCommentBundle:Thread:comments.html.twig' with {
+                            'comments': comments[loop.index0],
+                            'thread': thread[loop.index0]
+                            } %}
+                        </div>
 
-                    <td align="center">
-                        <img src={{ absolute_url(asset('bundles/framework/images/calendar.png')) }} /> {{ data.createDate }}
-                    </td>
-                <tr>
-                    <td align="center">Level du joueur : {{ data.summonerLevel }}</td>
-                    <td align="center">Durée du match : {{ data.timePlayed }}</td>
-                </tr>
-                </tr>
-                <tr>
-                    <td rowspan=2 align="center"><img
-                                src= {{ absolute_url(asset('bundles/framework/images/LoL/'~data.photoChamp~'.png')) }} />
-                    </td>
-                    <td align="center">
-                        <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/score.png"
-                             class="img-thumbnail" /> {{ data.championsKilled }}/{{ data.numDeaths }}
-                        /{{ data.assists }}
-                    </td>
-                    <td align="center">
-                        <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/gold.png" /> {{ data.goldEarned }}
-                    </td>
-                <tr>
-                    <td align="center">KDA : {{ data.kda }}</td>
-                    <td align="center">
-                        <img src="http://ddragon.leagueoflegends.com/cdn/5.5.1/img/ui/minion.png" /> {{ data.minionsKilled }}
                     </td>
                 </tr>
+            </table>
+            {% else %}
+            <table class="table table-hover" role="alert" style="background-color: #dac6d6">
+                {% if data.resultGame == 'WIN' %}
+                    <tr class="alert-success">
+                        <td width="200px">
+                            <a> <img src="https://upload.wikimedia.org/wikipedia/en/0/04/Heroes_of_the_Storm_logo.png"
+                                     class="img-responsive img-rounded" alt="League Of Legends">
+                            </a>
+                        </td>
+                        <td align="center" colspan="3" style="vertical-align: middle"><img
+                                    src="{{ absolute_url(asset('bundles/framework/images/win.png')) }}"/>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr class="alert-danger">
+                        <td width="200px">
+                            <a> <img src="https://upload.wikimedia.org/wikipedia/en/0/04/Heroes_of_the_Storm_logo.png"
+                                     class="img-responsive img-rounded" alt="League Of Legends">
+                            </a>
+                        </td>
+                        <td align="center" colspan="3" style="vertical-align: middle"><img
+                                    src="{{ absolute_url(asset('bundles/framework/images/loose.png')) }}"/>
+                        </td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td align="center" width="200px"><img class="img-responsive img-circle"
+                                                          src="http://static.icy-veins.com/images/heroes/hero-portrait-tychus.jpg"/>
+                    </td>
+                    <td rowspan="2" style="vertical-align: middle" align="right">
+                        <ul class="list-unstyled h4" style="font-weight: bold">
+                            <li>Nom du hero</li>
+                            <li>Nom de la carte</li>
+                            <li>Durée du match</li>
+                            <li>MMR</li>
+                            <li>Variation de MMR</li>
+                            <li>Date du match</li>
+                        </ul>
+                    </td>
+                    <td rowspan="2" style="vertical-align: middle">
+                        <ul class="list-unstyled h4 carbonad-text">
+                            <li>{{ data.heroName }}</li>
+                            <li>{{ data.mapName }}</li>
+                            <li>{{ data.timeGame }}</li>
+                            <li>{{ data.currentMmr }}</li>
+                            <li> {{ data.varMmr }}</li>
+                            <li> {{ data.createDate }}</li>
+                        </ul>
+                    </td>
                 </tr>
                 <tr>
-                    <td colspan="3">
-                       <div id="fos_comment_thread" data-thread="{{ thread[loop.index0] }}">
+                    <td align="center" class="h3 text-capitalize" style="font-weight: bold">
+                        #Pseudo
+                        </br>Niveau {{ data.levelPlayer }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="active">
+                        <div id="fos_comment_thread" data-thread="{{ thread[loop.index0] }}">
                             {% include 'FOSCommentBundle:Thread:comments.html.twig' with {
                             'comments': comments[loop.index0],
                             'thread': thread[loop.index0]
@@ -78,10 +152,11 @@
                 </tr>
             </table>
 
-            </br>
+
+                {% endif %}
 
             {% endfor %}
             {% endif %}
         {% endblock %}
-    </table></div>
+    </div>
 {% endblock %}
