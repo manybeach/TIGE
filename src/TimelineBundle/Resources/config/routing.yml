@@ -47,3 +47,9 @@ event_not_participate:
     defaults: { _controller: EventBundle:Default:supprMember }
     requirements:
           idUser: \d+
+
+event_delete:
+    path:     /event/supprEvent/{idEvent}
+    defaults: { _controller: EventBundle:Default:supprEvent }
+    requirements:
+          idUser: \d+
