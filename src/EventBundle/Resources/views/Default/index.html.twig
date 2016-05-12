@@ -100,8 +100,7 @@
 
             <div id="participateEvents" class="tab-pane fade">
                 {% if arrayEventUserParticipation is empty %}
-                    <p><br><b>Vous n'êtes incrit à aucun événement actuellement !
-                            ;)</b></p>
+                    <p><br><b>Vous n'êtes incrit à aucun événement actuellement !</b></p>
                 {% else %}
                     {% for event in arrayEventUserParticipation %}
                         {% if event.eventDate.getTimestamp() >= today %}
