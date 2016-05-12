@@ -39,11 +39,11 @@ class DefaultController extends Controller
 
         foreach($arraySorted as $arrayGame)
         {
-            $arrayCommentAndThread = $this->somethingAction($request, $arrayGame["createDate"]);
+            $arrayCommentAndThread = $this->somethingAction($request, $arrayGame["idComm"]);
             array_push($comments, $arrayCommentAndThread['comments']);
             array_push($threads, $arrayCommentAndThread['threads']);
+
         }
-        var_dump($arraySorted);
         return $this->render('TimelineBundle:Default:index.html.twig', array('AllData' => $arraySorted, 'comments' => $comments, 'thread' => $threads));
 
     }
