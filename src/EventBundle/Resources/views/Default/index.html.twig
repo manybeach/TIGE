@@ -12,7 +12,7 @@
         <div class="tab-content">
             <div id="upcommingEvents" class="tab-pane fade in active">
                 {% if arrayEvents is empty %}
-                    <p><br><b>Aucun évenement n'est programmé pour le moment ! Allez dans "Créer un événement" pour en
+                    <p><br/><b>Aucun évenement n'est programmé pour le moment ! Allez dans "Créer un événement" pour en
                             ajouter !</b></p>
                 {% else %}
                     {% for event in arrayEvents %}
@@ -40,7 +40,7 @@
                                         - on recherche le tableau contenant le noms des
                                         participants de l'événement en cours (premier élément du tableau)
                                         - on affiche le nom du créateur (deuxième élément du tableau)
-                                        - on affiche le nom des participants#}
+                                        - #}
                                         {% for members in arrayMembersName %}
                                             {% if (members[0] == event.id) %}
                                                 {% for key, member in members %}
