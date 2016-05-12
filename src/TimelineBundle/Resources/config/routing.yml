@@ -1,3 +1,34 @@
-timeline_homepage:
-    path:     /
-    defaults: { _controller: TimelineBundle:Default:index }
+home:
+    path:  /
+    defaults: { _controller: AppBundle:Default:home }
+
+timeline_data:
+    path:  /timeline
+    defaults: { _controller: TimelineBundle:Default:getDataFromLol }
+
+my_account:
+    path:  /account
+    defaults: { _controller: MyaccountBundle:AccountName:add }
+
+stats_homepage:
+    path:  /statistiques/{idUser}
+    defaults: { _controller: StatsBundle:Default:displayStat,idUser: false }
+
+ajoutfavoris:
+    path: /ajoutfavoris/{id_favoris}
+    defaults: {_controller: AppBundle:Favourites:addfavourites}
+    requirements:
+      id_favourites: \d+
+
+supprfavoris:
+    path: /supprfavoris/{id_favoris}
+    defaults: {_controller: AppBundle:Favourites:delFavourites}
+    requirements:
+      id_favourites: \d+
+
+search_player:
+    path: /search
+    defaults: { _controller: SearchBundle:Default:searchPlayer}
+    requirements:
+      _method: POST
+

@@ -1,0 +1,17 @@
+{% extends "TimelineBundle::layout.html.twig" %}
+
+{% block body %}
+
+    {% block content_header %}
+    {% endblock %}
+
+    <div class="block">
+        {% block content %}
+            <div class="form_row">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
+            </div>
+        {% endblock %}
+    </div>
+{% endblock %}

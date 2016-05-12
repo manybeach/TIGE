@@ -3,6 +3,8 @@ imports:
     - { resource: security.yml }
     - { resource: services.yml }
     - { resource: "@TimelineBundle/Resources/config/services.yml" }
+    - { resource: "@MyaccountBundle/Resources/config/services.yml" }
+    - { resource: "@StatsBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -32,6 +34,79 @@ framework:
     fragments:       ~
     http_method_override: true
     assets: ~
+
+# Assetic Configuration
+assetic:
+    debug:          "%kernel.debug%"
+    use_controller: '%kernel.debug%'
+    bundles:        [ 'TimelineBundle', 'StatsBundle',"FOSCommentBundle" ]
+    filters:
+        cssrewrite: ~
+    assets:
+        bootstrap_js:
+            inputs:
+                - %kernel.root_dir%/../vendor/twitter/bootstrap/dist/js/bootstrap.js
+        bootstrap_css:
+            inputs:
+                - %kernel.root_dir%/../vendor/twitter/bootstrap/dist/css/bootstrap.css
+                - %kernel.root_dir%/../vendor/twitter/bootstrap/dist/css/bootstrap-theme.css
+            filters: [cssrewrite]
+
+        bootstrap_glyphicons_ttf:
+            inputs:
+                - %kernel.root_dir%/../vendor/twitter/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf
+            output: "fonts/glyphicons-halflings-regular.ttf"
+        bootstrap_glyphicons_eot:
+            inputs:
+                - %kernel.root_dir%/../vendor/twitter/bootstrap/dist/fonts/glyphicons-halflings-regular.eot
+            output: "fonts/glyphicons-halflings-regular.eot"
+        bootstrap_glyphicons_svg:
+            inputs:
+                - %kernel.root_dir%/../vendor/twitter/bootstrap/dist/fonts/glyphicons-halflings-regular.svg
+            output: "fonts/glyphicons-halflings-regular.svg"
+        bootstrap_glyphicons_woff:
+            inputs:
+                - %kernel.root_dir%/../vendor/twitter/bootstrap/dist/fonts/glyphicons-halflings-regular.woff
+            output: "fonts/glyphicons-halflings-regular.woff"
+
+        jquery:
+            inputs:
+                - %kernel.root_dir%/../vendor/components/jquery/jquery.js
+
+
+# Fos Configuration
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: AppBundle\Entity\User
+    registration:
+            form:
+                type: AppBundle\Form\RegistrationType
+
+
+fos_comment:
+    db_driver: orm
+    class:
+        model:
+            comment: AppBundle\Entity\Comment
+            thread: AppBundle\Entity\Thread
+
+fos_rest:
+     view:
+         formats:
+             rss: true
+             xml: false
+         templating_formats:
+             html: true
+         force_redirects:
+             html: true
+         failed_validation: HTTP_BAD_REQUEST
+         default_engine: twig
+         view_response_listener: true
+#.......
+
+assetic:
+    bundles: [ "FOSCommentBundle" ]
 
 # Twig Configuration
 twig:
@@ -67,3 +142,5 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+# app/config/config.yml

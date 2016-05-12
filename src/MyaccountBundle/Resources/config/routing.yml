@@ -1,0 +1,24 @@
+myaccount_homepage:
+    path:     /account
+    defaults: { _controller: MyaccountBundle:Default:index }
+
+myaccount_add:
+    path:    /add
+    defaults: { _controller: MyaccountBundle:Default:addAccount }
+    requirements:
+      _method: POST
+
+myaccount_mod:
+    path:    /mod
+    defaults: { _controller: MyaccountBundle:Default:modAccount }
+    requirements:
+      _method: POST
+
+games:
+    path:    /games
+    defaults: { _controller: AppBundle:Games:index }
+    requirements:
+          _method: POST
+
+
+

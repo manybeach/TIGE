@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% stylesheets '@bootstrap_css' %}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+    {% javascripts '@jquery' '@bootstrap_js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <meta charset="{{ _charset }}"/>
+    <meta name="robots" content="noindex,nofollow"/>
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{{ absolute_url(asset('bundles/framework/css/structure.css')) }}" rel="stylesheet"/>
+    <link href="{{ absolute_url(asset('bundles/framework/css/body.css')) }}" rel="stylesheet"/>
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+<div id="content">
+    <div class="header clear-fix">
+        {#<div class="header-logo">
+            <img class="img-thumbnail"
+                 alt="Tige"
+                 src="{{ absolute_url(asset('bundles/framework/images/tige.png')) }}"/>
+        </div>#}
+        <div class="search">
+            </br>
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                {# <div class="form-row">
+                     <form class="fos_user_registration_register"
+                           action="{{ path('fos_user_security_logout') }} "
+                           method="GET">
+                         <button class="sf-button" type="submit">
+                             <span class="border-l">
+                                 <span class="border-r">
+                                     <span class="btn-bg">Déconnexion</span>
+                                 </span>
+                             </span>
+                         </button>
+                     </form>
+                 </div>#}
+            {% else %}
+                <div class="form-row">
+                    <form class="fos_user_registration_register"
+                          action="{{ path('app_registration_register') }} "
+                          method="POST">
+                        <button class="sf-button" type="submit">
+                        <span class="border-l">
+                            <span class="border-r">
+                                <span class="btn-bg">S'enregistrer</span>
+                            </span>
+                        </span>
+                        </button>
+                    </form>
+                </div></br>
+                <div class="form-row">
+                    <form class="fos_user_registration_register"
+                          action="{{ path('fos_user_security_login') }} "
+                          method="POST">
+                        <button class="sf-button" type="submit">
+                            <span class="border-l">
+                                <span class="border-r">
+                                    <span class="btn-bg">Connexion</span>
+                                </span>
+                            </span>
+                        </button>
+                    </form>
+                </div>
+
+            {% endif %}
+        </div>
+    </div>
+    <div>
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            <nav class="navbar navbar-inverse navbar-fixed-top">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                                data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="{{ path('timeline_data') }} ">Timeline</a>
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1 ">
+                        <ul class="nav navbar-nav">
+                            <li><a href="#">Evénements</a></li>
+                            <li><a href="{{ path('stats_homepage') }}">Statistiques</a></li>
+                            <li><a href="{{ path('my_account') }}">Mon compte</a></li>
+                            <li><a href="{{ path('games') }}">Mes jeux</a></li>
+                        </ul>
+                        <form class="navbar-form navbar-left" role="search" action="{{ path("search_player") }}"
+                              method="POST">
+                            <div class="form-group">
+                                <input name="searchData" type="text" class="form-control" placeholder="Rechercher">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                        <form class="fos_user_registration_register navbar-form navbar-right"
+                              action="{{ path('fos_user_security_logout') }} "
+                              method="GET">
+                            <div class="form-group">
+                                <button class="btn btn-danger" type="submit">Déconnexion</button>
+                            </div>
+                        </form>
+                    </div><!-- /.navbar-collapse -->
+                </div><!-- /.container-fluid -->
+            </nav>
+        {% endif %}
+    </div>
+    <div class="sf-reset">
+            {% block body %}
+
+
+            {% endblock %}
+
+    </div>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

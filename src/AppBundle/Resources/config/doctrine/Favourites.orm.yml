@@ -1,0 +1,25 @@
+AppBundle\Entity\Favourites:
+    type: entity
+    table: null
+    repositoryClass: AppBundle\Repository\FavouritesRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        idFavourites:
+            type: string
+            length: 255
+            nullable: true
+            column: id_favourites
+    manyToOne:
+            idAccount:
+                targetEntity: User
+                inversedBy: accountname
+                joinColumn:
+                    name: id_account
+                    referencedColumnName: id
+                    nullable: false
+    lifecycleCallbacks: {  }

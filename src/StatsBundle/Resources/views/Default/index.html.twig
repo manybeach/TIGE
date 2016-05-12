@@ -1,0 +1,257 @@
+{% extends "TimelineBundle::layout.html.twig" %}
+
+{% block body %}
+    <div class="block">
+        <table align="center">
+            <tr>
+                <td>
+                    <h1 class="display-4">{{ summonerName }}</h1></td>
+                {% if  me==false %}
+                    {% if follow==false %}
+                        <td>
+                            <a tabindex="0" class="btn btn-lg btn" role="button" data-toggle="popover"
+                               data-trigger="focus"
+                               href="{{ path('ajoutfavoris',{'id_favoris':idUser}) }}"
+                               title="Suis-moi" data-content="L'ajoutez aux favoris"><span
+                                        class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a>
+                        </td>
+                    {% else %}
+                        <td>
+                            <a tabindex="0" class="btn btn-lg btn" role="button" data-toggle="popover"
+                               data-trigger="focus"
+                               href="{{ path('supprfavoris',{'id_favoris':idUser}) }}"
+                               title="unfollow-me" data-content="Le supprimer des favoris"><span
+                                        class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span></a>
+                        </td>
+                    {% endif %}
+                {% endif %}
+            </tr>
+        </table>
+    </div>
+
+    <div class="block">
+    <!-- Load jQuery from Google's CDN if needed -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script src="//code.highcharts.com/4.1.8/highcharts.js"></script>
+    <script src="//code.highcharts.com/4.1.8/modules/exporting.js"></script>
+    <script src="//code.highcharts.com/4.1.8/modules/heatmap.js"></script>
+    <script src="//code.highcharts.com/highcharts-more.js"></script>
+    <script src="//code.highcharts.com/modules/solid-gauge.js"></script>
+    <script type="text/javascript">
+        {{ chart(piechart) }}
+        {{ chart(barchart) }}
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            var chart;
+            new Highcharts.Chart('container', {
+
+                        chart: {
+                            type: 'solidgauge',
+                            marginTop: 50
+                        },
+
+                        title: {
+                            text: 'Activity',
+                            style: {
+                                fontSize: '24px'
+                            }
+                        },
+
+                        tooltip: {
+                            borderWidth: 0,
+                            backgroundColor: 'none',
+                            shadow: false,
+                            style: {
+                                fontSize: '16px'
+                            },
+                            pointFormat: '{series.name}<br><span style="font-size:2em; color: {point.color}; font-weight: bold">{point.y}%</span>',
+                            positioner: function (labelWidth, labelHeight) {
+                                return {
+                                    x: 200 - labelWidth / 2,
+                                    y: 180
+                                };
+                            }
+                        },
+
+                        pane: {
+                            startAngle: 0,
+                            endAngle: 360,
+                            background: [{ // Track for Move
+                                outerRadius: '112%',
+                                innerRadius: '88%',
+                                backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0.3).get(),
+                                borderWidth: 0
+                            }, { // Track for Exercise
+                                outerRadius: '87%',
+                                innerRadius: '63%',
+                                backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[1]).setOpacity(0.3).get(),
+                                borderWidth: 0
+                            }, { // Track for Stand
+                                outerRadius: '62%',
+                                innerRadius: '38%',
+                                backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[2]).setOpacity(0.3).get(),
+                                borderWidth: 0
+                            }]
+                        },
+
+                        yAxis: {
+                            min: 0,
+                            max: 100,
+                            lineWidth: 0,
+                            tickPositions: []
+                        },
+
+                        plotOptions: {
+                            solidgauge: {
+                                borderWidth: '34px',
+                                dataLabels: {
+                                    enabled: false
+                                },
+                                linecap: 'round',
+                                stickyTracking: false
+                            }
+                        },
+
+                        series: [{
+                            name: 'Move',
+                            borderColor: Highcharts.getOptions().colors[0],
+                            data: [{
+                                color: Highcharts.getOptions().colors[0],
+                                radius: '100%',
+                                innerRadius: '100%',
+                                y: 80
+                            }]
+                        }, {
+                            name: 'Exercise',
+                            borderColor: Highcharts.getOptions().colors[1],
+                            data: [{
+                                color: Highcharts.getOptions().colors[1],
+                                radius: '75%',
+                                innerRadius: '75%',
+                                y: 65
+                            }]
+                        }, {
+                            name: 'Stand',
+                            borderColor: Highcharts.getOptions().colors[2],
+                            data: [{
+                                color: Highcharts.getOptions().colors[2],
+                                radius: '50%',
+                                innerRadius: '50%',
+                                y: 50
+                            }]
+                        }]
+                    },
+
+                    /**
+                     * In the chart load callback, add icons on top of the circular shapes
+                     */
+                    function callback() {
+
+                        // Move icon
+                        this.renderer.path(['M', -8, 0, 'L', 8, 0, 'M', 0, -8, 'L', 8, 0, 0, 8])
+                                .attr({
+                                    'stroke': '#303030',
+                                    'stroke-linecap': 'round',
+                                    'stroke-linejoin': 'round',
+                                    'stroke-width': 2,
+                                    'zIndex': 10
+                                })
+                                .translate(190, 26)
+                                .add(this.series[2].group);
+
+                        // Exercise icon
+                        this.renderer.path(['M', -8, 0, 'L', 8, 0, 'M', 0, -8, 'L', 8, 0, 0, 8, 'M', 8, -8, 'L', 16, 0, 8, 8])
+                                .attr({
+                                    'stroke': '#303030',
+                                    'stroke-linecap': 'round',
+                                    'stroke-linejoin': 'round',
+                                    'stroke-width': 2,
+                                    'zIndex': 10
+                                })
+                                .translate(190, 61)
+                                .add(this.series[2].group);
+
+                        // Stand icon
+                        /** @namespace this.series */
+                        this.renderer.path(['M', 0, 8, 'L', 0, -8, 'M', -8, 0, 'L', 0, -8, 8, 0])
+                                .attr({
+                                    'stroke': '#303030',
+                                    'stroke-linecap': 'round',
+                                    'stroke-linejoin': 'round',
+                                    'stroke-width': 2,
+                                    'zIndex': 10
+                                })
+                                .translate(190, 96)
+                                .add(this.series[2].group);
+                    });
+        });
+
+    </script>
+
+    <ul class="nav nav-pills">
+        <li class="active"><a data-toggle="tab" href="#byChampion">Champions</a></li>
+        <li><a data-toggle="tab" href="#bySummary">Parties</a></li>
+        <li><a data-toggle="tab" href="#perf">Performances</a></li>
+        <li><a data-toggle="tab" href="#louane">Louane</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="byChampion" class="tab-pane fade in active">
+            <div id="piechart" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+        </div>
+        <div id="bySummary" class="tab-pane fade">
+            <div id="barchart" style="min-width: 800px; height: 400px; margin: 0 auto"></div>
+        </div>
+        <div id="perf" class="tab-pane fade">
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <td> Nom du champion</td>
+                    <td> Ratio de victoires</td>
+                    <td> KDA</td>
+                    <td> Dommages infligés</td>
+                    <td> Dommages reçus</td>
+                    <td> Minions tués</td>
+                    <td> Gold gagné</td>
+                    <td> Graph de performance</td>
+                </tr>
+                {% if championsData is not empty %}
+                {% for champion in championsData %}
+                {% set kda = (champion.totalChampionKills+champion.totalAssists)/champion.totalDeathsPerSession %}
+                {% if kda < 1 %}
+                <tr class="danger">
+
+                    {% elseif kda > 3 %}
+                <tr class="success">
+
+                    {% else %}
+                <tr class="blog-title ">
+                    {% endif %}
+
+
+                    <td> {{ champion.id }}</td>
+                    <td> {{ champion.totalSessionsWon/champion.totalSessionsPlayed }}</td>
+                    <td> {{ (champion.totalChampionKills+champion.totalAssists)/champion.totalDeathsPerSession }}</td>
+                    <td> {{ champion.totalDamageDealt }}</td>
+                    <td> {{ champion.totalDamageTaken }}</td>
+                    <td> {{ champion.totalMinionKills }}</td>
+                    <td> {{ champion.totalGoldEarned }}</td>
+                    <td>
+                        jj
+                    </td>
+                <tr>
+                    {% endfor %}
+                    {% endif %}
+
+            </table>
+        </div>
+        <div id="louane" class="tab-pane fade">
+            <div id="container" style="width: 400px; height: 400px; margin: 0 auto">
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

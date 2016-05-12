@@ -1,3 +1,11 @@
+stats:
+    resource: "@StatsBundle/Resources/config/routing.yml"
+    prefix:   /
+
+myaccount:
+    resource: "@MyaccountBundle/Resources/config/routing.yml"
+    prefix:   /
+
 timeline:
     resource: "@TimelineBundle/Resources/config/routing.yml"
     prefix:   /
@@ -5,3 +13,17 @@ timeline:
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
+
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
+fos_comment_api:
+    resource: "@FOSCommentBundle/Resources/config/routing.yml"
+    prefix: /api
+    defaults: { _format: html }
+    type: rest
+
+fos_comment_thread_api:
+    type: rest
+    resource: "@FOSCommentBundle/Controller/ThreadController.php"
+    prefix: fos_comment_

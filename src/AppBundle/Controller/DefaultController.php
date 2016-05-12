@@ -6,11 +6,16 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Form\UserAccountForm;
 
 class DefaultController extends Controller
 {
+
+    public function homeAction(){
+        return $this->render('AppBundle::accueil.html.twig');
+    }
     /**
-     * @Route("/", name="homepage")
+     * @Route("/nnn", name="homepage")
      */
     public function indexAction(Request $request)
     {
@@ -21,11 +26,22 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/admin", name="homepage")
+     * @Route("/admin")
      */
-    public function adminAction(Request $request)
+    public function adminAction()
     {
-        // replace this example code with whatever you need
-        return new Response("Hello Mathieu !!");
+        return new Response('<html><body>Admin page!</body></html>');
+    }
+
+    /**
+     * @return User current idUser
+     */
+    public function getCurrentUserId()
+    {
+        var_dump($this);
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        var_dump($user);
+        $idUser = $user->getId();
+        return $idUser;
     }
 }

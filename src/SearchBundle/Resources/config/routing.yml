@@ -1,0 +1,7 @@
+search_homepage:
+    path:     /
+    defaults: { _controller: SearchBundle:Default:index }
+
+stats_homepage:
+    path:  /statistiques/{idUser}
+    defaults: { _controller: StatsBundle:Default:displayStat,idUser: false }

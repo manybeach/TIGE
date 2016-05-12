@@ -1,0 +1,41 @@
+{% extends "TimelineBundle::layout.html.twig" %}
+
+{% block body %}
+
+    {% block content_header %}
+    {% endblock %}
+
+    <div class="block">
+        {# {% block content %}
+             {% if error %}
+                 <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+             {% endif %}#}
+        <div class="container-fluid">
+            <form action="{{ path('login') }}" method="post" class="form-horizontal">
+                <div class="form-group">
+                    <label for="username" class="col-sm-2 control-label">Username</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="username" name="_username"
+                               value="{{ last_username }}" placeholder="Username"/>
+                    </div>
+                </div>
+                </br>
+                <div class="form-group">
+                    <label for="password" class="col-sm-2 control-label">Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="password" name="_password"
+                               placeholder="Password"/>
+                    </div>
+                </div>
+                </br>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary btn-lg active">Login</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {# {% endblock %}#}
+    </div>
+{% endblock %}
