@@ -39,8 +39,7 @@
                                         {#Pour afficher les noms des participants :
                                         - on recherche le tableau contenant le noms des
                                         participants de l'événement en cours (premier élément du tableau)
-                                        - on affiche le nom du créateur (deuxième élément du tableau)
-                                        - #}
+                                        - on affiche le nom du créateur (deuxième élément du tableau)#}
                                         {% for members in arrayMembersName %}
                                             {% if (members[0] == event.id) %}
                                                 {% for key, member in members %}
