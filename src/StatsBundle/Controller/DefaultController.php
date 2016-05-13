@@ -113,8 +113,7 @@ class DefaultController extends Controller
     {
         $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:AccountName');
 
-        $arrayAccountName = $repository->findBy(array('user_id' => $idUser, 'game_id' => 1,));
-
+        $arrayAccountName = $repository->findBy(array('id' => $idUser,));
         $accountName = $arrayAccountName[0]->getName();
         return $accountName;
     }
@@ -171,6 +170,7 @@ class DefaultController extends Controller
         $url = 'https://' . $server . '.api.pvp.net/api/lol/' . $server . '/v1.4/summoner/by-name/' . $summonerName . '?api_key=0610f47d-dba7-46ff-84c7-fc9eeee8b788';
         $resultJson = file_get_contents($url);
         $result = json_decode($resultJson, true);
+        $summonerName= strtolower($summonerName);
         $summonerId = $result[$summonerName]['id'];
         return $summonerId;
     }

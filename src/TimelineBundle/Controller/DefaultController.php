@@ -21,7 +21,8 @@ class DefaultController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $currentUser = $user->getId();
         $objHotsName = $this->getDoctrine()->getManager()->getRepository('AppBundle:AccountName');
-        $hotsName = $objHotsName->findBy(array('game_id' => $hotsId, 'user_id' => $currentUser));
+        $hotsName = $objHotsName->findBy(array('game_id' => $hotsId));
+        /* faire une boucle sur chaque joueur $hotsName[0]*/
         $hotsAccount = $hotsName[0]->getName();
         $hotsId = $hotsName[0]->getId();
         

@@ -74,13 +74,13 @@
                 {% if mesFavoris is empty %}
                     <p><br/><b>Vous n'avez aucun favoris actuellement !</b></p>
                 {% else %}
-                    {% for favourite in mesFavoris %}
-                        <table class="table table-bordered table-striped">
-                            <tr>
-                                <th><h3 align="center"> Nom du personnage</h3></th>
-                                <th><h3 align="center"> Ne plus suivre</h3></th>
-                            </tr>
+                    <table class="table table-bordered table-striped">
+                    <tr>
+                        <th><h3 align="center"> Nom du personnage</h3></th>
+                        <th><h3 align="center"> Ne plus suivre</h3></th>
+                    </tr>
 
+                    {% for favourite in mesFavoris %}
                             <tr>
                                 <td align="center">
                                     {{ favourite.name }}
@@ -93,8 +93,9 @@
                                                 class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span></a>
                                 </td>
                             </tr>
-                        </table>
                     {% endfor %}
+                    </table>
+
                 {% endif %}
             </div>
         </div>
