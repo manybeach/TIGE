@@ -48,31 +48,33 @@ class LeagueController extends Controller
                     $summonerLevel = $resultSummonerInfo[$summonerName]["summonerLevel"];
 
                     $arrayAllStats = array($summonerName => array());
-
+                    $i=1;
                     foreach ($resultListMatch["games"] as $arrayGame) {
-
-                        $photo = $this->getPhotoByIdLol($profileIconId);
-                        $arrayGame = $this->controleArrayLol($arrayGame);
-                        if ($arrayGame["stats"]["numDeaths"] == 0) $arrayGame["stats"]["numDeaths"] = 1;
-                        $arrayDataBySum = array('Game' => $lolId, 'player' => $summonerName,
-                            'accountId' => $MonObjetAccountName->getId(),
-                            'summonerId' => $summonerId,
-                            'profileIconId' => $profileIconId,
-                            'summonerLevel' => $summonerLevel,
-                            'photo' => $photo,
-                            'photoChamp' => $arrayGame["championId"],
-                            'win' => $arrayGame["stats"]["win"],
-                            'createDate' => (int)round($arrayGame["createDate"] / 1000),
-                            'idComm' => (int)$arrayGame["createDate"],
-                            'championId' => $arrayGame["championId"],
-                            'goldEarned' => $arrayGame["stats"]["goldEarned"],
-                            'numDeaths' => $arrayGame["stats"]["numDeaths"],
-                            'championsKilled' => $arrayGame["stats"]["championsKilled"],
-                            'minionsKilled' => $arrayGame["stats"]["minionsKilled"],
-                            'assists' => $arrayGame["stats"]["assists"],
-                            'timePlayed' => date('i:s', $arrayGame["stats"]["timePlayed"]),
-                            'kda' => round(($arrayGame["stats"]["championsKilled"] + $arrayGame["stats"]["assists"]) / $arrayGame["stats"]["numDeaths"], 2));
-                        array_push($arrayAllStats[$summonerName], $arrayDataBySum);
+                        if ($i<=3) {
+                            $photo = $this->getPhotoByIdLol($profileIconId);
+                            $arrayGame = $this->controleArrayLol($arrayGame);
+                            if ($arrayGame["stats"]["numDeaths"] == 0) $arrayGame["stats"]["numDeaths"] = 1;
+                            $arrayDataBySum = array('Game' => $lolId, 'player' => $summonerName,
+                                'accountId' => $MonObjetAccountName->getId(),
+                                'summonerId' => $summonerId,
+                                'profileIconId' => $profileIconId,
+                                'summonerLevel' => $summonerLevel,
+                                'photo' => $photo,
+                                'photoChamp' => $arrayGame["championId"],
+                                'win' => $arrayGame["stats"]["win"],
+                                'createDate' => (int)round($arrayGame["createDate"] / 1000),
+                                'idComm' => (int)$arrayGame["createDate"],
+                                'championId' => $arrayGame["championId"],
+                                'goldEarned' => $arrayGame["stats"]["goldEarned"],
+                                'numDeaths' => $arrayGame["stats"]["numDeaths"],
+                                'championsKilled' => $arrayGame["stats"]["championsKilled"],
+                                'minionsKilled' => $arrayGame["stats"]["minionsKilled"],
+                                'assists' => $arrayGame["stats"]["assists"],
+                                'timePlayed' => date('i:s', $arrayGame["stats"]["timePlayed"]),
+                                'kda' => round(($arrayGame["stats"]["championsKilled"] + $arrayGame["stats"]["assists"]) / $arrayGame["stats"]["numDeaths"], 2));
+                            array_push($arrayAllStats[$summonerName], $arrayDataBySum);
+                            $i=$i+1;
+                        }
                     }
 
                     array_push($arrayAllPlayers, $arrayAllStats);
