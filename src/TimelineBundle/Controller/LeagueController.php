@@ -30,41 +30,59 @@ class LeagueController extends Controller
             $arrayAllPlayers = array();
 
 
-            $objLolId       = $thisB->getDoctrine()->getManager()->getRepository('AppBundle:Games');
-            $arrayLolId     = $objLolId->findBy(array('name'=>'League Of Legend'));
-            $lolId          = $arrayLolId[0]->getId();
+            $objLolId = $thisB->getDoctrine()->getManager()->getRepository('AppBundle:Games');
+            $arrayLolId = $objLolId->findBy(array('name' => 'League Of Legend'));
+            $lolId = $arrayLolId[0]->getId();
 
             $repository = $thisB->getDoctrine()->getManager()->getRepository('AppBundle:AccountName');
-            $objAccountName = $repository->findBy(array('user_id' => $securityContext, 'game_id' => $lolId));
+            $objAccountName = $repository->findBy(array('game_id' => $lolId));
+            foreach ($objAccountName as $MonObjetAccountName) {
+                if (!empty($MonObjetAccountName)) {
 
-            if (!empty($objAccountName)) {
+                    $summonerName = strtolower($MonObjetAccountName->getName());
+                    $resultSummonerInfo = $this->getInfoSummoner($summonerName, $server);
+                    $summonerId = $resultSummonerInfo[$summonerName]['id'];
+                    $resultListMatch = $this->getMatchList($summonerId, $server);
 
-                $summonerName = strtolower($objAccountName[0]->getName());
-                $resultSummonerInfo = $this->getInfoSummoner($summonerName, $server);
-                $summonerId = $resultSummonerInfo[$summonerName]['id'];
-                $resultListMatch = $this->getMatchList($summonerId, $server);
+                    $profileIconId = $resultSummonerInfo[$summonerName]["profileIconId"];
+                    $summonerLevel = $resultSummonerInfo[$summonerName]["summonerLevel"];
 
-                $profileIconId = $resultSummonerInfo[$summonerName]["profileIconId"];
-                $summonerLevel = $resultSummonerInfo[$summonerName]["summonerLevel"];
+                    $arrayAllStats = array($summonerName => array());
 
-                $arrayAllStats = array($summonerName => array());
+                    foreach ($resultListMatch["games"] as $arrayGame) {
 
-                foreach ($resultListMatch["games"] as $arrayGame) {
+                        $photo = $this->getPhotoByIdLol($profileIconId);
+                        $arrayGame = $this->controleArrayLol($arrayGame);
+                        if ($arrayGame["stats"]["numDeaths"] == 0) $arrayGame["stats"]["numDeaths"] = 1;
+                        $arrayDataBySum = array('Game' => $lolId, 'player' => $summonerName,
+                            'accountId' => $MonObjetAccountName->getId(),
+                            'summonerId' => $summonerId,
+                            'profileIconId' => $profileIconId,
+                            'summonerLevel' => $summonerLevel,
+                            'photo' => $photo,
+                            'photoChamp' => $arrayGame["championId"],
+                            'win' => $arrayGame["stats"]["win"],
+                            'createDate' => (int)round($arrayGame["createDate"] / 1000),
+                            'idComm' => (int)$arrayGame["createDate"],
+                            'championId' => $arrayGame["championId"],
+                            'goldEarned' => $arrayGame["stats"]["goldEarned"],
+                            'numDeaths' => $arrayGame["stats"]["numDeaths"],
+                            'championsKilled' => $arrayGame["stats"]["championsKilled"],
+                            'minionsKilled' => $arrayGame["stats"]["minionsKilled"],
+                            'assists' => $arrayGame["stats"]["assists"],
+                            'timePlayed' => date('i:s', $arrayGame["stats"]["timePlayed"]),
+                            'kda' => round(($arrayGame["stats"]["championsKilled"] + $arrayGame["stats"]["assists"]) / $arrayGame["stats"]["numDeaths"], 2));
+                        array_push($arrayAllStats[$summonerName], $arrayDataBySum);
+                    }
 
-                    $photo = $this->getPhotoByIdLol($profileIconId);
-                    $arrayGame = $this->controleArrayLol($arrayGame);
-                    if ($arrayGame["stats"]["numDeaths"] == 0) $arrayGame["stats"]["numDeaths"] = 1;
-                    $arrayDataBySum = array('Game'=>$lolId,'player' => $summonerName, 'summonerId' => $summonerId, 'profileIconId' => $profileIconId, 'summonerLevel' => $summonerLevel, 'photo' => $photo, 'photoChamp' => $arrayGame["championId"], 'win' => $arrayGame["stats"]["win"], 'createDate' =>(int)round($arrayGame["createDate"]/1000), 'idComm' => (int)$arrayGame["createDate"], 'championId' => $arrayGame["championId"], 'goldEarned' => $arrayGame["stats"]["goldEarned"], 'numDeaths' => $arrayGame["stats"]["numDeaths"], 'championsKilled' => $arrayGame["stats"]["championsKilled"], 'minionsKilled' => $arrayGame["stats"]["minionsKilled"], 'assists' => $arrayGame["stats"]["assists"], 'timePlayed' => date('i:s', $arrayGame["stats"]["timePlayed"]), 'kda' => round(($arrayGame["stats"]["championsKilled"] + $arrayGame["stats"]["assists"]) / $arrayGame["stats"]["numDeaths"], 2));
-                    array_push($arrayAllStats[$summonerName], $arrayDataBySum);
+                    array_push($arrayAllPlayers, $arrayAllStats);
+                    $games = $this->sortGames($arrayAllPlayers);
+                    $displayData = true;
+                } else {
+                    $displayData = false;
                 }
-
-                array_push($arrayAllPlayers, $arrayAllStats);
-                $games = $this->sortGames($arrayAllPlayers);
-                $displayData = true;
-            } else {
-                $displayData = false;
             }
-        } else {
+        }else {
             $displayData = false;
         }
         if($displayData==false)
@@ -73,6 +91,7 @@ class LeagueController extends Controller
             $comments='';
             $threads='';
         }
+
         $dataLeague = array('AllData'=>$games,'comments'=>$comments,'threads'=>$threads);
         return $dataLeague;
     }

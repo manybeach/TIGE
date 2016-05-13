@@ -12,7 +12,8 @@ class DefaultController extends Controller
     {
         $leagueController = new LeagueController();
         $hotsController = new HotsController();
-
+        $arrayDataLol = array();
+        
         $objHotsId = $this->getDoctrine()->getManager()->getRepository('AppBundle:Games');
         $arrayHotsId = $objHotsId->findBy(array('name' => 'Heroes Of The Storm'));
         $hotsId = $arrayHotsId[0]->getId();
@@ -22,11 +23,12 @@ class DefaultController extends Controller
         $objHotsName = $this->getDoctrine()->getManager()->getRepository('AppBundle:AccountName');
         $hotsName = $objHotsName->findBy(array('game_id' => $hotsId, 'user_id' => $currentUser));
         $hotsAccount = $hotsName[0]->getName();
-
+        $hotsId = $hotsName[0]->getId();
+        
         $arrayDataLol = $leagueController->getDataFromLolAction($request, $currentUser, $this);
 
         if (!empty($hotsAccount)) {
-            $arrayDataHots = $hotsController->getDataFromHots($hotsAccount, $hotsId);
+            $arrayDataHots = $hotsController->getDataFromHots($hotsAccount, $hotsId, $hotsId);
         }
 
         $gamesLol           = $arrayDataLol['AllData'];

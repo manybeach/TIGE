@@ -28,7 +28,10 @@ class EventType extends AbstractType
                     'class' => 'form-control input-md')))
             ->add('eventPlace', TextType::class, array('label' => 'Lieu', 'attr' => array(
                 'class' => 'form-control input-md')))
-            ->add('eventDate', DateType::class, array('label' => 'Date',
+            ->add('eventDate', DateType::class, array(
+                'input'  => 'datetime',
+                'widget' => 'choice',
+                'label' => 'Date',
                 'attr' => array(
                     'class' => 'form-control input-md')))
             ->add('eventMaxParticipant', IntegerType::class, array('label' => 'Nombre Participants Max',

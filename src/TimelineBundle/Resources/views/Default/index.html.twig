@@ -16,28 +16,28 @@
             {% for data in AllData %}
 
             {% if data.Game == 1 %}
-            <table class="table table-hover" role="alert" style="background-color: #dac6d6">
+            <table class="table table-hover" role="alert">
                 {% if data.win %}
-                    <tr class="alert-success">
-                        <td width="200px">
-                            <a> <img style="max-width: 200px" src="https://upload.wikimedia.org/wikipedia/fr/7/77/League_of_Legends_logo.png"
+                    <tr>
+                        <th align="center" class="alert-success">
+                             <img style="max-width: 150px" src="https://upload.wikimedia.org/wikipedia/fr/7/77/League_of_Legends_logo.png"
                                      class="img-responsive img-rounded" alt="League Of Legends">
-                            </a>
-                        </td>
-                        <td align="center" colspan="3" style="vertical-align: middle"><img
+
+                        </th>
+                        <th align="center" colspan="3" style="vertical-align: middle" class="alert-success"><img style="max-width: 150px"
                                     src="{{ absolute_url(asset('bundles/framework/images/win.png')) }}"/>
-                        </td>
+                        </th>
                     </tr>
                 {% else %}
-                    <tr class="alert-danger">
-                        <td width="200px">
-                            <a> <img src="https://upload.wikimedia.org/wikipedia/fr/7/77/League_of_Legends_logo.png"
+                    <tr>
+                        <th align="center" class="alert-danger">
+                            <a> <img src="https://upload.wikimedia.org/wikipedia/fr/7/77/League_of_Legends_logo.png" style="max-width: 150px"
                                      class="img-responsive img-rounded" alt="League Of Legends">
                             </a>
-                        </td>
-                        <td align="center" colspan="3" style="vertical-align: middle"><img
+                        </th>
+                        <th align="center" colspan="3" style="vertical-align: middle" class="alert-danger"><img style="max-width: 150px"
                                     src="{{ absolute_url(asset('bundles/framework/images/loose.png')) }}"/>
-                        </td>
+                        </th>
                     </tr>
                 {% endif %}
                 <tr>
@@ -55,65 +55,68 @@
                         </ul>
                     </td>
                     <td rowspan="2" style="vertical-align: middle">
-                        <ul class="list-unstyled h4 carbonad-text">
+                        <ul class="sf-reset h4">
                             <li>{{ data.createDate }}</li>
                             <li>{{ data.timePlayed }}</li>
                             <li>{{ data.championsKilled }}/{{ data.numDeaths }}/{{ data.assists }}</li>
                             <li>{{ data.kda }}</li>
                             <li>{{ data.goldEarned }}</li>
                             <li> {{ data.minionsKilled }}</li>
+
                         </ul>
                     </td>
                 </tr>
                 <tr>
                     <td align="center" class="h3 text-capitalize" style="font-weight: bold">
-                       {{ data.player }}
+                            <a target="_blank" href="{{ path("stats_homepage",{'idUser':data.accountId }) }}">#{{ data.player }}</a>
                         </br>Niveau {{ data.summonerLevel }}
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="3" class="active">
-                        <div id="fos_comment_thread" data-thread="{{ thread[loop.index0] }}">
-                            {% include 'FOSCommentBundle:Thread:comments.html.twig' with {
-                            'comments': comments[loop.index0],
-                            'thread': thread[loop.index0]
-                            } %}
-                        </div>
-
-                    </td>
-                </tr>
+                <tr><td colspan="3">
+                <div class="tab-content">
+                    <div id="sansCommentaire{{loop.index0}}" class="tab-pane fade in active">
+                        <a data-toggle="tab" href="#fos_comment_thread{{loop.index0}}">Afficher les commentaires </a>
+                    </div>
+                    <div id="fos_comment_thread{{loop.index0}}" data-thread="{{ thread[loop.index0] }}" class="tab-pane fade">
+                        {% include 'FOSCommentBundle:Thread:comments.html.twig' with {
+                        'comments': comments[loop.index0],
+                        'thread': thread[loop.index0]
+                        } %}
+                        <a data-toggle="tab" href="#sansCommentaire{{loop.index0}}">Masquer les commentaires </a>
+                    </div>
+                </div>
+                    </td></tr>
             </table>
             {% else %}
-            <table class="table table-hover" role="alert" style="background-color: #dac6d6">
+            <table class="table table-hover" role="alert">
                 {% if data.resultGame == 'WIN' %}
-                    <tr class="alert-success">
-                        <td width="200px">
-                            <a> <img src="https://upload.wikimedia.org/wikipedia/en/0/04/Heroes_of_the_Storm_logo.png"
+                    <tr>
+                        <th align="center" class="alert-success">
+                           <img src="https://upload.wikimedia.org/wikipedia/en/0/04/Heroes_of_the_Storm_logo.png" style="max-width: 150px"
                                      class="img-responsive img-rounded" alt="League Of Legends">
-                            </a>
-                        </td>
-                        <td align="center" colspan="3" style="vertical-align: middle"><img
+                        </th>
+                        <th align="center" colspan="3" style="vertical-align: middle" class="alert-success"><img style="max-width: 150px"
                                     src="{{ absolute_url(asset('bundles/framework/images/win.png')) }}"/>
-                        </td>
+                        </th>
                     </tr>
                 {% else %}
-                    <tr class="alert-danger">
-                        <td width="200px">
-                            <a> <img src="https://upload.wikimedia.org/wikipedia/en/0/04/Heroes_of_the_Storm_logo.png"
+                    <tr>
+                        <th align="center" class="alert-danger">
+                          <img style="max-width: 150px" src="https://upload.wikimedia.org/wikipedia/en/0/04/Heroes_of_the_Storm_logo.png"
                                      class="img-responsive img-rounded" alt="League Of Legends">
-                            </a>
-                        </td>
-                        <td align="center" colspan="3" style="vertical-align: middle"><img
+
+                        </th>
+                        <th align="center" colspan="3" style="vertical-align: middle"  class="alert-danger"><img style="max-width: 150px"
                                     src="{{ absolute_url(asset('bundles/framework/images/loose.png')) }}"/>
-                        </td>
+                        </th>
                     </tr>
                 {% endif %}
                 <tr>
                     <td align="center" width="200px"><img class="img-responsive img-circle"
-                                                          src="http://static.icy-veins.com/images/heroes/hero-portrait-tychus.jpg"/>
+                                                          src="{{ absolute_url(asset('bundles/framework/images/Hots/'~data.heroName~'.png')) }}"/>
                     </td>
                     <td rowspan="2" style="vertical-align: middle" align="right">
-                        <ul class="list-unstyled h4" style="font-weight: bold">
+                        <ul class="sf-reset h4" style="font-weight: bold">
                             <li>Nom du hero</li>
                             <li>Nom de la carte</li>
                             <li>Durée du match</li>
@@ -123,7 +126,7 @@
                         </ul>
                     </td>
                     <td rowspan="2" style="vertical-align: middle">
-                        <ul class="list-unstyled h4 carbonad-text">
+                        <ul class="sf-reset h4">
                             <li>{{ data.heroName }}</li>
                             <li>{{ data.mapName }}</li>
                             <li>{{ data.timeGame }}</li>
@@ -135,29 +138,23 @@
                 </tr>
                 <tr>
                     <td align="center" class="h3 text-capitalize" style="font-weight: bold">
-                        #Pseudo
-                        </br>Niveau {{ data.levelPlayer }}
+                        <a target="_blank" href="{{ path("stats_homepage",{'idUser':data.accountId }) }}">#{{ data.player }}</a>                        </br>Niveau {{ data.levelPlayer }}
                     </td>
                 </tr>
                 <tr>
                     <td colspan="3">
-                        {%  if loop.index0< 10 %}
-                        <div id="content">
-                            <div class="tab-content">
-                                <div id="sansCommentaire{{loop.index0}}" class="tab-pane fade in active">
-                                     <a data-toggle="tab" href="#fos_comment_thread{{loop.index0}}">Afficher les commentaires </a>
-                                </div>
-                                <div id="fos_comment_thread{{loop.index0}}" data-thread="{{ thread[loop.index0] }}" class="tab-pane fade">
-                                                {% include 'FOSCommentBundle:Thread:comments.html.twig' with {
-                                                'comments': comments[loop.index0],
-                                                'thread': thread[loop.index0]
-                                                } %}
-                                    <a data-toggle="tab" href="#sansCommentaire{{loop.index0}}">Masquer les commentaires </a>
-                                </div>
+                        <div class="tab-content">
+                            <div id="sansCommentaire{{loop.index0}}" class="tab-pane fade in active">
+                                <a data-toggle="tab" href="#fos_comment_thread{{loop.index0}}">Afficher les commentaires </a>
+                            </div>
+                            <div id="fos_comment_thread{{loop.index0}}" data-thread="{{ thread[loop.index0] }}" class="tab-pane fade">
+                                {% include 'FOSCommentBundle:Thread:comments.html.twig' with {
+                                'comments': comments[loop.index0],
+                                'thread': thread[loop.index0]
+                                } %}
+                                <a data-toggle="tab" href="#sansCommentaire{{loop.index0}}">Masquer les commentaires </a>
                             </div>
                         </div>
-                        {% endif %}
-
                     </td>
                 </tr>
             </table>

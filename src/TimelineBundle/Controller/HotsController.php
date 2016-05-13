@@ -21,7 +21,7 @@ class HotsController extends Controller
      * @param $playerName
      * @return array
      */
-    public function getDataFromHots($playerName,$idHots)
+    public function getDataFromHots($playerName,$idHots, $accountId)
     {
 
         /// ************ INIT CONNEXION ************
@@ -73,7 +73,12 @@ class HotsController extends Controller
             $dateMatch = strtotime($td[1][6]);
             ($varMmr > 0) ? $resultGame = 'WIN' : $resultGame = 'LOOSE';
 
-            $arrayGame = array('Game'=>$idHots,'idComm'=>$dateMatch,'heroName'=>$heroName,'mapName' => $mapName, 'timeGame' => $timeGame, 'levelPlayer' => $levelPlayer, 'currentMmr' => $currentMmr, 'varMmr' => $varMmr, 'createDate' => $dateMatch, 'resultGame' => $resultGame);
+            $arrayGame = array('Game'=>$idHots,'idComm'=>$dateMatch,
+                'player'=>$playerName,
+                'accountId' =>$accountId,
+                'heroName'=>$heroName,'mapName' => $mapName, 'timeGame' => $timeGame,
+                'levelPlayer' => $levelPlayer, 'currentMmr' => $currentMmr, 'varMmr' => $varMmr,
+                'createDate' => $dateMatch, 'resultGame' => $resultGame);
 
             array_push($arrayAllGame, $arrayGame);
         }
