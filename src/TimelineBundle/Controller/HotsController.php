@@ -12,8 +12,7 @@ class HotsController extends Controller
         if ($securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
 
             $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-            var_dump($currentUser);
-            exit();
+
         }
     }
 
