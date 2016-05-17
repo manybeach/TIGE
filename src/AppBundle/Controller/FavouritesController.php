@@ -14,6 +14,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FavouritesController extends Controller
 {
+    /**
+     * Add player to our favorite
+     * @param $id_favoris
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function addfavouritesAction($id_favoris)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -49,6 +54,11 @@ class FavouritesController extends Controller
         );
     }
 
+    /**
+     * Delete player from favourite
+     * @param $id_favoris
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function delFavouritesAction($id_favoris)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();

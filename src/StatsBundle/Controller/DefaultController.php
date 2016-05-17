@@ -109,6 +109,10 @@ class DefaultController extends Controller
             ));
     }
 
+    /**
+     * @param $idUser
+     * @return string
+     */
     public function getSummonerNameByUserId($idUser)
     {
         $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:AccountName');
@@ -118,6 +122,10 @@ class DefaultController extends Controller
         return $accountName;
     }
 
+    /**
+     * @param $summonerName
+     * @return array
+     */
     public function getStatsDataRankAction($summonerName)
     {
         $arrayStatsRanked = array();
@@ -138,6 +146,10 @@ class DefaultController extends Controller
         return $arrayStatsRanked;
     }
 
+    /**
+     * @param $summonerName
+     * @return array
+     */
     public function getStatsDataSummaryAction($summonerName)
     {
         $arrayStatsSummary = array();
@@ -176,6 +188,11 @@ class DefaultController extends Controller
     }
 
 
+    /**
+     * @param $summonerId
+     * @param $server
+     * @return mixed
+     */
     private function getStatsSummary($summonerId, $server)
     {
         $url = 'https://' . $server . '.api.pvp.net/api/lol/' . $server . '/v1.3/stats/by-summoner/' . $summonerId . '/summary?api_key=0610f47d-dba7-46ff-84c7-fc9eeee8b788';
@@ -185,6 +202,11 @@ class DefaultController extends Controller
         return $result;
     }
 
+    /**
+     * @param $summonerId
+     * @param $server
+     * @return mixed
+     */
     private function getStatsRanked($summonerId, $server)
     {
         $url = 'https://' . $server . '.api.pvp.net/api/lol/' . $server . '/v1.3/stats/by-summoner/' . $summonerId . '/ranked?api_key=0610f47d-dba7-46ff-84c7-fc9eeee8b788';
@@ -194,6 +216,10 @@ class DefaultController extends Controller
         return $result;
     }
 
+    /**
+     * @param $idUser
+     * @return bool
+     */
     public function isFavourite($idUser)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -214,7 +240,10 @@ class DefaultController extends Controller
         return $result;
     }
 
-
+    /**
+     * @param $idChamp
+     * @return string
+     */
     public function getChampionName($idChamp)
     {
         $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:champions');

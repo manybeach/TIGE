@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 class LeagueController extends Controller
 {
 
+    /**
+     * @return Response
+     */
     public function indexAction()
     {
         #return $this->render('TimelineBundle:Default:accueil.html.twig');
@@ -120,6 +123,10 @@ class LeagueController extends Controller
         return $temp;
     }
 
+    /**
+     * @param $idChampion
+     * @return string
+     */
     private function getNameByIdChampionLol($idChampion)
     {
         $photoChamp = 'bundles/framework/images/LoL/1.png';
@@ -151,6 +158,11 @@ class LeagueController extends Controller
         return $result;
     }
 
+    /**
+     * @param $summonerId
+     * @param $server
+     * @return mixed
+     */
     private function getMatchList($summonerId, $server)
     {
         $url = 'https://' . $server . '.api.pvp.net/api/lol/' . $server . '/v1.3/game/by-summoner/' . $summonerId . '/recent?api_key=0610f47d-dba7-46ff-84c7-fc9eeee8b788';
@@ -161,7 +173,7 @@ class LeagueController extends Controller
     }
 
     /**
-     * Add gamers
+     * addGames into DB
      */
     private function addGamers()
     {

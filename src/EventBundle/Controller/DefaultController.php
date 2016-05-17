@@ -11,26 +11,22 @@ class DefaultController extends Controller
 {
     public function indexAction(Request $request)
     {
-        //Récupération de l'utilisateur connecté
+        //recover current user
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $userId = $user->getId();
 
-        //Récupération des évenements dans un tableau
+        //recover event into array
         $arrayEvents = $this->getDoctrine()->getManager()->getRepository('AppBundle:Event')->findAll();
 
-        //Tri des événements par date
         $sortArrayEvents = $this->sortEventAction($arrayEvents);
 
-        //Récupération des évenements créés par le joueur connecté
         $arrayEventsUser = $this->getDoctrine()->getManager()->getRepository('AppBundle:Event')->findBy(array('eventOwner' => $userId));
 
-        //Tri des événements de l'utilisateur par date
         $sortArrayEventsUser = $this->sortEventAction($arrayEventsUser);
 
-        //Récupération des noms des participants
         $arrayMembersName = $this->getMembersName($userId);
 
-        //Récupération des évenements auxquels le joueur connecté participe
+        //recover event where the current user is in
         $arrayEventUserParticipation = array();
         foreach ($arrayEvents as $event) {
             $arrayMembers = explode(";", $event->getEventMembers());
@@ -41,20 +37,15 @@ class DefaultController extends Controller
             }
         }
 
-        //Gestion du formulaire d'ajout d'évenement
         $event = new Event();
 
-        //Date du jour par défaut
         $event->setEventDate(new \DateTime('tomorrow'));
-
-        //Date du jour
         $time = time();
-
         $form = $this->createForm(EventType::class, $event);
 
         $form->handleRequest($request);
 
-        //Action lors de la validation du form
+        //action to do when form was validate
         if ($form->isSubmitted() && $form->isValid()) {
 
             $event->setEventOwner($userId);
@@ -62,7 +53,7 @@ class DefaultController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            // tells Doctrine you want to (eventually) save the Product (no queries yet)
+            // tells Doctrine you want to (eventually) save  (no queries yet)
             $em->persist($event);
 
             // actually executes the queries (i.e. the INSERT query)
@@ -82,19 +73,20 @@ class DefaultController extends Controller
         ));
     }
 
+    /**
+     * @param $idEvent
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function addMemberAction($idEvent)
     {
-        //Récupération de l'utilisateur connecté
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $userId = $user->getId();
 
-        //Récupération de l'événement auquel le joueur souhaite participer
         $event = $this->getDoctrine()->getManager()->getRepository('AppBundle:Event')->findBy(array('id' => $idEvent));
 
-        //Ajout du joueur comme membre de l'événement
         $event[0]->addMember($userId);
 
-        //Mise à jour de la base de données
+        //maj DataBase
         $em = $this->getDoctrine()->getManager();
         $em->persist($event[0]);
         $em->flush();
@@ -103,19 +95,21 @@ class DefaultController extends Controller
 
     }
 
+    /**
+     * @param $idEvent
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function supprMemberAction($idEvent)
     {
-        //Récupération de l'utilisateur connecté
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $userId = $user->getId();
 
-        //Récupération de l'événement auquel le joueur souhaite ne plus participer
         $event = $this->getDoctrine()->getManager()->getRepository('AppBundle:Event')->findBy(array('id' => $idEvent));
 
-        //Suppression du joueur comme membre de l'événement
+
         $event[0]->supprMember($userId);
 
-        //Mise à jour de la base de données
+        //MAJ DATABASE
         $em = $this->getDoctrine()->getManager();
         $em->persist($event[0]);
         $em->flush();
@@ -124,9 +118,13 @@ class DefaultController extends Controller
 
     }
 
+    /**
+     * Recover MembersName
+     * @param $userId
+     * @return array
+     */
     public function getMembersName($userId)
     {
-
         $eventRepository = $this
             ->getDoctrine()
             ->getManager()
@@ -137,33 +135,27 @@ class DefaultController extends Controller
             ->getManager()
             ->getRepository('AppBundle:User');
 
-        //Stockage des événements dans un tableau
         $arrayEvents = $eventRepository->findAll();
 
-        //Tableau final qui contiendra les noms des membres pour chaque événement
         $result = array();
 
         foreach ($arrayEvents as $event) {
 
-            //Tableau destiné à contenir les noms des membres du l'événement en cours
             $arrayMembersName = array();
 
-            //Ajout de l'id de l'événement
             $arrayMembersName[0] = $event->getId();
-
-            //Ajout du nom du créateur
+            //recover event where current user is
             $idOwner = $event->getEventOwner();
             $accountNameOwner = $accountNameRepository->findBy(array('id' => $idOwner));
             $arrayMembersName[$idOwner] = $accountNameOwner[0]->getUsername();
 
             $participate = false;
 
-            //Si des joueurs sont inscrits à l'événement
+            //if player are in the event
             if ($event->getEventMembers() != null) {
-                //On stocke les id des membres dans un tableau
+                //recover all member of the event
                 $arrayMembersId = explode(";", $event->getEventMembers());
 
-                //Si le joueur connecté fait parti des membres de l'événement, on passe la variable participate à true
                 foreach ($arrayMembersId as $idMember) {
                     if ($idMember == $userId) {
                         $participate = true;
@@ -171,34 +163,32 @@ class DefaultController extends Controller
                 }
             }
 
-            //On ajoute la participation du joueur connecté
             $arrayMembersName[] = $participate;
 
-            //Si des joueurs sont inscrits à l'événement
             if ($event->getEventMembers() != null) {
-                //On stocke les id des membres dans un tableau
                 $arrayMembersId = explode(";", $event->getEventMembers());
 
-                //Pour chaque membre, on ajoute son nom dans le tableau
                 foreach ($arrayMembersId as $idMember) {
                     $accountName = $accountNameRepository->findBy(array(
                         'id' => $idMember));
                     $arrayMembersName[$idMember] = $accountName[0]->getUsername();
                 }
             }
-            //On ajoute le tableau contenant les noms des membres dans le tableau final
             $result[] = $arrayMembersName;
         }
 
         return $result;
     }
 
+    /**
+     * @param $idEvent
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function supprEventAction($idEvent){
 
-        //Récupération de l'événement que le joueur souhaite supprimer
+        //recover event we want to del
         $event = $this->getDoctrine()->getManager()->getRepository('AppBundle:Event')->findBy(array('id' => $idEvent));
 
-        //Suppression de l'événement
         $em = $this->getDoctrine()->getManager();
         $em->remove($event[0]);
         $em->flush();
@@ -206,19 +196,21 @@ class DefaultController extends Controller
         return $this->redirect($this->generateUrl('event_homepage'));
     }
 
+    /**
+     * sort event
+     * @param $arrayEvents
+     * @return mixed
+     */
     public function sortEventAction($arrayEvents)
     {
-        //Tableau qui contiendra les dates des événements dans le format timestamp
         $arrayEventDates = array();
 
-        //On ajoute dans ce tableau la date de chaque événement
         foreach ($arrayEvents as $event) {
             $idDateEvent = array();
             $idDateEvent[] = $event->getEventDate()->getTimestamp();
             $arrayEventDates[] = $idDateEvent;
         }
 
-        //On trie les événements (arrayEvents) en fonction de leur date (arrayEventDates)
         array_multisort($arrayEventDates, SORT_ASC, $arrayEvents);
 
         return $arrayEvents;

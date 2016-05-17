@@ -11,29 +11,23 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class GamesController extends Controller
 {
+    /**
+     * Create form for games
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction(Request $request)
     {
-
         $game = new Games();
-
         $form = $this->createForm(GamesType::class, $game);
-
         $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-//                $repository = $this
-//                    ->getDoctrine()
-//                    ->getManager()
-//                    ->getRepository('AppBundle:Games');
-
                 $em = $this->getDoctrine()->getManager();
-
                 // tells Doctrine you want to (eventually) save the Product (no queries yet)
                 $em->persist($game);
-
                 // actually executes the queries (i.e. the INSERT query)
                 $em->flush();
-
                 return $this->redirectToRoute('myaccount_homepage');
         }
 

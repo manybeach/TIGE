@@ -12,8 +12,13 @@ use AppBundle\Controller\FavouritesController;
 
 class DefaultController extends Controller
 {
+    /**
+     * default function
+     * @return Response
+     */
     public function indexAction()
     {
+        //recover current user
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $arrayUser = array(
             'id_user' => $user->getId(),
@@ -21,6 +26,7 @@ class DefaultController extends Controller
             'email' => $user->getEmail()
         );
 
+        //recover all games
         $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Games');
         $games = $repository->findAll();
 
@@ -53,8 +59,7 @@ class DefaultController extends Controller
             }
         }
 
-
-        /* MANY - ajout de la liste des favoris sur l'onglet mon compte */
+        /* Mathieu.P  - ajout de la liste des favoris sur l'onglet mon compte */
         $maListe = array();
         $mesFavoris = $this->listFavoris();
         foreach($mesFavoris as $favoris) {
@@ -68,12 +73,20 @@ class DefaultController extends Controller
             'games' => $arrayGames, 'accountName' => $accountName, 'mesFavoris'=> $maListe));
     }
 
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function modAccountAction(Request $request)
     {
         return $this->redirect($this->generateUrl('myaccount_homepage', array('user' => '', 'games' => '', 'accountName' => '')));
 
     }
 
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function addAccountAction(Request $request)
     {
 
@@ -87,6 +100,13 @@ class DefaultController extends Controller
         return $this->redirect($this->generateUrl('myaccount_homepage', array('user' => $idUser, 'games' => $idGame, 'accountName' => $pseudo)));
     }
 
+    /**
+     * add account
+     * @param $idUser
+     * @param $idGame
+     * @param $pseudo
+     * @return bool
+     */
     private function addAccountGaming($idUser, $idGame, $pseudo)
     {
         $accountName = $this->getDoctrine()->getManager()->getRepository('AppBundle:AccountName')->myFindOne($idUser);
@@ -110,7 +130,7 @@ class DefaultController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        // tells Doctrine you want to (eventually) save the Product (no queries yet)
+        // tells Doctrine you want to (eventually) save  (no queries yet)
         $em->persist($accountName);
 
         // actually executes the queries (i.e. the INSERT query)
@@ -119,6 +139,9 @@ class DefaultController extends Controller
         return true;
     }
 
+    /**
+     * @return \AppBundle\Entity\AccountName[]|\AppBundle\Entity\Favourites[]|array
+     */
     public function listFavoris()
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();

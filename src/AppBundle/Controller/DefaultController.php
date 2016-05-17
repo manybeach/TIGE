@@ -38,9 +38,7 @@ class DefaultController extends Controller
      */
     public function getCurrentUserId()
     {
-        var_dump($this);
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        var_dump($user);
         $idUser = $user->getId();
         return $idUser;
     }

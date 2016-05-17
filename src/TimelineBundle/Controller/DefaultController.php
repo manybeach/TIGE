@@ -7,7 +7,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
-
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction(Request $request)
     {
         $leagueController = new LeagueController();
@@ -69,6 +72,11 @@ class DefaultController extends Controller
         return $arrayGames;
     }
 
+    /**
+     * @param Request $request
+     * @param $id
+     * @return array
+     */
     public function somethingAction(Request $request, $id)
     {
         $thread = $this->container->get('fos_comment.manager.thread')->findThreadById($id);

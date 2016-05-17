@@ -8,6 +8,9 @@ use StatsBundle\StatsBundle;
 
 class DefaultController extends Controller
 {
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction()
     {
         return $this->render('SearchBundle::index.html.twig');
@@ -42,6 +45,10 @@ class DefaultController extends Controller
         return $this->render("SearchBundle::index.html.twig",array("dataSearch"=>$arrayAllPlayer,'fav'=>$arrayFollow));
     }
 
+    /**
+     * @param $idUser
+     * @return bool
+     */
     public function isFavourite($idUser)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
