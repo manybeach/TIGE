@@ -1,0 +1,70 @@
+<table class="table table-hover" role="alert">
+    {% if data.resultGame == 'WIN' %}
+        <tr>
+            <th align="center" class="alert-success">
+                <img src="https://upload.wikimedia.org/wikipedia/en/0/04/Heroes_of_the_Storm_logo.png" style="max-width: 150px"
+                     class="img-responsive img-rounded" alt="League Of Legends">
+            </th>
+            <th align="center" colspan="3" style="vertical-align: middle" class="alert-success"><img style="max-width: 150px"
+                                                                                                     src="{{ absolute_url(asset('bundles/framework/images/win.png')) }}"/>
+            </th>
+        </tr>
+    {% else %}
+        <tr>
+            <th align="center" class="alert-danger">
+                <img style="max-width: 150px" src="https://upload.wikimedia.org/wikipedia/en/0/04/Heroes_of_the_Storm_logo.png"
+                     class="img-responsive img-rounded" alt="League Of Legends">
+
+            </th>
+            <th align="center" colspan="3" style="vertical-align: middle"  class="alert-danger"><img style="max-width: 150px"
+                                                                                                     src="{{ absolute_url(asset('bundles/framework/images/loose.png')) }}"/>
+            </th>
+        </tr>
+    {% endif %}
+    <tr>
+        <td align="center" width="200px"><img class="img-responsive img-circle"
+                                              src="{{ absolute_url(asset('bundles/framework/images/Hots/'~data.heroName~'.png')) }}"/>
+        </td>
+        <td rowspan="2" style="vertical-align: middle" align="right">
+            <ul class="sf-reset h4" style="font-weight: bold">
+                <li>Nom du hero</li>
+                <li>Nom de la carte</li>
+                <li>Durée du match</li>
+                <li>MMR</li>
+                <li>Variation de MMR</li>
+                <li>Date du match</li>
+            </ul>
+        </td>
+        <td rowspan="2" style="vertical-align: middle">
+            <ul class="sf-reset h4">
+                <li>{{ data.heroName }}</li>
+                <li>{{ data.mapName }}</li>
+                <li>{{ data.timeGame }}</li>
+                <li>{{ data.currentMmr }}</li>
+                <li> {{ data.varMmr }}</li>
+                <li> {{ data.createDate }}</li>
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td align="center" class="h3 text-capitalize" style="font-weight: bold">
+            <a target="_blank" href="{{ path("stats_homepage",{'idUser':data.accountId }) }}">#{{ data.player }}</a>                        </br>Niveau {{ data.levelPlayer }}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3">
+            <div class="tab-content">
+                <div id="sansCommentaire{{loop.index0}}" class="tab-pane fade in active">
+                    <a data-toggle="tab" href="#fos_comment_thread{{loop.index0}}">Afficher les commentaires </a>
+                </div>
+                <div id="fos_comment_thread{{loop.index0}}" data-thread="{{ thread[loop.index0] }}" class="tab-pane fade">
+                    {% include 'FOSCommentBundle:Thread:comments.html.twig' with {
+                    'comments': comments[loop.index0],
+                    'thread': thread[loop.index0]
+                    } %}
+                    <a data-toggle="tab" href="#sansCommentaire{{loop.index0}}">Masquer les commentaires </a>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>

@@ -53,7 +53,7 @@ class LeagueController extends Controller
                     $arrayAllStats = array($summonerName => array());
                     $i=1;
                     foreach ($resultListMatch["games"] as $arrayGame) {
-                        if ($i<=3) {
+                        if ($i<=2) {
                             $photo = $this->getPhotoByIdLol($profileIconId);
                             $arrayGame = $this->controleArrayLol($arrayGame);
                             if ($arrayGame["stats"]["numDeaths"] == 0) $arrayGame["stats"]["numDeaths"] = 1;

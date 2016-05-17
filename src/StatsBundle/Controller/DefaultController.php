@@ -212,7 +212,7 @@ class DefaultController extends Controller
         $url = 'https://' . $server . '.api.pvp.net/api/lol/' . $server . '/v1.3/stats/by-summoner/' . $summonerId . '/ranked?api_key=0610f47d-dba7-46ff-84c7-fc9eeee8b788';
         $resultJson = file_get_contents($url);
         $result = json_decode($resultJson, true);
-
+        
         return $result;
     }
 

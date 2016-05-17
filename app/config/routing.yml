@@ -1,3 +1,7 @@
+comment:
+    resource: "@CommentBundle/Resources/config/routing.yml"
+    prefix:   /
+
 stats:
     resource: "@StatsBundle/Resources/config/routing.yml"
     prefix:   /

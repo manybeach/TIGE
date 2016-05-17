@@ -23,18 +23,24 @@ class DefaultController extends Controller
 
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $currentUser = $user->getId();
+ 
+        /* Recupération des data pour le jeu HoTS */
         $objHotsName = $this->getDoctrine()->getManager()->getRepository('AppBundle:AccountName');
         $hotsName = $objHotsName->findBy(array('game_id' => $hotsId));
-        /* faire une boucle sur chaque joueur $hotsName[0]*/
-        $hotsAccount = $hotsName[0]->getName();
-        $hotsId = $hotsName[0]->getId();
-        
-        $arrayDataLol = $leagueController->getDataFromLolAction($request, $currentUser, $this);
+        $arrayDataHots = array();
 
-        if (!empty($hotsAccount)) {
-            $arrayDataHots = $hotsController->getDataFromHots($hotsAccount, $hotsId, $hotsId);
+        foreach ($hotsName as $myHotsName){
+            $hotsAccount = $myHotsName->getName();
+            $hotsId = $myHotsName->getId();
+            if (!empty($hotsAccount)) {
+                $arrayDataHots_temp = $hotsController->getDataFromHots($hotsAccount, $hotsId, $hotsId);
+                $arrayDataHots= array_merge($arrayDataHots,$arrayDataHots_temp);
+            }
         }
 
+        
+        /* Recupération des data pour le jeu LoL */
+        $arrayDataLol = $leagueController->getDataFromLolAction($request, $currentUser, $this);
         $gamesLol           = $arrayDataLol['AllData'];
         $arrayDataAllGame   = array_merge($arrayDataHots, $gamesLol);
         $arraySorted        = $this->sortGames($arrayDataAllGame);
