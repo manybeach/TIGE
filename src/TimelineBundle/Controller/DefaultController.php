@@ -31,7 +31,7 @@ class DefaultController extends Controller
 
         foreach ($hotsName as $myHotsName){
             $hotsAccount = $myHotsName->getName();
-            $hotsId = $myHotsName->getId();
+            $hotsId = $myHotsName->getGameId()->getId();
             if (!empty($hotsAccount)) {
                 $arrayDataHots_temp = $hotsController->getDataFromHots($hotsAccount, $hotsId, $hotsId);
                 $arrayDataHots= array_merge($arrayDataHots,$arrayDataHots_temp);
